@@ -1,3 +1,3 @@
 # The Settlers
 
-TEST GIT push
+Játék leírása:
