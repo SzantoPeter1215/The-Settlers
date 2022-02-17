@@ -2,3 +2,4 @@
 
 Játék leírása:
 Marci
+Ez egy játék
