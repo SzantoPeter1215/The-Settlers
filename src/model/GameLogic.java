@@ -6,6 +6,22 @@ public final class GameLogic {
     private int row;
     private int column;
 
+    public int getRow() {
+        return row;
+    }
+
+    public void setRow(int row) {
+        this.row = row;
+    }
+
+    public Type[][] getGrids() {
+        return grids;
+    }
+
+    public void setGrids(Type[][] grids) {
+        this.grids = grids;
+    }
+
     private Type[][] grids;
 
     private InfoBoard infoBoard;

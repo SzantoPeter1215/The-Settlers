@@ -16,8 +16,11 @@ public class GameBoard extends JPanel {
 
     private String name;
 
+    private GameUIConstants gameConstants;
+
 
     public GameBoard(GameLogic gameLogic) {
+        gameConstants = new GameUIConstants();//it will calculate the area
         this.gameLogic = gameLogic;
         setPreferredSize(new Dimension(GameUIConstants.GAME_WIDTH, GameUIConstants.GAME_HEIGHT));
         setBackground(GameUIConstants.BACKGROUND_COLOR);
@@ -33,6 +36,12 @@ public class GameBoard extends JPanel {
                 InfoBoard infoBoard = gameLogic.getInfoBoard();
                 if (infoBoard.isGameOver()) {
                     startNewGame();
+                    repaint();
+                }
+                if(e.getY()<=(gameConstants.gameareaREACT.height+gameConstants.gameareaREACT.y)&&e.getY()>=gameConstants.gameareaREACT.y&&e.getX()<=gameConstants.gameareaREACT.width) {
+                    Type[][] localGrid = gameLogic.getGrids();
+                    localGrid[(int) ((e.getY()-gameConstants.gameareaREACT.y)/GameUIConstants.GAME_AREA_RECTANGLE)][e.getX()/GameUIConstants.GAME_AREA_RECTANGLE] = Type.TOWER;
+                    gameLogic.setGrids(localGrid);
                     repaint();
                 }
             }
@@ -73,7 +82,7 @@ public class GameBoard extends JPanel {
     private void startNewGame() {
         createInputDialog();
 
-        gameLogic.newGame(GameConstants.NORMAL_ROW_COUNT, GameConstants.NORMAL_COL_COUNT, name);
+        gameLogic.newGame(gameConstants.GAMEAREA_HEIGHT_canBeDividedBy,gameConstants.GAMEAREA_WIDTH_canBeDividedBy, name);
     }
 
 
@@ -83,7 +92,7 @@ public class GameBoard extends JPanel {
         //TODO: remove all this. just example
         graphics2D.setFont(GameUIConstants.MAIN_FONT);
 
-        graphics2D.setColor(GameUIConstants.TITLE_BG_COLOR);
+        graphics2D.setColor(Color.black);
         graphics2D.fill(GameUIConstants.TITLE_RECTANGLE);
         graphics2D.fill(GameUIConstants.CLICK_RECTANGLE);
 
@@ -92,6 +101,8 @@ public class GameBoard extends JPanel {
 
         graphics2D.setFont(GameUIConstants.SMALL_FONT);
         graphics2D.drawString("Click to start", GameUIConstants.CLICK_POS_X, GameUIConstants.CLICK_POS_Y);
+
+
     }
 
 
@@ -111,15 +122,27 @@ public class GameBoard extends JPanel {
         }
     }
 
-    private void drawUI(Graphics2D graphics2D) {
+    private void drawGameArea(Graphics2D graphics2D) {
         //TODO: rethink, just example
         graphics2D.setColor(GameUIConstants.GRID_COLOR);
-        graphics2D.fill(GameUIConstants.GRID_RECTANGLE);
-
+        graphics2D.fill(gameConstants.gameareaREACT);
         graphics2D.setStroke(GameUIConstants.LARGE_STROKE);
         graphics2D.setColor(GameUIConstants.GRID_BORDER_COLOR);
-        graphics2D.draw(GameUIConstants.GRID_RECTANGLE);
+        graphics2D.draw(gameConstants.gameareaREACT);
+        graphics2D.setStroke(GameUIConstants.SMALL_STROKE);
 
+        Type[][] localGrid = gameLogic.getGrids();
+        for (int y_col = 0; y_col < gameConstants.GAMEAREA_HEIGHT_canBeDividedBy; y_col++) {
+            for (int x_row = 0; x_row < gameConstants.GAMEAREA_WIDTH_canBeDividedBy; x_row++) {
+                Rectangle currentField = new Rectangle(gameConstants.gameareaREACT.x+x_row*GameUIConstants.GAME_AREA_RECTANGLE,gameConstants.gameareaREACT.y+y_col*GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.GAME_AREA_RECTANGLE);
+                graphics2D.setColor(Color.BLACK);
+                graphics2D.draw(currentField);
+                if(localGrid[y_col][x_row] == Type.TOWER){
+                    graphics2D.setColor(Color.RED);
+                    graphics2D.fill(currentField);
+                }
+            }
+        }
         drawInfoBoard(graphics2D);
     }
 
@@ -150,7 +173,7 @@ public class GameBoard extends JPanel {
         graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         graphics2D.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 
-        drawUI(graphics2D);
+        drawGameArea(graphics2D);
 
         InfoBoard infoBoard = gameLogic.getInfoBoard();
         if (infoBoard.isGameOver()) {
