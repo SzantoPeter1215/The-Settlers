@@ -24,60 +24,69 @@
 
 ## User stories
 
-| AS A      |       | Player                                                     |
-| --------- | ----- | ---------------------------------------------------------- |
-| I WANT TO |       | Build a tower                                              |
-| 1         | GIVEN | That I clicked on a valid field                            |
-|           | WHEN  | I have sufficient money                                    |
-|           | THEN  | The tower gets built                                       |
-| 2         | GIVEN | That I clicked on a valid field                            |
-|           | WHEN  | I have don't have sufficient money                         |
-|           | THEN  | The tower doesn't get built                                |
-| AS A      |       | Player                                                     |
-| I WANT TO |       | Train a unit                                               |
-| 1         | GIVEN | That I clicked on the unit's icon                          |
-|           | WHEN  | I have sufficient money                                    |
-|           | THEN  | The unit will start moving in the attack phase             |
-| 2         | GIVEN | That I clicked on the unit's icon                          |
-|           | WHEN  | I don't have sufficient money                              |
-|           | THEN  | Nothing happens                                            |
-| AS A      |       | Player                                                     |
-| I WANT TO |       | Begin the attack phase                                     |
-| 1         | GIVEN | That I clicked on the end turn button                      |
-|           | WHEN  | The other player has already ended their turn              |
-|           | THEN  | The attack phase starts                                    |
-| 2         | GIVEN | That I clicked on the end turn button                      |
-|           | WHEN  | The other player has not yet ended their turn              |
-|           | THEN  | The other player's build phase begins                      |
-| AS A      |       | Player                                                     |
-| I WANT TO |       | Get more gold                                              |
-| 1         | GIVEN | That I have units on the board                             |
-|           | WHEN  | The attack phase ends                                      |
-|           | THEN  | I get money for my surviving units                         |
-| 2         | GIVEN | That my towers killed enemy units in the attack phase      |
-|           | WHEN  | The attack phase ends                                      |
-|           | THEN  | I get money for each killed enemy unit                     |
-| AS A      |       | Player                                                     |
-| I WANT TO |       | Build a tower                                              |
-| 1         | GIVEN | That I clicked on a field                                  |
-|           | WHEN  | I wouldn't block all available routes to my castle         |
-|           | THEN  | The tower gets built                                       |
-| 2         | GIVEN | That I clicked on a field                                  |
-|           | WHEN  | I would block all available routes to my castle            |
-|           | THEN  | The tower doesn't get built                                |
-| AS A      |       | Player                                                     |
-| I WANT TO |       | Damage my opponents castle                                 |
-| 1         | GIVEN | That I have units on the board                             |
-|           | WHEN  | They reach the enemy castle                                |
-|           | THEN  | The enemy castle takes damage                              |
-| 2         | GIVEN | That I have units on the board                             |
-|           | WHEN  | They can't reach the enemy castle                          |
-|           | THEN  | The units move and take damage from enemy towers           |
-| AS A      |       | Player                                                     |
-| I WANT TO |       | Damage my opponents unit(s)                                |
-| 1         | GIVEN | That I have a tower on the board                           |
-|           | WHEN  | The enemy units walk in range of my towers or castle       |
-|           | THEN  | The enemy unit takes damage                                |
-| 2         | GIVEN | That I have a tower on the board                           |
-|           | WHEN  | The enemy units don't walk in range of my towers or castle |
-|           | THEN  | The enemy unit moves but doesn't take damage               |
+| AS A      |       | Player                                                           |
+|-----------|-------|------------------------------------------------------------------|
+| I WANT TO |       | Build a tower                                                    |
+| 1         | GIVEN | That I clicked on a valid field                                  |
+|           | WHEN  | I have sufficient money                                          |
+|           | THEN  | The tower gets built                                             |
+| 2         | GIVEN | That I clicked on a valid field                                  |
+|           | WHEN  | I have don't have sufficient money                               |
+|           | THEN  | The tower doesn't get built                                      |
+| 3         | GIVEN | That I clicked on a field                                        |
+|           | WHEN  | I wouldn't block all available routes to my castle               |
+|           | THEN  | The tower gets built                                             |
+| 4         | GIVEN | That I clicked on a field                                        |
+|           | WHEN  | I would block all available routes to my castle                  |
+|           | THEN  | The tower doesn't get built                                      |
+| AS A      |       | Player                                                           |
+| I WANT TO |       | Train a unit                                                     |
+| 1         | GIVEN | That I clicked on the unit's icon                                |
+|           | WHEN  | I have sufficient money                                          |
+|           | THEN  | The unit will start moving in the attack phase                   |
+| 2         | GIVEN | That I clicked on the unit's icon                                |
+|           | WHEN  | I don't have sufficient money                                    |
+|           | THEN  | Nothing happens                                                  |
+| AS A      |       | Player                                                           |
+| I WANT TO |       | Begin the attack phase                                           |
+| 1         | GIVEN | That I clicked on the end turn button                            |
+|           | WHEN  | The other player has already ended their turn                    |
+|           | THEN  | The attack phase starts                                          |
+| 2         | GIVEN | That I clicked on the end turn button                            |
+|           | WHEN  | The other player has not yet ended their turn                    |
+|           | THEN  | The other player's build phase begins                            |
+| AS A      |       | Player                                                           |
+| I WANT TO |       | Quit the game                                                    |
+| 1         | GIVEN | That I clicked on the exit button                                |
+|           | WHEN  | The game is saved                                                |
+|           | THEN  | The game exits                                                   |
+| 2         | GIVEN | That I clicked on the exit button                                |
+|           | WHEN  | The game isn't saved                                             |
+|           | THEN  | The game asks if the players want to save the game               |
+| AS A      |       | Player                                                           |
+| I WANT TO |       | Upgrade a tower                                                  |
+| 1         | GIVEN | That I clicked on a tower upgrade button                         |
+|           | WHEN  | I have sufficient money                                          |
+|           | THEN  | The tower gets upgraded                                          |
+| 2         | GIVEN | That I clicked on a tower upgrade button                         |
+|           | WHEN  | I don't have sufficient money                                    |
+|           | THEN  | The tower doesn't get upgraded                                   |
+| AS A      |       | Player                                                           |
+| I WANT TO |       | Build a barrack                                                  |
+| 1         | GIVEN | That I clicked on a valid field                                  |
+|           | WHEN  | I have sufficient money                                          |
+|           | THEN  | The barrack gets built                                           |
+| 2         | GIVEN | That I clicked on a valid field                                  |
+|           | WHEN  | I have don't have sufficient money                               |
+|           | THEN  | The barrack doesn't get built                                    |
+| 3         | GIVEN | That I clicked on a field                                        |
+|           | WHEN  | There would be a route between the barrack and the enemy castle  |
+|           | THEN  | The barrack gets built                                           |
+| 4         | GIVEN | That I clicked on a field                                        |
+|           | WHEN  | There would be no route between the barrack and the enemy castle |
+|           | THEN  | The barrack doesn't get built                                    |
+| AS A      |       | Player                                                           |
+| I WANT TO |       | Save the game                                                    |
+| 1         | GIVEN | That I clicked on the save game button                           |
+|           | WHEN  |                                                                  |
+|           | THEN  | The game gets saved                                              |
