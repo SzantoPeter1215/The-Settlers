@@ -237,6 +237,10 @@ public class GameBoard extends JPanel {
             graphics2D.draw(Tower2_Field);
         }
     }
+    private void player1_drawOutEndButton(Graphics2D graphics2D){
+        graphics2D.drawString("End", GameUIConstants.GAME_AREA_RECTANGLE*4, GameUIConstants.SMALL_FONT.getSize()*3);
+        gameLogic.setFillTowerType(null);
+    }
     private void drawInfoBoard(Graphics2D graphics2D) {//drawing out the player 1 info board
         //TODO: rethink infoboard structure. Just example.
 
@@ -253,7 +257,7 @@ public class GameBoard extends JPanel {
 
         player1_drawOutTheTowerField(Type.TOWER1,graphics2D);
         player1_drawOutTheTowerField(Type.TOWER2,graphics2D);
-
+        //player1_drawOutEndButton(graphics2D);
 
     }
 
