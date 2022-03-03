@@ -248,14 +248,12 @@ public class GameBoard extends JPanel {
             graphics2D.draw(Tower2_Field);
         }
     }
-    private void player1_drawOutEndButton(Graphics2D graphics2D){
-        graphics2D.drawString("End", GameUIConstants.GAME_AREA_RECTANGLE*4, GameUIConstants.SMALL_FONT.getSize()*3);
-        gameLogic.setFillTowerType(null);
+    private void player1_drawOutEndButton(Graphics2D graphics2D){//todo: when someone clicks on this the tower image become disabled
+        graphics2D.setStroke(GameUIConstants.SMALL_STROKE);
+        graphics2D.drawString("End turn", GameUIConstants.GAME_AREA_RECTANGLE*4, GameUIConstants.SMALL_FONT.getSize()*3);
     }
     private void drawInfoBoard(Graphics2D graphics2D) {//drawing out the player 1 info board
         //TODO: rethink infoboard structure. Just example.
-
-        InfoBoard infoBoard = gameLogic.getInfoBoard();
 
 
         graphics2D.setColor(GameUIConstants.GRID_BORDER_COLOR);
@@ -268,7 +266,15 @@ public class GameBoard extends JPanel {
 
         player1_drawOutTheTowerField(Type.TOWER1,graphics2D);
         player1_drawOutTheTowerField(Type.TOWER2,graphics2D);
-        //player1_drawOutEndButton(graphics2D);
+        player1_drawOutEndButton(graphics2D);
+
+        graphics2D.draw(gameConstants.player2InfoBoard);
+
+        graphics2D.setColor(GameUIConstants.TEXT_COLOR);
+        graphics2D.setFont(GameUIConstants.SMALL_FONT);
+        graphics2D.drawString("Player 2", 0, gameConstants.player2InfoBoard.y+GameUIConstants.SMALL_FONT.getSize());
+
+
 
     }
 
