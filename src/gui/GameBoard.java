@@ -19,6 +19,39 @@ public class GameBoard extends JPanel {
     private GameUIConstants gameConstants;
 
 
+    private boolean onGameArea(int x, int y){
+        int startOfTheGameBoard_Y = gameConstants.gameareaREACT.height+gameConstants.gameareaREACT.y;
+        int endOfTheGameBoard_Y = gameConstants.gameareaREACT.y;
+        if(y<=startOfTheGameBoard_Y&&y>=endOfTheGameBoard_Y&&x<=gameConstants.gameareaREACT.width){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    private boolean playerInfo1BoardTower1_clicked(int x, int y){
+        int startOfThePlayer1InfoBoard = (gameConstants.player1InfoBoard.y+(GameUIConstants.SMALL_FONT.getSize()*2));
+        int endOfThePlayer1InfoBoard = startOfThePlayer1InfoBoard+GameUIConstants.GAME_AREA_RECTANGLE;
+        if((y>=startOfThePlayer1InfoBoard&&y<=endOfThePlayer1InfoBoard)&&(x>=0&&x<=GameUIConstants.GAME_AREA_RECTANGLE)){
+            return true;
+        }
+        return false;
+    }
+    private boolean playerInfo1BoardTower2_clicked(int x, int y){
+        int startOfThePlayer1InfoBoard = (gameConstants.player1InfoBoard.y+(GameUIConstants.SMALL_FONT.getSize()*2));
+        int endOfThePlayer1InfoBoard = startOfThePlayer1InfoBoard+GameUIConstants.GAME_AREA_RECTANGLE;
+        if((y>=startOfThePlayer1InfoBoard&&y<=endOfThePlayer1InfoBoard)&&(x>=GameUIConstants.GAME_AREA_RECTANGLE&&x<=(GameUIConstants.GAME_AREA_RECTANGLE*2))){
+            return true;
+        }
+        return false;
+    }
+    private int convertYtoModelX_GameArea(int y){//it has to be on the gameArea
+        int endOfTheGameBoard_Y = gameConstants.gameareaREACT.y;
+        return ((y - endOfTheGameBoard_Y) / GameUIConstants.GAME_AREA_RECTANGLE);
+    }
+    private int convertXtoModelY_GameArea(int x){//it has to be on the gamearea
+        return x / GameUIConstants.GAME_AREA_RECTANGLE;
+    }
     public GameBoard(GameLogic gameLogic) {
         gameConstants = new GameUIConstants();//it will calculate the area
         this.gameLogic = gameLogic;
@@ -33,36 +66,37 @@ public class GameBoard extends JPanel {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
+
+                int startOfThePlayer1InfoBoard = (gameConstants.player1InfoBoard.y+(GameUIConstants.SMALL_FONT.getSize()*2));
+                int endOfThePlayer1InfoBoard = startOfThePlayer1InfoBoard+GameUIConstants.GAME_AREA_RECTANGLE;
+
                 InfoBoard infoBoard = gameLogic.getInfoBoard();
                 if (infoBoard.isGameOver()) {
                     startNewGame();
                     repaint();
                 }
-                if(e.getY()<=(gameConstants.gameareaREACT.height+gameConstants.gameareaREACT.y)&&e.getY()>=gameConstants.gameareaREACT.y&&e.getX()<=gameConstants.gameareaREACT.width) {
-                    Type[][] localGrid = gameLogic.getGrids();
-                    localGrid[(int) ((e.getY()-gameConstants.gameareaREACT.y)/GameUIConstants.GAME_AREA_RECTANGLE)][e.getX()/GameUIConstants.GAME_AREA_RECTANGLE] = Type.TOWER;
-                    gameLogic.setGrids(localGrid);
+                if(onGameArea(e.getX(),e.getY())) {
+                    if(gameLogic.getFillTowerType()!=null) {
+                        Type[][] localGrid = gameLogic.getGrids();
+                        int x = convertYtoModelX_GameArea(e.getY());
+                        int y = convertXtoModelY_GameArea(e.getX());
+                        if(localGrid[x][y]==Type.EMPTY) {
+                            localGrid[x][y] = gameLogic.getFillTowerType(); //setting the model after click somewhere on the game area
+                            gameLogic.setGrids(localGrid);
+                            repaint();
+                        }
+                    }
+                }
+                else if(playerInfo1BoardTower1_clicked(e.getX(),e.getY())) {
+                    gameLogic.setFillTowerType(Type.TOWER1);
                     repaint();
+                }
+                else if(playerInfo1BoardTower2_clicked(e.getX(),e.getY())){
+                        gameLogic.setFillTowerType(Type.TOWER2);
+                        repaint();
                 }
             }
         });
-
-        //TODO: these listeners can help start the game. If not useful delete.
-        KeyListener gameKeyListener = new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-
-                final InfoBoard infoBoard = gameLogic.getInfoBoard();
-                if (infoBoard.isGameOver()) {
-                    return;
-                }
-
-                switch (e.getKeyCode()) {
-                }
-                repaint();
-            }
-        };
-        addKeyListener(gameKeyListener);
     }
 
 
@@ -80,8 +114,7 @@ public class GameBoard extends JPanel {
     }
 
     private void startNewGame() {
-        createInputDialog();
-
+        //createInputDialog();
         gameLogic.newGame(gameConstants.GAMEAREA_HEIGHT_canBeDividedBy,gameConstants.GAMEAREA_WIDTH_canBeDividedBy, name);
     }
 
@@ -121,7 +154,40 @@ public class GameBoard extends JPanel {
             System.err.println("Failed to set body image! __ " + ex.getMessage());
         }
     }
+    private void loadTower1_OnTheField(Graphics2D graphics2D,int x,int y,boolean disabled){
+        String path;
 
+        if(!disabled) {
+            path = "images/towerExample.png";
+        }
+        else{
+            path = "images/disabled_towerExample.png";
+        }
+        BufferedImage image = null;
+        try {
+            image = ImageLoader.readImage(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        graphics2D.drawImage(image , x, y, GameUIConstants.GAME_AREA_RECTANGLE, GameUIConstants.GAME_AREA_RECTANGLE, null);
+    }
+    private void loadTower2_OnTheField(Graphics2D graphics2D,int x,int y,boolean disabled){
+        String path;
+
+        if(!disabled){
+            path = "images/tower2_Example.png" ;
+        }
+        else{
+            path = "images/disabled_tower2_Example.png";
+        }
+        BufferedImage image = null;
+        try {
+            image = ImageLoader.readImage(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        graphics2D.drawImage(image , x, y, GameUIConstants.GAME_AREA_RECTANGLE, GameUIConstants.GAME_AREA_RECTANGLE, null);
+    }
     private void drawGameArea(Graphics2D graphics2D) {
         //TODO: rethink, just example
         graphics2D.setColor(GameUIConstants.GRID_COLOR);
@@ -137,27 +203,58 @@ public class GameBoard extends JPanel {
                 Rectangle currentField = new Rectangle(gameConstants.gameareaREACT.x+x_row*GameUIConstants.GAME_AREA_RECTANGLE,gameConstants.gameareaREACT.y+y_col*GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.GAME_AREA_RECTANGLE);
                 graphics2D.setColor(Color.BLACK);
                 graphics2D.draw(currentField);
-                if(localGrid[y_col][x_row] == Type.TOWER){
-                    graphics2D.setColor(Color.RED);
-                    graphics2D.fill(currentField);
+                if(localGrid[y_col][x_row] == Type.TOWER1){
+                    loadTower1_OnTheField(graphics2D,currentField.x,currentField.y,false);
+                }
+                else if(localGrid[y_col][x_row] == Type.TOWER2){
+                    loadTower2_OnTheField(graphics2D,currentField.x,currentField.y,false);
                 }
             }
         }
         drawInfoBoard(graphics2D);
     }
-
-
-    private void drawInfoBoard(Graphics2D graphics2D) {
+    private void player1_drawOutTheTowerField(Type Tower,Graphics2D graphics2D){
+        if(Tower == Type.TOWER1){
+            if(gameLogic.getFillTowerType()==Type.TOWER1){
+                graphics2D.setStroke(GameUIConstants.LARGE_STROKE);
+            }
+            else{
+                graphics2D.setStroke(GameUIConstants.SMALL_STROKE);
+            }
+            Rectangle Tower1_Field = new Rectangle(0,GameUIConstants.SMALL_FONT.getSize()*2,GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.GAME_AREA_RECTANGLE);
+            loadTower1_OnTheField(graphics2D,0,GameUIConstants.SMALL_FONT.getSize()*2,false);
+            graphics2D.draw(Tower1_Field);
+        }
+        else if(Tower == Type.TOWER2){
+            if(gameLogic.getFillTowerType()==Type.TOWER2){
+                graphics2D.setStroke(GameUIConstants.LARGE_STROKE);
+            }
+            else{
+                graphics2D.setStroke(GameUIConstants.SMALL_STROKE);
+            }
+            Rectangle Tower2_Field = new Rectangle(GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.SMALL_FONT.getSize()*2,GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.GAME_AREA_RECTANGLE);
+            loadTower2_OnTheField(graphics2D,GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.SMALL_FONT.getSize()*2,false);
+            graphics2D.draw(Tower2_Field);
+        }
+    }
+    private void drawInfoBoard(Graphics2D graphics2D) {//drawing out the player 1 info board
         //TODO: rethink infoboard structure. Just example.
 
         InfoBoard infoBoard = gameLogic.getInfoBoard();
-        int x = GameUIConstants.INFO_POS_X;
-        int y = GameUIConstants.INFO_POS_Y;
+
+
+        graphics2D.setColor(GameUIConstants.GRID_BORDER_COLOR);
+        graphics2D.setStroke(GameUIConstants.LARGE_STROKE);
+        graphics2D.draw(gameConstants.player1InfoBoard);
+
         graphics2D.setColor(GameUIConstants.TEXT_COLOR);
         graphics2D.setFont(GameUIConstants.SMALL_FONT);
+        graphics2D.drawString("Player 1", 0, GameUIConstants.SMALL_FONT.getSize());
+
+        player1_drawOutTheTowerField(Type.TOWER1,graphics2D);
+        player1_drawOutTheTowerField(Type.TOWER2,graphics2D);
 
 
-        graphics2D.drawString("INFO BOARD", x, y);
     }
 
 

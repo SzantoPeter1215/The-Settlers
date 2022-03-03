@@ -9,6 +9,8 @@ public final class GameUIConstants {
     public int GAMEAREA_HEIGHT_canBeDividedBy;
     public int GAMEAREA_WIDTH_canBeDividedBy;
     public Rectangle gameareaREACT;
+    public Rectangle player1InfoBoard;
+    public Rectangle player2InfoBoard;
     public GameUIConstants(){//in this method we calculate the gamearea size. It's important that i can be divided by the small react(it will be one unit on the game where the user can put things)
         int WIDTH_hasToBeDividedByRectSize = GAME_WIDTH;
         while (WIDTH_hasToBeDividedByRectSize>0&&WIDTH_hasToBeDividedByRectSize%GAME_AREA_RECTANGLE!=0){
@@ -23,6 +25,7 @@ public final class GameUIConstants {
         GAMEAREA_HEIGHT_canBeDividedBy = (int)(GAMEAREA_HEIGHT/GAME_AREA_RECTANGLE);
         GAMEAREA_WIDTH_canBeDividedBy = (int)(GAMEAREA_WIDTH/GAME_AREA_RECTANGLE);
         gameareaREACT = new Rectangle(0,(GAME_HEIGHT-GAMEAREA_HEIGHT)/2,GAMEAREA_WIDTH,GAMEAREA_HEIGHT);
+        player1InfoBoard = new Rectangle(0,0,GAMEAREA_WIDTH,(GAME_HEIGHT-GAMEAREA_HEIGHT)/2);
     }
 
     // width will store the width of the screen

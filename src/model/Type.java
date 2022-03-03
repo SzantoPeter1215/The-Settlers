@@ -1,5 +1,5 @@
 package model;
 
 public enum Type {
-    EMPTY,TOWER
+    EMPTY,TOWER1,TOWER2
 }

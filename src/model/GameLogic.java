@@ -5,6 +5,17 @@ import model.info.InfoBoard;
 public final class GameLogic {
     private int row;
     private int column;
+    private String player1_Name;
+    private String player2_Name;
+    private Type FillTowerType;
+
+    public Type getFillTowerType() {
+        return FillTowerType;
+    }
+
+    public void setFillTowerType(Type fillTowerType) {
+        FillTowerType = fillTowerType;
+    }
 
     public int getRow() {
         return row;
