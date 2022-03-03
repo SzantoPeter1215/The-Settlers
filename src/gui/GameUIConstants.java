@@ -26,6 +26,7 @@ public final class GameUIConstants {
         GAMEAREA_WIDTH_canBeDividedBy = (int)(GAMEAREA_WIDTH/GAME_AREA_RECTANGLE);
         gameareaREACT = new Rectangle(0,(GAME_HEIGHT-GAMEAREA_HEIGHT)/2,GAMEAREA_WIDTH,GAMEAREA_HEIGHT);
         player1InfoBoard = new Rectangle(0,0,GAMEAREA_WIDTH,(GAME_HEIGHT-GAMEAREA_HEIGHT)/2);
+        player2InfoBoard = new Rectangle(0,GAME_HEIGHT-((GAME_HEIGHT-GAMEAREA_HEIGHT)/2),GAMEAREA_WIDTH,(GAME_HEIGHT-GAMEAREA_HEIGHT)/2);
     }
 
     // width will store the width of the screen
