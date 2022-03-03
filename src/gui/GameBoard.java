@@ -18,6 +18,69 @@ public class GameBoard extends JPanel {
 
     private GameUIConstants gameConstants;
 
+    private Timer timer;
+
+    public GameBoard(GameLogic gameLogic) {
+        gameConstants = new GameUIConstants();//it will calculate the area
+        this.gameLogic = gameLogic;
+        setPreferredSize(new Dimension(GameUIConstants.GAME_WIDTH, GameUIConstants.GAME_HEIGHT));
+        setBackground(GameUIConstants.BACKGROUND_COLOR);
+        setFocusable(true);
+
+        startNewGame();
+
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+                int startOfThePlayer1InfoBoard = (gameConstants.player1InfoBoard.y+(GameUIConstants.SMALL_FONT.getSize()*2));
+                int endOfThePlayer1InfoBoard = startOfThePlayer1InfoBoard+GameUIConstants.GAME_AREA_RECTANGLE;
+
+                InfoBoard infoBoard = gameLogic.getInfoBoard();
+                if (infoBoard.isGameOver()) {
+                    startNewGame();
+                    //repaint();
+                }
+                if(onGameArea(e.getX(),e.getY())) {
+                    if(gameLogic.getFillTowerType()!=null) {
+                        Type[][] localGrid = gameLogic.getGrids();
+                        int x = convertYtoModelX_GameArea(e.getY());
+                        int y = convertXtoModelY_GameArea(e.getX());
+                        if(localGrid[x][y]==Type.EMPTY) {
+                            localGrid[x][y] = gameLogic.getFillTowerType(); //setting the model after click somewhere on the game area
+                            gameLogic.setGrids(localGrid);
+                            //repaint();
+                        }
+                    }
+                }
+                else if(playerInfo1BoardTower1_clicked(e.getX(),e.getY())) {
+                    gameLogic.setFillTowerType(Type.TOWER1);
+                    //repaint();
+                }
+                else if(playerInfo1BoardTower2_clicked(e.getX(),e.getY())){
+                    gameLogic.setFillTowerType(Type.TOWER2);
+                    //repaint();
+                }
+                //repaint();
+            }
+        });
+    }
+
+    private void startNewGame() {
+        int time = gameConstants.TIMER;
+        this.timer = new Timer(time, this.oneGameCycleAction);
+        this.timer.start();
+        gameLogic.newGame(gameConstants.GAMEAREA_HEIGHT_canBeDividedBy,gameConstants.GAMEAREA_WIDTH_canBeDividedBy, name);
+    }
+
+    private final Action oneGameCycleAction = new AbstractAction() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            System.out.println(2);
+            repaint();
+        }
+    };
+
 
     private boolean onGameArea(int x, int y){
         int startOfTheGameBoard_Y = gameConstants.gameareaREACT.height+gameConstants.gameareaREACT.y;
@@ -52,52 +115,7 @@ public class GameBoard extends JPanel {
     private int convertXtoModelY_GameArea(int x){//it has to be on the gamearea
         return x / GameUIConstants.GAME_AREA_RECTANGLE;
     }
-    public GameBoard(GameLogic gameLogic) {
-        gameConstants = new GameUIConstants();//it will calculate the area
-        this.gameLogic = gameLogic;
-        setPreferredSize(new Dimension(GameUIConstants.GAME_WIDTH, GameUIConstants.GAME_HEIGHT));
-        setBackground(GameUIConstants.BACKGROUND_COLOR);
-        setFocusable(true);
 
-        startNewGame();
-
-
-
-        addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-
-                int startOfThePlayer1InfoBoard = (gameConstants.player1InfoBoard.y+(GameUIConstants.SMALL_FONT.getSize()*2));
-                int endOfThePlayer1InfoBoard = startOfThePlayer1InfoBoard+GameUIConstants.GAME_AREA_RECTANGLE;
-
-                InfoBoard infoBoard = gameLogic.getInfoBoard();
-                if (infoBoard.isGameOver()) {
-                    startNewGame();
-                    repaint();
-                }
-                if(onGameArea(e.getX(),e.getY())) {
-                    if(gameLogic.getFillTowerType()!=null) {
-                        Type[][] localGrid = gameLogic.getGrids();
-                        int x = convertYtoModelX_GameArea(e.getY());
-                        int y = convertXtoModelY_GameArea(e.getX());
-                        if(localGrid[x][y]==Type.EMPTY) {
-                            localGrid[x][y] = gameLogic.getFillTowerType(); //setting the model after click somewhere on the game area
-                            gameLogic.setGrids(localGrid);
-                            repaint();
-                        }
-                    }
-                }
-                else if(playerInfo1BoardTower1_clicked(e.getX(),e.getY())) {
-                    gameLogic.setFillTowerType(Type.TOWER1);
-                    repaint();
-                }
-                else if(playerInfo1BoardTower2_clicked(e.getX(),e.getY())){
-                        gameLogic.setFillTowerType(Type.TOWER2);
-                        repaint();
-                }
-            }
-        });
-    }
 
 
     private void createInputDialog() {
@@ -112,13 +130,6 @@ public class GameBoard extends JPanel {
             name = nameField.getText().trim();
         }
     }
-
-    private void startNewGame() {
-        //createInputDialog();
-        gameLogic.newGame(gameConstants.GAMEAREA_HEIGHT_canBeDividedBy,gameConstants.GAMEAREA_WIDTH_canBeDividedBy, name);
-    }
-
-
 
     private void drawStartScreen(Graphics2D graphics2D) {
 
@@ -286,18 +297,4 @@ public class GameBoard extends JPanel {
         }
         Toolkit.getDefaultToolkit().sync();
     }
-
-
-    private final Action oneGameCycleAction = new AbstractAction() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            InfoBoard infoBoard = gameLogic.getInfoBoard();
-            if (!infoBoard.isGameOver()) {
-                //TODO: use gamelogic to get the current state.
-            }
-            repaint();
-
-        }
-    };
-
 }

@@ -3,7 +3,7 @@ package gui;
 import java.awt.*;
 
 public final class GameUIConstants {
-
+    public int TIMER = 10;
     public int GAMEAREA_HEIGHT;
     public int GAMEAREA_WIDTH;
     public int GAMEAREA_HEIGHT_canBeDividedBy;
