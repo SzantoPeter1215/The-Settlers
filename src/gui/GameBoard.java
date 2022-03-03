@@ -76,7 +76,7 @@ public class GameBoard extends JPanel {
     private final Action oneGameCycleAction = new AbstractAction() {
         @Override
         public void actionPerformed(ActionEvent e) {
-            System.out.println(2);
+            System.out.println(e);
             repaint();
         }
     };
