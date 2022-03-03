@@ -8,6 +8,15 @@ public final class GameLogic {
     private String player1_Name;
     private String player2_Name;
     private Type FillTowerType;
+    private int playerTurn = 1;
+
+    public int getPlayerTurn() {
+        return playerTurn;
+    }
+
+    public void setPlayerTurn(int player) {
+        playerTurn = player;
+    }
 
     public Type getFillTowerType() {
         return FillTowerType;

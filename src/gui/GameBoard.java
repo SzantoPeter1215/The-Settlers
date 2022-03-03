@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.sql.SQLOutput;
 
 public class GameBoard extends JPanel {
 
@@ -61,6 +62,22 @@ public class GameBoard extends JPanel {
                     gameLogic.setFillTowerType(Type.TOWER2);
                     //repaint();
                 }
+                else if(playerInfo1BoardEndTurn_clicked(e.getX(),e.getY())){
+                    gameLogic.setPlayerTurn(2);
+                    //repaint();
+                }
+                else if(playerInfo2BoardTower1_clicked(e.getX(),e.getY())) {
+                    gameLogic.setFillTowerType(Type.TOWER1);
+                    //repaint();
+                }
+                else if(playerInfo2BoardTower2_clicked(e.getX(),e.getY())){
+                    gameLogic.setFillTowerType(Type.TOWER2);
+                    //repaint();
+                }
+                else if(playerInfo2BoardEndTurn_clicked(e.getX(),e.getY())){
+                    gameLogic.setPlayerTurn(1);
+                    //repaint();
+                }
                 //repaint();
             }
         });
@@ -95,7 +112,7 @@ public class GameBoard extends JPanel {
     private boolean playerInfo1BoardTower1_clicked(int x, int y){
         int startOfThePlayer1InfoBoard = (gameConstants.player1InfoBoard.y+(GameUIConstants.SMALL_FONT.getSize()*2));
         int endOfThePlayer1InfoBoard = startOfThePlayer1InfoBoard+GameUIConstants.GAME_AREA_RECTANGLE;
-        if((y>=startOfThePlayer1InfoBoard&&y<=endOfThePlayer1InfoBoard)&&(x>=0&&x<=GameUIConstants.GAME_AREA_RECTANGLE)){
+        if((y>=startOfThePlayer1InfoBoard&&y<=endOfThePlayer1InfoBoard)&&(x>=0&&x<=GameUIConstants.GAME_AREA_RECTANGLE)&&gameLogic.getPlayerTurn()==1){
             return true;
         }
         return false;
@@ -103,7 +120,35 @@ public class GameBoard extends JPanel {
     private boolean playerInfo1BoardTower2_clicked(int x, int y){
         int startOfThePlayer1InfoBoard = (gameConstants.player1InfoBoard.y+(GameUIConstants.SMALL_FONT.getSize()*2));
         int endOfThePlayer1InfoBoard = startOfThePlayer1InfoBoard+GameUIConstants.GAME_AREA_RECTANGLE;
-        if((y>=startOfThePlayer1InfoBoard&&y<=endOfThePlayer1InfoBoard)&&(x>=GameUIConstants.GAME_AREA_RECTANGLE&&x<=(GameUIConstants.GAME_AREA_RECTANGLE*2))){
+        if((y>=startOfThePlayer1InfoBoard&&y<=endOfThePlayer1InfoBoard)&&(x>=GameUIConstants.GAME_AREA_RECTANGLE&&x<=(GameUIConstants.GAME_AREA_RECTANGLE*2))&& gameLogic.getPlayerTurn()==1){
+            return true;
+        }
+        return false;
+    }
+    private boolean playerInfo1BoardEndTurn_clicked(int x, int y){
+        if((y>=GameUIConstants.SMALL_FONT.getSize()*2&&y<=GameUIConstants.SMALL_FONT.getSize()*3)&&(x>=GameUIConstants.GAME_AREA_RECTANGLE*4&&x<=GameUIConstants.GAME_AREA_RECTANGLE*6)&&gameLogic.getPlayerTurn()==1){
+            return true;
+        }
+        return false;
+    }
+    private boolean playerInfo2BoardTower1_clicked(int x, int y){
+        int startOfThePlayer2InfoBoard = (gameConstants.player2InfoBoard.y+(GameUIConstants.SMALL_FONT.getSize()*2));
+        int endOfThePlayer2InfoBoard = startOfThePlayer2InfoBoard+GameUIConstants.GAME_AREA_RECTANGLE;
+        if((y>=startOfThePlayer2InfoBoard&&y<=endOfThePlayer2InfoBoard)&&(x>=0&&x<=GameUIConstants.GAME_AREA_RECTANGLE)&&gameLogic.getPlayerTurn()==2){
+            return true;
+        }
+        return false;
+    }
+    private boolean playerInfo2BoardTower2_clicked(int x, int y){
+        int startOfThePlayer2InfoBoard = (gameConstants.player2InfoBoard.y+(GameUIConstants.SMALL_FONT.getSize()*2));
+        int endOfThePlayer2InfoBoard = startOfThePlayer2InfoBoard+GameUIConstants.GAME_AREA_RECTANGLE;
+        if((y>=startOfThePlayer2InfoBoard&&y<=endOfThePlayer2InfoBoard)&&(x>=GameUIConstants.GAME_AREA_RECTANGLE&&x<=(GameUIConstants.GAME_AREA_RECTANGLE*2))&& gameLogic.getPlayerTurn()==2){
+            return true;
+        }
+        return false;
+    }
+    private boolean playerInfo2BoardEndTurn_clicked(int x, int y){
+        if((y>=gameConstants.player2InfoBoard.y+GameUIConstants.SMALL_FONT.getSize()*2&&y<=gameConstants.player2InfoBoard.y+GameUIConstants.SMALL_FONT.getSize()*3)&&(x>=GameUIConstants.GAME_AREA_RECTANGLE*4&&x<=GameUIConstants.GAME_AREA_RECTANGLE*6)&&gameLogic.getPlayerTurn()==2){
             return true;
         }
         return false;
@@ -226,7 +271,7 @@ public class GameBoard extends JPanel {
     }
     private void player1_drawOutTheTowerField(Type Tower,Graphics2D graphics2D){
         if(Tower == Type.TOWER1){
-            if(gameLogic.getFillTowerType()==Type.TOWER1){
+            if(gameLogic.getFillTowerType()==Type.TOWER1 && gameLogic.getPlayerTurn()==1){
                 graphics2D.setStroke(GameUIConstants.LARGE_STROKE);
             }
             else{
@@ -237,7 +282,7 @@ public class GameBoard extends JPanel {
             graphics2D.draw(Tower1_Field);
         }
         else if(Tower == Type.TOWER2){
-            if(gameLogic.getFillTowerType()==Type.TOWER2){
+            if(gameLogic.getFillTowerType()==Type.TOWER2 && gameLogic.getPlayerTurn()==1){
                 graphics2D.setStroke(GameUIConstants.LARGE_STROKE);
             }
             else{
@@ -251,6 +296,34 @@ public class GameBoard extends JPanel {
     private void player1_drawOutEndButton(Graphics2D graphics2D){//todo: when someone clicks on this the tower image become disabled
         graphics2D.setStroke(GameUIConstants.SMALL_STROKE);
         graphics2D.drawString("End turn", GameUIConstants.GAME_AREA_RECTANGLE*4, GameUIConstants.SMALL_FONT.getSize()*3);
+    }
+    private void player2_drawOutTheTowerField(Type Tower,Graphics2D graphics2D){
+        if(Tower == Type.TOWER1){
+            if(gameLogic.getFillTowerType()==Type.TOWER1 && gameLogic.getPlayerTurn()==2){
+                graphics2D.setStroke(GameUIConstants.LARGE_STROKE);
+            }
+            else{
+                graphics2D.setStroke(GameUIConstants.SMALL_STROKE);
+            }
+            Rectangle Tower1_Field = new Rectangle(0,gameConstants.player2InfoBoard.y+GameUIConstants.SMALL_FONT.getSize()*2,GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.GAME_AREA_RECTANGLE);
+            loadTower1_OnTheField(graphics2D,0,gameConstants.player2InfoBoard.y+GameUIConstants.SMALL_FONT.getSize()*2,false);
+            graphics2D.draw(Tower1_Field);
+        }
+        else if(Tower == Type.TOWER2){
+            if(gameLogic.getFillTowerType()==Type.TOWER2 && gameLogic.getPlayerTurn()==2){
+                graphics2D.setStroke(GameUIConstants.LARGE_STROKE);
+            }
+            else{
+                graphics2D.setStroke(GameUIConstants.SMALL_STROKE);
+            }
+            Rectangle Tower2_Field = new Rectangle(GameUIConstants.GAME_AREA_RECTANGLE,gameConstants.player2InfoBoard.y+GameUIConstants.SMALL_FONT.getSize()*2,GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.GAME_AREA_RECTANGLE);
+            loadTower2_OnTheField(graphics2D,GameUIConstants.GAME_AREA_RECTANGLE,gameConstants.player2InfoBoard.y+GameUIConstants.SMALL_FONT.getSize()*2,false);
+            graphics2D.draw(Tower2_Field);
+        }
+    }
+    private void player2_drawOutEndButton(Graphics2D graphics2D){//todo: when someone clicks on this the tower image become disabled
+        graphics2D.setStroke(GameUIConstants.SMALL_STROKE);
+        graphics2D.drawString("End turn", GameUIConstants.GAME_AREA_RECTANGLE*4, gameConstants.player2InfoBoard.y+GameUIConstants.SMALL_FONT.getSize()*3);
     }
     private void drawInfoBoard(Graphics2D graphics2D) {//drawing out the player 1 info board
         //TODO: rethink infoboard structure. Just example.
@@ -274,6 +347,9 @@ public class GameBoard extends JPanel {
         graphics2D.setFont(GameUIConstants.SMALL_FONT);
         graphics2D.drawString("Player 2", 0, gameConstants.player2InfoBoard.y+GameUIConstants.SMALL_FONT.getSize());
 
+        player2_drawOutTheTowerField(Type.TOWER1,graphics2D);
+        player2_drawOutTheTowerField(Type.TOWER2,graphics2D);
+        player2_drawOutEndButton(graphics2D);
 
 
     }
