@@ -20,7 +20,7 @@
 ![uml_done](/uploads/65052e3fa94e2ec2701ea09b8b071035/uml_done.PNG)
 
 ## Use case 
-![USE_CASE_populated](/uploads/1ad27a64d41b0309811822da551536dc/USE_CASE_populated.png)
+![useCase_done](/uploads/7a6ad3d171eda6ad2459d0ca47a1bfa1/useCase_done.PNG)
 
 ## User stories
 
