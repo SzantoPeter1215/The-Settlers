@@ -17,10 +17,10 @@
 ![image008](/uploads/ae93b7a97727a1eac3c89ed61e21daac/image008.png)
 ### Az egységek a tornyokhoz érnek, ahol sebzést kapnak tőlük(bizonyos távolságtól). A tornyok kölünbözően sebeznek(távolság és gyorsaság). Ha egy egység eljutt egy vár elötti mezőhöz, elpusztul és a vár ereje csökken. A kör végén az összes elpusztított egységért is fogunk már pénzt kapna, nemcsak a meglévő egységeinkért(ebben az esetben a piros játékos). 
 ## Diagram
-![uml](/uploads/e8d477b6244f874c39190ebc43130436/uml.PNG)
+![uml_done](/uploads/65052e3fa94e2ec2701ea09b8b071035/uml_done.PNG)
 
 ## Use case 
-![usecase](/uploads/e9a363190fc56737d2fcdfadb2925183/usecase.PNG)
+![USE_CASE_populated](/uploads/1ad27a64d41b0309811822da551536dc/USE_CASE_populated.png)
 
 ## User stories
 
