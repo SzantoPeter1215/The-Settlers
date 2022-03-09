@@ -9,6 +9,18 @@ public final class GameLogic {
     private String player2_Name;
     private Type FillTowerType;
     private int playerTurn = 1;
+    private int player1Gold = GameConstants.START_GOLD_PLAYER;
+    private int player2Gold = GameConstants.START_GOLD_PLAYER;
+
+
+
+    public int getPlayer1Gold() {
+        return player1Gold;
+    }
+
+    public int getPlayer2Gold() {
+        return player2Gold;
+    }
 
     public int getPlayerTurn() {
         return playerTurn;
@@ -32,6 +44,10 @@ public final class GameLogic {
 
     public void setRow(int row) {
         this.row = row;
+    }
+
+    public void setTypeElement(int x, int y,Type element){
+        this.grids[x][y] = element;
     }
 
     public Type[][] getGrids() {
@@ -83,6 +99,27 @@ public final class GameLogic {
             for (int j = 0; j < column; ++j) {
                 grids[i][j] = Type.EMPTY;
             }
+        }
+    }
+    public void removeMoney(int minusGold,int player){
+        if(player==1){
+            int expectedGold = this.player1Gold - minusGold;
+            if(expectedGold<0){
+                this.player1Gold = 0;
+            }
+            else{
+                this.player1Gold -= minusGold;
+            }
+        }
+        else if(player==2){
+            int expectedGold = this.player2Gold - minusGold;
+            if(expectedGold<0){
+                this.player2Gold = 0;
+            }
+            else{
+                this.player2Gold -= minusGold;
+            }
+
         }
     }
 

@@ -9,7 +9,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.sql.SQLOutput;
+import java.util.concurrent.ThreadLocalRandom;
+
 
 public class GameBoard extends JPanel {
 
@@ -20,6 +21,9 @@ public class GameBoard extends JPanel {
     private GameUIConstants gameConstants;
 
     private Timer timer;
+
+    private Position player1Castle;
+    private Position player2Castle;
 
     public GameBoard(GameLogic gameLogic) {
         gameConstants = new GameUIConstants();//it will calculate the area
@@ -50,6 +54,7 @@ public class GameBoard extends JPanel {
                         if(localGrid[x][y]==Type.EMPTY) {
                             localGrid[x][y] = gameLogic.getFillTowerType(); //setting the model after click somewhere on the game area
                             gameLogic.setGrids(localGrid);
+                            gameLogic.removeMoney(GameConstants.TOWER1_PRICE,gameLogic.getPlayerTurn());
                             //repaint();
                         }
                     }
@@ -88,6 +93,10 @@ public class GameBoard extends JPanel {
         this.timer = new Timer(time, this.oneGameCycleAction);
         this.timer.start();
         gameLogic.newGame(gameConstants.GAMEAREA_HEIGHT_canBeDividedBy,gameConstants.GAMEAREA_WIDTH_canBeDividedBy, name);
+        int castleRandomX = ThreadLocalRandom.current().nextInt(0, (int) (gameConstants.GAMEAREA_WIDTH_canBeDividedBy/4));
+        int castleRandomY = ThreadLocalRandom.current().nextInt(0, (int) gameConstants.GAMEAREA_HEIGHT_canBeDividedBy);
+        this.player1Castle = new Position(castleRandomX,castleRandomY);
+        gameLogic.setTypeElement(castleRandomY,castleRandomX,Type.CASTLE);
     }
 
     private final Action oneGameCycleAction = new AbstractAction() {
@@ -244,6 +253,22 @@ public class GameBoard extends JPanel {
         }
         graphics2D.drawImage(image , x, y, GameUIConstants.GAME_AREA_RECTANGLE, GameUIConstants.GAME_AREA_RECTANGLE, null);
     }
+    private void loadCastleOnTheField(Graphics2D graphics2D,int x,int y,boolean disabled){
+        String path;
+        if(!disabled){
+            path = "images/castle.png" ;
+        }
+        else{
+            path = "images/castle.png";
+        }
+        BufferedImage image = null;
+        try {
+            image = ImageLoader.readImage(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        graphics2D.drawImage(image , x, y, GameUIConstants.GAME_AREA_RECTANGLE, GameUIConstants.GAME_AREA_RECTANGLE, null);
+    }
     private void drawGameArea(Graphics2D graphics2D) {
         //TODO: rethink, just example
         graphics2D.setColor(GameUIConstants.GRID_COLOR);
@@ -265,11 +290,14 @@ public class GameBoard extends JPanel {
                 else if(localGrid[y_col][x_row] == Type.TOWER2){
                     loadTower2_OnTheField(graphics2D,currentField.x,currentField.y,false);
                 }
+                else if(localGrid[y_col][x_row]== Type.CASTLE){
+                    loadCastleOnTheField(graphics2D,currentField.x,currentField.y,false);
+                }
             }
         }
         drawInfoBoard(graphics2D);
     }
-    private void player1_drawOutTheTowerField(Type Tower,Graphics2D graphics2D){
+    private void player1_drawOutTheTowerField(Type Tower,Graphics2D graphics2D,boolean disabled){
         if(Tower == Type.TOWER1){
             if(gameLogic.getFillTowerType()==Type.TOWER1 && gameLogic.getPlayerTurn()==1){
                 graphics2D.setStroke(GameUIConstants.LARGE_STROKE);
@@ -278,7 +306,7 @@ public class GameBoard extends JPanel {
                 graphics2D.setStroke(GameUIConstants.SMALL_STROKE);
             }
             Rectangle Tower1_Field = new Rectangle(0,GameUIConstants.SMALL_FONT.getSize()*2,GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.GAME_AREA_RECTANGLE);
-            loadTower1_OnTheField(graphics2D,0,GameUIConstants.SMALL_FONT.getSize()*2,false);
+            loadTower1_OnTheField(graphics2D,0,GameUIConstants.SMALL_FONT.getSize()*2,disabled);
             graphics2D.draw(Tower1_Field);
         }
         else if(Tower == Type.TOWER2){
@@ -289,15 +317,21 @@ public class GameBoard extends JPanel {
                 graphics2D.setStroke(GameUIConstants.SMALL_STROKE);
             }
             Rectangle Tower2_Field = new Rectangle(GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.SMALL_FONT.getSize()*2,GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.GAME_AREA_RECTANGLE);
-            loadTower2_OnTheField(graphics2D,GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.SMALL_FONT.getSize()*2,false);
+            loadTower2_OnTheField(graphics2D,GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.SMALL_FONT.getSize()*2,disabled);
             graphics2D.draw(Tower2_Field);
         }
     }
     private void player1_drawOutEndButton(Graphics2D graphics2D){//todo: when someone clicks on this the tower image become disabled
         graphics2D.setStroke(GameUIConstants.SMALL_STROKE);
-        graphics2D.drawString("End turn", GameUIConstants.GAME_AREA_RECTANGLE*4, GameUIConstants.SMALL_FONT.getSize()*3);
+        if(gameLogic.getPlayerTurn()==2)
+        {
+            graphics2D.drawString("not my turn", GameUIConstants.GAME_AREA_RECTANGLE*4, GameUIConstants.SMALL_FONT.getSize()*3);
+        }
+        else{
+            graphics2D.drawString("End turn", GameUIConstants.GAME_AREA_RECTANGLE*4, GameUIConstants.SMALL_FONT.getSize()*3);
+        }
     }
-    private void player2_drawOutTheTowerField(Type Tower,Graphics2D graphics2D){
+    private void player2_drawOutTheTowerField(Type Tower,Graphics2D graphics2D,boolean disabled){
         if(Tower == Type.TOWER1){
             if(gameLogic.getFillTowerType()==Type.TOWER1 && gameLogic.getPlayerTurn()==2){
                 graphics2D.setStroke(GameUIConstants.LARGE_STROKE);
@@ -306,7 +340,7 @@ public class GameBoard extends JPanel {
                 graphics2D.setStroke(GameUIConstants.SMALL_STROKE);
             }
             Rectangle Tower1_Field = new Rectangle(0,gameConstants.player2InfoBoard.y+GameUIConstants.SMALL_FONT.getSize()*2,GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.GAME_AREA_RECTANGLE);
-            loadTower1_OnTheField(graphics2D,0,gameConstants.player2InfoBoard.y+GameUIConstants.SMALL_FONT.getSize()*2,false);
+            loadTower1_OnTheField(graphics2D,0,gameConstants.player2InfoBoard.y+GameUIConstants.SMALL_FONT.getSize()*2,disabled);
             graphics2D.draw(Tower1_Field);
         }
         else if(Tower == Type.TOWER2){
@@ -317,13 +351,18 @@ public class GameBoard extends JPanel {
                 graphics2D.setStroke(GameUIConstants.SMALL_STROKE);
             }
             Rectangle Tower2_Field = new Rectangle(GameUIConstants.GAME_AREA_RECTANGLE,gameConstants.player2InfoBoard.y+GameUIConstants.SMALL_FONT.getSize()*2,GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.GAME_AREA_RECTANGLE);
-            loadTower2_OnTheField(graphics2D,GameUIConstants.GAME_AREA_RECTANGLE,gameConstants.player2InfoBoard.y+GameUIConstants.SMALL_FONT.getSize()*2,false);
+            loadTower2_OnTheField(graphics2D,GameUIConstants.GAME_AREA_RECTANGLE,gameConstants.player2InfoBoard.y+GameUIConstants.SMALL_FONT.getSize()*2,disabled);
             graphics2D.draw(Tower2_Field);
         }
     }
     private void player2_drawOutEndButton(Graphics2D graphics2D){//todo: when someone clicks on this the tower image become disabled
         graphics2D.setStroke(GameUIConstants.SMALL_STROKE);
-        graphics2D.drawString("End turn", GameUIConstants.GAME_AREA_RECTANGLE*4, gameConstants.player2InfoBoard.y+GameUIConstants.SMALL_FONT.getSize()*3);
+        if(gameLogic.getPlayerTurn()==1){
+            graphics2D.drawString("not my turn", GameUIConstants.GAME_AREA_RECTANGLE*4, gameConstants.player2InfoBoard.y+GameUIConstants.SMALL_FONT.getSize()*3);
+        }
+        else{
+            graphics2D.drawString("End turn", GameUIConstants.GAME_AREA_RECTANGLE*4, gameConstants.player2InfoBoard.y+GameUIConstants.SMALL_FONT.getSize()*3);
+        }
     }
     private void drawInfoBoard(Graphics2D graphics2D) {//drawing out the player 1 info board
         //TODO: rethink infoboard structure. Just example.
@@ -335,20 +374,33 @@ public class GameBoard extends JPanel {
 
         graphics2D.setColor(GameUIConstants.TEXT_COLOR);
         graphics2D.setFont(GameUIConstants.SMALL_FONT);
-        graphics2D.drawString("Player 1", 0, GameUIConstants.SMALL_FONT.getSize());
+        graphics2D.drawString("Player 1         Money: "+gameLogic.getPlayer1Gold(), 0, GameUIConstants.SMALL_FONT.getSize());
 
-        player1_drawOutTheTowerField(Type.TOWER1,graphics2D);
-        player1_drawOutTheTowerField(Type.TOWER2,graphics2D);
+        if(gameLogic.getPlayerTurn()==2){
+            player1_drawOutTheTowerField(Type.TOWER1,graphics2D,true);
+            player1_drawOutTheTowerField(Type.TOWER2,graphics2D,true);
+        }
+        else{
+            player1_drawOutTheTowerField(Type.TOWER1,graphics2D,false);
+            player1_drawOutTheTowerField(Type.TOWER2,graphics2D,false);
+        }
         player1_drawOutEndButton(graphics2D);
 
         graphics2D.draw(gameConstants.player2InfoBoard);
 
         graphics2D.setColor(GameUIConstants.TEXT_COLOR);
         graphics2D.setFont(GameUIConstants.SMALL_FONT);
-        graphics2D.drawString("Player 2", 0, gameConstants.player2InfoBoard.y+GameUIConstants.SMALL_FONT.getSize());
+        graphics2D.drawString("Player 2         Money: "+gameLogic.getPlayer2Gold(), 0, gameConstants.player2InfoBoard.y+GameUIConstants.SMALL_FONT.getSize());
 
-        player2_drawOutTheTowerField(Type.TOWER1,graphics2D);
-        player2_drawOutTheTowerField(Type.TOWER2,graphics2D);
+        if(gameLogic.getPlayerTurn()==1){
+            player2_drawOutTheTowerField(Type.TOWER1,graphics2D,true);
+            player2_drawOutTheTowerField(Type.TOWER2,graphics2D,true);
+        }
+        else{
+            player2_drawOutTheTowerField(Type.TOWER1,graphics2D,false);
+            player2_drawOutTheTowerField(Type.TOWER2,graphics2D,false);
+        }
+
         player2_drawOutEndButton(graphics2D);
 
 

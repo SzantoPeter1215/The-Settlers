@@ -5,4 +5,7 @@ public final class GameConstants {
 
     public static final int NORMAL_ROW_COUNT = 1;
     public static final int NORMAL_COL_COUNT = 1;
+    public static final int START_GOLD_PLAYER = 1000;
+    public static final int TOWER1_PRICE = 50;
+    public static final int TOWER2_PRICE = 100;
 }
