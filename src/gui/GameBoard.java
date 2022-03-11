@@ -37,14 +37,15 @@ public class GameBoard extends JPanel {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-
+                //TODO: create disabled state for the WHOLE INFO BOARD!!
+                if(gameLogic.getPlayerTurn() == 0) return;
                 int startOfThePlayer1InfoBoard = (gameConstants.player1InfoBoard.y+(GameUIConstants.SMALL_FONT.getSize()*2));
                 int endOfThePlayer1InfoBoard = startOfThePlayer1InfoBoard+GameUIConstants.GAME_AREA_RECTANGLE;
-
+                //TODO: REFACTOR!
                 InfoBoard infoBoard = gameLogic.getInfoBoard();
                 if (infoBoard.isGameOver()) {
                     startNewGame();
-                    //repaint();
+
                 }
                 if(onGameArea(e.getX(),e.getY())) {
                     if(gameLogic.getFillTowerType()!=null) {
@@ -55,35 +56,36 @@ public class GameBoard extends JPanel {
                             localGrid[x][y] = gameLogic.getFillTowerType(); //setting the model after click somewhere on the game area
                             gameLogic.setGrids(localGrid);
                             gameLogic.removeMoney(GameConstants.TOWER1_PRICE,gameLogic.getPlayerTurn());
-                            //repaint();
+
                         }
                     }
                 }
                 else if(playerInfo1BoardTower1_clicked(e.getX(),e.getY())) {
                     gameLogic.setFillTowerType(Type.TOWER1);
-                    //repaint();
+
                 }
                 else if(playerInfo1BoardTower2_clicked(e.getX(),e.getY())){
                     gameLogic.setFillTowerType(Type.TOWER2);
-                    //repaint();
+
                 }
                 else if(playerInfo1BoardEndTurn_clicked(e.getX(),e.getY())){
                     gameLogic.setPlayerTurn(2);
-                    //repaint();
+
                 }
                 else if(playerInfo2BoardTower1_clicked(e.getX(),e.getY())) {
                     gameLogic.setFillTowerType(Type.TOWER1);
-                    //repaint();
+
                 }
                 else if(playerInfo2BoardTower2_clicked(e.getX(),e.getY())){
                     gameLogic.setFillTowerType(Type.TOWER2);
-                    //repaint();
+
                 }
                 else if(playerInfo2BoardEndTurn_clicked(e.getX(),e.getY())){
-                    gameLogic.setPlayerTurn(1);
-                    //repaint();
+                    //TODO: create simulated part by setting variable to 0
+                    gameLogic.setPlayerTurn(0);
+
                 }
-                //repaint();
+                repaint();
             }
         });
     }
@@ -102,7 +104,9 @@ public class GameBoard extends JPanel {
     private final Action oneGameCycleAction = new AbstractAction() {
         @Override
         public void actionPerformed(ActionEvent e) {
-            System.out.println(e);
+            if(gameLogic.getPlayerTurn() == 0) {
+                gameLogic.nextAttackPhase();
+            }
             repaint();
         }
     };
@@ -170,20 +174,6 @@ public class GameBoard extends JPanel {
         return x / GameUIConstants.GAME_AREA_RECTANGLE;
     }
 
-
-
-    private void createInputDialog() {
-        JTextField nameField = new JTextField(5);
-
-        JPanel myPanel = new JPanel();
-        myPanel.add(new JLabel("Name: "));
-
-        int result = JOptionPane.showConfirmDialog(null, myPanel,
-                "Please enter your game settings:", JOptionPane.OK_CANCEL_OPTION);
-        if (result == JOptionPane.OK_OPTION) {
-            name = nameField.getText().trim();
-        }
-    }
 
     private void drawStartScreen(Graphics2D graphics2D) {
 
@@ -270,7 +260,6 @@ public class GameBoard extends JPanel {
         graphics2D.drawImage(image , x, y, GameUIConstants.GAME_AREA_RECTANGLE, GameUIConstants.GAME_AREA_RECTANGLE, null);
     }
     private void drawGameArea(Graphics2D graphics2D) {
-        //TODO: rethink, just example
         graphics2D.setColor(GameUIConstants.GRID_COLOR);
         graphics2D.fill(gameConstants.gameareaREACT);
         graphics2D.setStroke(GameUIConstants.LARGE_STROKE);

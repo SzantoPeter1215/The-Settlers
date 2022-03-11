@@ -62,6 +62,11 @@ public final class GameLogic {
 
     private InfoBoard infoBoard;
 
+    /*
+        Durning attack phase we count how much rounds has been elpased
+        and we swich back to the forst player once it's done.
+    **/
+    private int stepCounter;
 
     public GameLogic() {
 
@@ -72,6 +77,7 @@ public final class GameLogic {
         this.column = column;
 
         grids = new Type[row][column];
+        stepCounter = 0;
         initGrid();
 
         initInfoBoard();
@@ -123,7 +129,43 @@ public final class GameLogic {
         }
     }
 
+    public void nextAttackPhase() {
+        if(stepCounter >= 3) {
+            stepCounter = 0;
+            playerTurn = 1;
+            return;
+        }
+        ++stepCounter;
+        //TODO: create a method that accepts a function and executes it to all the grid elements.
+        //TODO: HANDLE WHEN TWO THINGS ARE IN THE SAME PLACE!!!
+        for (int i = 0; i < row; ++i) {
+            for (int j = 0; j < column; ++j) {
+                Type current = grids[i][j];
+                switch (current) {
+                    case TOWER1: {
+                        grids[i][j] = Type.EMPTY;
+                        if(j >= column - 1) break; //out of index stb
+                        grids[i][j + 1] = Type.TOWER1;
+                        ++j;
+                        break;
+                    }
+                    case TOWER2: {
+                        grids[i][j] = Type.EMPTY;
+                        if(j <= 1) break;
+                        grids[i][j - 3] = Type.TOWER2;
+                        break;
+                    }
+                    default: {
+                    //TODO: add the other types once done
+                    }
+                }
+            }
+        }
+    }
+
+
     public InfoBoard getInfoBoard() {
         return infoBoard;
     }
+
 }
