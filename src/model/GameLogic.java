@@ -8,7 +8,7 @@ public final class GameLogic {
     private String player1_Name;
     private String player2_Name;
     private Type FillTowerType;
-    private int playerTurn = 1;
+    private PlayerTurn playerTurn = PlayerTurn.PLAYER1;
     private int player1Gold = GameConstants.START_GOLD_PLAYER;
     private int player2Gold = GameConstants.START_GOLD_PLAYER;
 
@@ -22,11 +22,9 @@ public final class GameLogic {
         return player2Gold;
     }
 
-    public int getPlayerTurn() {
-        return playerTurn;
-    }
+    public PlayerTurn getPlayerTurn() { return playerTurn; }
 
-    public void setPlayerTurn(int player) {
+    public void setPlayerTurn(PlayerTurn player) {
         playerTurn = player;
     }
 
@@ -107,8 +105,8 @@ public final class GameLogic {
             }
         }
     }
-    public void removeMoney(int minusGold,int player){
-        if(player==1){
+    public void removeMoney(int minusGold,PlayerTurn player){
+        if(player==PlayerTurn.PLAYER1){
             int expectedGold = this.player1Gold - minusGold;
             if(expectedGold<0){
                 this.player1Gold = 0;
@@ -117,7 +115,7 @@ public final class GameLogic {
                 this.player1Gold -= minusGold;
             }
         }
-        else if(player==2){
+        else if(player==PlayerTurn.PLAYER2){
             int expectedGold = this.player2Gold - minusGold;
             if(expectedGold<0){
                 this.player2Gold = 0;
@@ -132,7 +130,7 @@ public final class GameLogic {
     public void nextAttackPhase() {
         if(stepCounter >= 3) {
             stepCounter = 0;
-            playerTurn = 1;
+            playerTurn = PlayerTurn.PLAYER1;
             return;
         }
         ++stepCounter;
