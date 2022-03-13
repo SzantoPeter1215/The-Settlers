@@ -274,7 +274,6 @@ public class GameBoard extends JPanel {
             for (int x_row = 0; x_row < gameConstants.GAMEAREA_WIDTH_canBeDividedBy; x_row++) {
                 Rectangle currentField = new Rectangle(gameConstants.gameareaREACT.x+x_row*GameUIConstants.GAME_AREA_RECTANGLE,gameConstants.gameareaREACT.y+y_col*GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.GAME_AREA_RECTANGLE);
                 graphics2D.setColor(Color.BLACK);
-                graphics2D.draw(currentField);
                 if(localGrid[y_col][x_row] == Type.TOWER1){
                     loadTower1_OnTheField(graphics2D,currentField.x,currentField.y,false);
                 }
@@ -283,6 +282,9 @@ public class GameBoard extends JPanel {
                 }
                 else if(localGrid[y_col][x_row]== Type.CASTLE){
                     loadCastleOnTheField(graphics2D,currentField.x,currentField.y,false);
+                }
+                else{
+                    graphics2D.draw(currentField);
                 }
             }
         }
