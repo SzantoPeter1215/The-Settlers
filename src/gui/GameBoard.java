@@ -130,7 +130,7 @@ public class GameBoard extends JPanel {
         if(playerTurn==PlayerTurn.PLAYER2) {
             int startOfThePlayer2InfoBoard = (gameConstants.player2InfoBoard.y + (GameUIConstants.SMALL_FONT.getSize() * 2));
             int endOfThePlayer2InfoBoard = startOfThePlayer2InfoBoard + GameUIConstants.GAME_AREA_RECTANGLE;
-            if ((y >= startOfThePlayer2InfoBoard && y <= endOfThePlayer2InfoBoard) && (x >= 0 && x <= GameUIConstants.GAME_AREA_RECTANGLE)) {
+            if ((y >= startOfThePlayer2InfoBoard&&y<=endOfThePlayer2InfoBoard)&&(x>=0&&x<=GameUIConstants.GAME_AREA_RECTANGLE)){
                 return true;
             }
         }
@@ -154,11 +154,16 @@ public class GameBoard extends JPanel {
         return false;
     }
     private boolean playerInfoBoardEndTurn_clicked(int x, int y){
-        //TODO:shorten these if statements
-        if((y>=GameUIConstants.SMALL_FONT.getSize()*2&&y<=GameUIConstants.SMALL_FONT.getSize()*3)&&(x>=GameUIConstants.GAME_AREA_RECTANGLE*4&&x<=GameUIConstants.GAME_AREA_RECTANGLE*6)&&playerTurn==PlayerTurn.PLAYER1){
+        int player1EndTurnY1 = GameUIConstants.SMALL_FONT.getSize()*2;
+        int player1EndTurnY2 = GameUIConstants.SMALL_FONT.getSize()*3;
+        int EndTurnX1 = GameUIConstants.GAME_AREA_RECTANGLE*4;
+        int EndTurnX2 = GameUIConstants.GAME_AREA_RECTANGLE*6;
+        if((y>=player1EndTurnY1&&y<=player1EndTurnY2)&&(x>=EndTurnX1&&x<=EndTurnX2)&&playerTurn==PlayerTurn.PLAYER1){
             return true;
         }
-        if((y>=gameConstants.player2InfoBoard.y+GameUIConstants.SMALL_FONT.getSize()*2&&y<=gameConstants.player2InfoBoard.y+GameUIConstants.SMALL_FONT.getSize()*3)&&(x>=GameUIConstants.GAME_AREA_RECTANGLE*4&&x<=GameUIConstants.GAME_AREA_RECTANGLE*6)&&playerTurn==PlayerTurn.PLAYER2){
+        int player2EndTurnY1 = gameConstants.player2InfoBoard.y+GameUIConstants.SMALL_FONT.getSize()*2;
+        int player2EndTurnY2 = gameConstants.player2InfoBoard.y+GameUIConstants.SMALL_FONT.getSize()*3;
+        if((y>=player2EndTurnY1&&y<=player2EndTurnY2)&&(x>=EndTurnX1&&x<=EndTurnX2)&&playerTurn==PlayerTurn.PLAYER2){
             return true;
         }
         return false;
@@ -283,68 +288,58 @@ public class GameBoard extends JPanel {
         }
         drawInfoBoard(graphics2D);
     }
-    //TODO: refactor the player1/player2 draw out functions
-    private void player1_drawOutTheTowerField(Type Tower,Graphics2D graphics2D,boolean disabled){
+    private void drawOutTheTowerField(Type Tower,Graphics2D graphics2D,boolean disabled){
         if(Tower == Type.TOWER1){
-            if(gameLogic.getFillTowerType()==Type.TOWER1 && gameLogic.getPlayerTurn()==PlayerTurn.PLAYER1){
+            if(gameLogic.getFillTowerType()==Type.TOWER1 && !disabled){
                 graphics2D.setStroke(GameUIConstants.LARGE_STROKE);
             }
             else{
                 graphics2D.setStroke(GameUIConstants.SMALL_STROKE);
             }
-            Rectangle Tower1_Field = new Rectangle(0,GameUIConstants.SMALL_FONT.getSize()*2,GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.GAME_AREA_RECTANGLE);
+            Rectangle player1Tower1_Field = new Rectangle(0,GameUIConstants.SMALL_FONT.getSize()*2,GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.GAME_AREA_RECTANGLE);
             loadTower1_OnTheField(graphics2D,0,GameUIConstants.SMALL_FONT.getSize()*2,disabled);
-            graphics2D.draw(Tower1_Field);
+            graphics2D.draw(player1Tower1_Field);
+            if(gameLogic.getFillTowerType()==Type.TOWER1 && disabled){
+                graphics2D.setStroke(GameUIConstants.LARGE_STROKE);
+            }
+            else{
+                graphics2D.setStroke(GameUIConstants.SMALL_STROKE);
+            }
+            Rectangle player2Tower1_Field = new Rectangle(0,gameConstants.player2InfoBoard.y+GameUIConstants.SMALL_FONT.getSize()*2,GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.GAME_AREA_RECTANGLE);
+            loadTower1_OnTheField(graphics2D,0,gameConstants.player2InfoBoard.y+GameUIConstants.SMALL_FONT.getSize()*2,!disabled);
+            graphics2D.draw(player2Tower1_Field);
         }
         else if(Tower == Type.TOWER2){
-            if(gameLogic.getFillTowerType()==Type.TOWER2 && gameLogic.getPlayerTurn()==PlayerTurn.PLAYER1){
+            if(gameLogic.getFillTowerType()==Type.TOWER2 && !disabled){
                 graphics2D.setStroke(GameUIConstants.LARGE_STROKE);
             }
             else{
                 graphics2D.setStroke(GameUIConstants.SMALL_STROKE);
             }
-            Rectangle Tower2_Field = new Rectangle(GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.SMALL_FONT.getSize()*2,GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.GAME_AREA_RECTANGLE);
+            Rectangle player1Tower2_Field = new Rectangle(GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.SMALL_FONT.getSize()*2,GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.GAME_AREA_RECTANGLE);
             loadTower2_OnTheField(graphics2D,GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.SMALL_FONT.getSize()*2,disabled);
-            graphics2D.draw(Tower2_Field);
+            graphics2D.draw(player1Tower2_Field);
+            if(gameLogic.getFillTowerType()==Type.TOWER2 && disabled){
+                graphics2D.setStroke(GameUIConstants.LARGE_STROKE);
+            }
+            else{
+                graphics2D.setStroke(GameUIConstants.SMALL_STROKE);
+            }
+            Rectangle player2Tower2_Field = new Rectangle(GameUIConstants.GAME_AREA_RECTANGLE,gameConstants.player2InfoBoard.y+GameUIConstants.SMALL_FONT.getSize()*2,GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.GAME_AREA_RECTANGLE);
+            loadTower2_OnTheField(graphics2D,GameUIConstants.GAME_AREA_RECTANGLE,gameConstants.player2InfoBoard.y+GameUIConstants.SMALL_FONT.getSize()*2,!disabled);
+            graphics2D.draw(player2Tower2_Field);
         }
     }
-    private void player1_drawOutEndButton(Graphics2D graphics2D){//todo: when someone clicks on this the tower image become disabled
+    private void drawOutEndButton(Graphics2D graphics2D){//todo: when someone clicks on this the tower image become disabled
         graphics2D.setStroke(GameUIConstants.SMALL_STROKE);
-        if(gameLogic.getPlayerTurn()==PlayerTurn.PLAYER2)
+        if(playerTurn==PlayerTurn.PLAYER2)
         {
             graphics2D.drawString("not my turn", GameUIConstants.GAME_AREA_RECTANGLE*4, GameUIConstants.SMALL_FONT.getSize()*3);
         }
         else{
             graphics2D.drawString("End turn", GameUIConstants.GAME_AREA_RECTANGLE*4, GameUIConstants.SMALL_FONT.getSize()*3);
         }
-    }
-    private void player2_drawOutTheTowerField(Type Tower,Graphics2D graphics2D,boolean disabled){
-        if(Tower == Type.TOWER1){
-            if(gameLogic.getFillTowerType()==Type.TOWER1 && gameLogic.getPlayerTurn()==PlayerTurn.PLAYER2){
-                graphics2D.setStroke(GameUIConstants.LARGE_STROKE);
-            }
-            else{
-                graphics2D.setStroke(GameUIConstants.SMALL_STROKE);
-            }
-            Rectangle Tower1_Field = new Rectangle(0,gameConstants.player2InfoBoard.y+GameUIConstants.SMALL_FONT.getSize()*2,GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.GAME_AREA_RECTANGLE);
-            loadTower1_OnTheField(graphics2D,0,gameConstants.player2InfoBoard.y+GameUIConstants.SMALL_FONT.getSize()*2,disabled);
-            graphics2D.draw(Tower1_Field);
-        }
-        else if(Tower == Type.TOWER2){
-            if(gameLogic.getFillTowerType()==Type.TOWER2 && gameLogic.getPlayerTurn()==PlayerTurn.PLAYER2){
-                graphics2D.setStroke(GameUIConstants.LARGE_STROKE);
-            }
-            else{
-                graphics2D.setStroke(GameUIConstants.SMALL_STROKE);
-            }
-            Rectangle Tower2_Field = new Rectangle(GameUIConstants.GAME_AREA_RECTANGLE,gameConstants.player2InfoBoard.y+GameUIConstants.SMALL_FONT.getSize()*2,GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.GAME_AREA_RECTANGLE);
-            loadTower2_OnTheField(graphics2D,GameUIConstants.GAME_AREA_RECTANGLE,gameConstants.player2InfoBoard.y+GameUIConstants.SMALL_FONT.getSize()*2,disabled);
-            graphics2D.draw(Tower2_Field);
-        }
-    }
-    private void player2_drawOutEndButton(Graphics2D graphics2D){//todo: when someone clicks on this the tower image become disabled
-        graphics2D.setStroke(GameUIConstants.SMALL_STROKE);
-        if(gameLogic.getPlayerTurn()==PlayerTurn.PLAYER1){
+        if(playerTurn==PlayerTurn.PLAYER1){
             graphics2D.drawString("not my turn", GameUIConstants.GAME_AREA_RECTANGLE*4, gameConstants.player2InfoBoard.y+GameUIConstants.SMALL_FONT.getSize()*3);
         }
         else{
@@ -363,32 +358,21 @@ public class GameBoard extends JPanel {
         graphics2D.setFont(GameUIConstants.SMALL_FONT);
         graphics2D.drawString("Player 1         Money: "+gameLogic.getPlayer1Gold(), 0, GameUIConstants.SMALL_FONT.getSize());
 
-        if(gameLogic.getPlayerTurn()==PlayerTurn.PLAYER2){
-            player1_drawOutTheTowerField(Type.TOWER1,graphics2D,true);
-            player1_drawOutTheTowerField(Type.TOWER2,graphics2D,true);
+        if(playerTurn==PlayerTurn.PLAYER1){
+            drawOutTheTowerField(Type.TOWER1,graphics2D,false);
+            drawOutTheTowerField(Type.TOWER2,graphics2D,false);
         }
         else{
-            player1_drawOutTheTowerField(Type.TOWER1,graphics2D,false);
-            player1_drawOutTheTowerField(Type.TOWER2,graphics2D,false);
+            drawOutTheTowerField(Type.TOWER1,graphics2D,true);
+            drawOutTheTowerField(Type.TOWER2,graphics2D,true);
         }
-        player1_drawOutEndButton(graphics2D);
+        drawOutEndButton(graphics2D);
 
         graphics2D.draw(gameConstants.player2InfoBoard);
 
         graphics2D.setColor(GameUIConstants.TEXT_COLOR);
         graphics2D.setFont(GameUIConstants.SMALL_FONT);
         graphics2D.drawString("Player 2         Money: "+gameLogic.getPlayer2Gold(), 0, gameConstants.player2InfoBoard.y+GameUIConstants.SMALL_FONT.getSize());
-
-        if(gameLogic.getPlayerTurn()==PlayerTurn.PLAYER1){
-            player2_drawOutTheTowerField(Type.TOWER1,graphics2D,true);
-            player2_drawOutTheTowerField(Type.TOWER2,graphics2D,true);
-        }
-        else{
-            player2_drawOutTheTowerField(Type.TOWER1,graphics2D,false);
-            player2_drawOutTheTowerField(Type.TOWER2,graphics2D,false);
-        }
-
-        player2_drawOutEndButton(graphics2D);
 
 
     }
