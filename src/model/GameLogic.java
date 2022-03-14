@@ -8,7 +8,7 @@ public final class GameLogic {
     private String player1_Name;
     private String player2_Name;
     private Type FillTowerType;
-    private PlayerTurn playerTurn = PlayerTurn.PLAYER1;
+    public static PlayerTurn playerTurn = PlayerTurn.PLAYER1;
     private int player1Gold = GameConstants.START_GOLD_PLAYER;
     private int player2Gold = GameConstants.START_GOLD_PLAYER;
 
@@ -20,12 +20,6 @@ public final class GameLogic {
 
     public int getPlayer2Gold() {
         return player2Gold;
-    }
-
-    public PlayerTurn getPlayerTurn() { return playerTurn; }
-
-    public void setPlayerTurn(PlayerTurn player) {
-        playerTurn = player;
     }
 
     public Type getFillTowerType() {

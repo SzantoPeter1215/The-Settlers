@@ -6,7 +6,7 @@ public class InfoBoard {
     private String user;
     private int[] topInfo;
     private String[] topPlayer;
-    private boolean gameOver = true;
+    private boolean gameOver = false;
 
     public void reset(String user) {
         setTopInfo();
