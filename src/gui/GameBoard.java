@@ -54,14 +54,11 @@ public class GameBoard extends JPanel {
                 }
                 if(ScreenMethods.onGameArea(e.getX(),e.getY())) {
                     if(gameLogic.getFillTowerType()!=null) {
-                        Type[][] localGrid = gameLogic.getGrids();
                         int x = ScreenMethods.convertYtoModelX_GameArea(e.getY());
                         int y = ScreenMethods.convertXtoModelY_GameArea(e.getX());
-                        if(localGrid[x][y]==Type.EMPTY) {
-                            localGrid[x][y] = gameLogic.getFillTowerType(); //setting the model after click somewhere on the game area
-                            gameLogic.setGrids(localGrid);
+                        if(gameLogic.getGrids()[x][y]==Type.EMPTY) {
+                            gameLogic.setTypeElement(x,y,gameLogic.getFillTowerType());
                             gameLogic.removeMoney(GameConstants.TOWER1_PRICE,GameLogic.playerTurn);
-
                         }
                     }
                 }
@@ -92,10 +89,14 @@ public class GameBoard extends JPanel {
         this.timer = new Timer(time, this.oneGameCycleAction);
         this.timer.start();
         gameLogic.newGame(gameConstants.GAMEAREA_HEIGHT_canBeDividedBy,gameConstants.GAMEAREA_WIDTH_canBeDividedBy, name);
-        int castleRandomX = ThreadLocalRandom.current().nextInt(0, gameConstants.GAMEAREA_WIDTH_canBeDividedBy/4);
-        int castleRandomY = ThreadLocalRandom.current().nextInt(0, gameConstants.GAMEAREA_HEIGHT_canBeDividedBy);
-        this.player1Castle = new Position(castleRandomX,castleRandomY);
-        gameLogic.setTypeElement(castleRandomY,castleRandomX,Type.CASTLE);
+        //making random castle for player 1 in his field area
+        int Player1castleRandomX = ThreadLocalRandom.current().nextInt(0, gameConstants.GAMEAREA_WIDTH_canBeDividedBy/4);
+        int Player2castleRandomX = ThreadLocalRandom.current().nextInt(gameConstants.GAMEAREA_WIDTH_canBeDividedBy/4*3, gameConstants.GAMEAREA_WIDTH_canBeDividedBy-1);
+        int castleRandomY = ThreadLocalRandom.current().nextInt(0, gameConstants.GAMEAREA_HEIGHT_canBeDividedBy);//It's the same for both castles
+        this.player1Castle = new Position(Player1castleRandomX,castleRandomY);
+        this.player2Castle = new Position(Player2castleRandomX,castleRandomY);
+        gameLogic.setTypeElement(castleRandomY,Player1castleRandomX,Type.CASTLE);
+        gameLogic.setTypeElement(castleRandomY,Player2castleRandomX,Type.CASTLE);
     }
 
     private final Action oneGameCycleAction = new AbstractAction() {
@@ -152,8 +153,8 @@ public class GameBoard extends JPanel {
             }
         }
     }
-    private void drawOutTheTowerField(Type Tower,Graphics2D graphics2D,boolean disabled){//drawing out the tower fields on the infobroads
-        //player 1 tower 1 tower 2 and player 2 tower 1 tower 2
+    private void drawOutTheTowerField(Type Tower,Graphics2D graphics2D,boolean disabled){//drawing out the tower fields on the infobroads in the following order:
+        //(player 1 tower 1 player 2 tower 1),(tower 2 and  tower 2)
         if(Tower == Type.TOWER1){
             if(gameLogic.getFillTowerType()==Type.TOWER1 && !disabled){
                 graphics2D.setStroke(GameUIConstants.LARGE_STROKE);
