@@ -79,9 +79,10 @@ public class GameBoard extends JPanel {
                 else if(ScreenMethods.playerInfoBoardEndTurn_clicked(e.getX(),e.getY())){
                     //TODO: create simulated part by setting variable to 0
                     if (GameLogic.playerTurn == PlayerTurn.PLAYER2){
-                        GameLogic.playerTurn = PlayerTurn.ATTACK;
+                        GameLogic.playerTurn = PlayerTurn.PLAYER1;
+                        System.out.println(GameLogic.playerTurn.toString());
                     }
-                    if(GameLogic.playerTurn == PlayerTurn.PLAYER1){
+                    else if(GameLogic.playerTurn == PlayerTurn.PLAYER1){
                         GameLogic.playerTurn = PlayerTurn.PLAYER2;
                     }
                 }
@@ -92,8 +93,8 @@ public class GameBoard extends JPanel {
 
     private void startNewGame() {
         int time = gameConstants.TIMER;
-        this.timer = new Timer(time, this.oneGameCycleAction);
-        this.timer.start();
+        //this.timer = new Timer(time, this.oneGameCycleAction);
+        //this.timer.start();
         gameLogic.newGame(gameConstants.GAMEAREA_HEIGHT_canBeDividedBy,gameConstants.GAMEAREA_WIDTH_canBeDividedBy, name);
         //making random castle for player 1 in his field area
         int Player1castleRandomX = ThreadLocalRandom.current().nextInt(0, gameConstants.GAMEAREA_WIDTH_canBeDividedBy/4);
@@ -260,6 +261,7 @@ public class GameBoard extends JPanel {
         }
     }
     private void drawOutEndButton(Graphics2D graphics2D){//todo: when someone clicks on this the tower image become disabled
+        System.out.println(GameLogic.playerTurn);
         graphics2D.setStroke(GameUIConstants.SMALL_STROKE);
         graphics2D.drawString(GameLogic.playerTurn==PlayerTurn.PLAYER1 ? "not my turn" : "end turn",
                 gameConstants.player2_text_onInfoBoard.x,gameConstants.player2_text_onInfoBoard.y);
