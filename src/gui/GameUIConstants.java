@@ -8,6 +8,15 @@ public final class GameUIConstants {
     public int GAMEAREA_WIDTH;
     public int GAMEAREA_HEIGHT_canBeDividedBy;
     public int GAMEAREA_WIDTH_canBeDividedBy;
+    public final static String Tower1Image = "images/towerExample.png";
+    public final static String disabled_Tower1Image = "images/disabled_towerExample.png";
+    public final static String Tower2Image = "images/tower2_Example.png";
+    public final static String disalbed_Tower2Image = "images/disabled_tower2_Example.png";
+    public final static String Soldier1 = "images/soldier_1.png";
+    public final static String Soldier2 = "images/soldier_2.png";
+    public final static String disabled_Soldier1 = "images/disabled_soldier_1.png";
+    public final static String disabled_Soldier2 = "images/disabled_soldier_2.png";
+    public final static String Castle = "images/castle.png";
     public Rectangle gameareaREACT;
     public Rectangle player1InfoBoard;
     public Rectangle player2InfoBoard;
@@ -15,6 +24,12 @@ public final class GameUIConstants {
     public Rectangle player2_placeOfTower1_OnInfoBoard;
     public Rectangle player1_placeOfTower2_OnInfoBoard;
     public Rectangle player2_placeOfTower2_OnInfoBoard;
+
+    public Rectangle player1_placeOfSoldier1_OnInfoBoard;
+    public Rectangle player1_placeOfSoldier2_OnInfoBoard;
+    public Rectangle player2_placeOfSoldier1_OnInfoBoard;
+    public Rectangle player2_placeOfSoldier2_OnInfoBoard;
+
     public Position player1_text_onInfoBoard;
     public Position player2_text_onInfoBoard;
     public Position player1_moneyAndNameText;
@@ -35,10 +50,17 @@ public final class GameUIConstants {
         gameareaREACT = new Rectangle(0,(GAME_HEIGHT-GAMEAREA_HEIGHT)/2,GAMEAREA_WIDTH,GAMEAREA_HEIGHT);
         player1InfoBoard = new Rectangle(0,0,GAMEAREA_WIDTH,(GAME_HEIGHT-GAMEAREA_HEIGHT)/2);
         player2InfoBoard = new Rectangle(0,GAME_HEIGHT-((GAME_HEIGHT-GAMEAREA_HEIGHT)/2),GAMEAREA_WIDTH,(GAME_HEIGHT-GAMEAREA_HEIGHT)/2);
+
         player1_placeOfTower1_OnInfoBoard = new Rectangle(0,GameUIConstants.SMALL_FONT.getSize()*2,GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.GAME_AREA_RECTANGLE);
         player2_placeOfTower1_OnInfoBoard =new Rectangle(0,this.player2InfoBoard.y+GameUIConstants.SMALL_FONT.getSize()*2,GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.GAME_AREA_RECTANGLE);
         player1_placeOfTower2_OnInfoBoard = new Rectangle(GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.SMALL_FONT.getSize()*2,GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.GAME_AREA_RECTANGLE);
         player2_placeOfTower2_OnInfoBoard = new Rectangle(GameUIConstants.GAME_AREA_RECTANGLE,this.player2InfoBoard.y+GameUIConstants.SMALL_FONT.getSize()*2,GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.GAME_AREA_RECTANGLE);
+
+        player1_placeOfSoldier1_OnInfoBoard = new Rectangle(0,player1_placeOfTower1_OnInfoBoard.y+GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.GAME_AREA_RECTANGLE);
+        player1_placeOfSoldier2_OnInfoBoard = new Rectangle(GameUIConstants.GAME_AREA_RECTANGLE,player1_placeOfSoldier1_OnInfoBoard.y,GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.GAME_AREA_RECTANGLE);
+        player2_placeOfSoldier1_OnInfoBoard = new Rectangle(0,player2_placeOfTower1_OnInfoBoard.y+GAME_AREA_RECTANGLE,GAME_AREA_RECTANGLE,GAME_AREA_RECTANGLE);
+        player2_placeOfSoldier2_OnInfoBoard = new Rectangle(GAME_AREA_RECTANGLE,player2_placeOfSoldier1_OnInfoBoard.y,GAME_AREA_RECTANGLE,GAME_AREA_RECTANGLE);
+
         player2_text_onInfoBoard = new Position(GameUIConstants.GAME_AREA_RECTANGLE*4,this.player2InfoBoard.y+GameUIConstants.SMALL_FONT.getSize()*3);
         player1_text_onInfoBoard = new Position(GameUIConstants.GAME_AREA_RECTANGLE*4, GameUIConstants.SMALL_FONT.getSize()*3);
         player1_moneyAndNameText = new Position( 0, GameUIConstants.SMALL_FONT.getSize());

@@ -99,26 +99,29 @@ public final class GameLogic {
             }
         }
     }
-    public void removeMoney(int minusGold,PlayerTurn player){
+    public Boolean removeMoney(int minusGold,PlayerTurn player){
         if(player==PlayerTurn.PLAYER1){
             int expectedGold = this.player1Gold - minusGold;
             if(expectedGold<0){
-                this.player1Gold = 0;
+                return false;
             }
             else{
                 this.player1Gold -= minusGold;
+                return true;
             }
         }
         else if(player==PlayerTurn.PLAYER2){
             int expectedGold = this.player2Gold - minusGold;
             if(expectedGold<0){
-                this.player2Gold = 0;
+                return false;
             }
             else{
                 this.player2Gold -= minusGold;
+                return true;
             }
 
         }
+        return false;
     }
 
     public void nextAttackPhase() {
