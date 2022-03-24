@@ -162,59 +162,34 @@ public class GameBoard extends JPanel {
             }
         }
     }
+    private void drawOutTowerUnitsInfoboard(Graphics2D graphics2D,boolean player1Tower1,boolean player1Tower2,boolean player2Tower1,boolean player2Tower2, boolean isPlayer1Turn,boolean isPlayer2Turn){
+        drawFixedRectAngleFieldWithImage(graphics2D,gameConstants.player1_placeOfTower1_OnInfoBoard.x,gameConstants.player1_placeOfTower1_OnInfoBoard.y,
+                isPlayer1Turn ? GameUIConstants.Tower1Image : GameUIConstants.disabled_Tower1Image,player1Tower1);
+        drawFixedRectAngleFieldWithImage(graphics2D,gameConstants.player1_placeOfTower2_OnInfoBoard.x,gameConstants.player1_placeOfTower2_OnInfoBoard.y,
+                isPlayer1Turn ? GameUIConstants.Tower2Image : GameUIConstants.disalbed_Tower2Image,player1Tower2);
+        drawFixedRectAngleFieldWithImage(graphics2D,gameConstants.player2_placeOfTower1_OnInfoBoard.x,gameConstants.player2_placeOfTower1_OnInfoBoard.y,
+                isPlayer2Turn ?GameUIConstants.Tower1Image : GameUIConstants.disabled_Tower1Image,player2Tower1);
+        drawFixedRectAngleFieldWithImage(graphics2D,gameConstants.player2_placeOfTower2_OnInfoBoard.x,gameConstants.player2_placeOfTower2_OnInfoBoard.y,
+                isPlayer2Turn ? GameUIConstants.Tower2Image : GameUIConstants.disalbed_Tower2Image,player2Tower2);
+    }
     private void drawOutTheTowerField(Graphics2D graphics2D,boolean isThePlayer_Player2){//drawing out the tower fields on the infobroads in the following order:
             //default state:
-            drawFixedRectAngleFieldWithImage(graphics2D,gameConstants.player1_placeOfTower1_OnInfoBoard.x,gameConstants.player1_placeOfTower1_OnInfoBoard.y,
-                    GameUIConstants.Tower1Image,false);
-            drawFixedRectAngleFieldWithImage(graphics2D,gameConstants.player1_placeOfTower2_OnInfoBoard.x,gameConstants.player1_placeOfTower2_OnInfoBoard.y,
-                    GameUIConstants.Tower2Image,false);
-            drawFixedRectAngleFieldWithImage(graphics2D,gameConstants.player2_placeOfTower1_OnInfoBoard.x,gameConstants.player2_placeOfTower1_OnInfoBoard.y,
-                    GameUIConstants.disabled_Tower1Image,false);
-            drawFixedRectAngleFieldWithImage(graphics2D,gameConstants.player2_placeOfTower2_OnInfoBoard.x,gameConstants.player2_placeOfTower2_OnInfoBoard.y,
-                    GameUIConstants.disalbed_Tower2Image,false);
+            drawOutTowerUnitsInfoboard(graphics2D,false,false,false,false,false,false);
             if(gameLogic.getFillTowerType()==Type.TOWER1){//we clicked on a tower 1 button on the inforboard and it's not the player 2
                 if(!isThePlayer_Player2){
-                    drawFixedRectAngleFieldWithImage(graphics2D,gameConstants.player1_placeOfTower1_OnInfoBoard.x,gameConstants.player1_placeOfTower1_OnInfoBoard.y,
-                            GameUIConstants.Tower1Image,true);
-                    drawFixedRectAngleFieldWithImage(graphics2D,gameConstants.player1_placeOfTower2_OnInfoBoard.x,gameConstants.player1_placeOfTower2_OnInfoBoard.y,
-                            GameUIConstants.Tower2Image,false);
-                    drawFixedRectAngleFieldWithImage(graphics2D,gameConstants.player2_placeOfTower1_OnInfoBoard.x,gameConstants.player2_placeOfTower1_OnInfoBoard.y,
-                            GameUIConstants.disabled_Tower1Image,false);
-                    drawFixedRectAngleFieldWithImage(graphics2D,gameConstants.player2_placeOfTower2_OnInfoBoard.x,gameConstants.player2_placeOfTower2_OnInfoBoard.y,
-                            GameUIConstants.disalbed_Tower2Image,false);
+                    drawOutTowerUnitsInfoboard(graphics2D,true,false,false,false,true,false);
                 }
                 else{
-                    drawFixedRectAngleFieldWithImage(graphics2D,gameConstants.player1_placeOfTower1_OnInfoBoard.x,gameConstants.player1_placeOfTower1_OnInfoBoard.y,
-                            GameUIConstants.disabled_Tower1Image,false);
-                    drawFixedRectAngleFieldWithImage(graphics2D,gameConstants.player1_placeOfTower2_OnInfoBoard.x,gameConstants.player1_placeOfTower2_OnInfoBoard.y,
-                            GameUIConstants.disalbed_Tower2Image,false);
-                    drawFixedRectAngleFieldWithImage(graphics2D,gameConstants.player2_placeOfTower1_OnInfoBoard.x,gameConstants.player2_placeOfTower1_OnInfoBoard.y,
-                            GameUIConstants.Tower1Image,true);
-                    drawFixedRectAngleFieldWithImage(graphics2D,gameConstants.player2_placeOfTower2_OnInfoBoard.x,gameConstants.player2_placeOfTower2_OnInfoBoard.y,
-                            GameUIConstants.Tower2Image,false);
+                    drawOutTowerUnitsInfoboard(graphics2D,false,false,true,false,false,true);
                 }
 
             }
             if(gameLogic.getFillTowerType()==Type.TOWER2){
                 if(!isThePlayer_Player2){
-                    drawFixedRectAngleFieldWithImage(graphics2D,gameConstants.player1_placeOfTower1_OnInfoBoard.x,gameConstants.player1_placeOfTower1_OnInfoBoard.y,
-                            GameUIConstants.Tower1Image,false);
-                    drawFixedRectAngleFieldWithImage(graphics2D,gameConstants.player1_placeOfTower2_OnInfoBoard.x,gameConstants.player1_placeOfTower2_OnInfoBoard.y,
-                            GameUIConstants.Tower2Image,true);
-                    drawFixedRectAngleFieldWithImage(graphics2D,gameConstants.player2_placeOfTower1_OnInfoBoard.x,gameConstants.player2_placeOfTower1_OnInfoBoard.y,
-                            GameUIConstants.disabled_Tower1Image,false);
-                    drawFixedRectAngleFieldWithImage(graphics2D,gameConstants.player2_placeOfTower2_OnInfoBoard.x,gameConstants.player2_placeOfTower2_OnInfoBoard.y,
-                            GameUIConstants.disalbed_Tower2Image,false);
+                    drawOutTowerUnitsInfoboard(graphics2D,false,true,false,false,true,false);
                 }
                 else{
-                    drawFixedRectAngleFieldWithImage(graphics2D,gameConstants.player1_placeOfTower1_OnInfoBoard.x,gameConstants.player1_placeOfTower1_OnInfoBoard.y,
-                            GameUIConstants.disabled_Tower1Image,false);
-                    drawFixedRectAngleFieldWithImage(graphics2D,gameConstants.player1_placeOfTower2_OnInfoBoard.x,gameConstants.player1_placeOfTower2_OnInfoBoard.y,
-                            GameUIConstants.disalbed_Tower2Image,false);
-                    drawFixedRectAngleFieldWithImage(graphics2D,gameConstants.player2_placeOfTower1_OnInfoBoard.x,gameConstants.player2_placeOfTower1_OnInfoBoard.y,
-                            GameUIConstants.Tower1Image,false);
-                    drawFixedRectAngleFieldWithImage(graphics2D,gameConstants.player2_placeOfTower2_OnInfoBoard.x,gameConstants.player2_placeOfTower2_OnInfoBoard.y,
-                            GameUIConstants.Tower2Image,true);
+                    drawOutTowerUnitsInfoboard(graphics2D,false,false,false,true,false,true);
                 }
             }
     }
@@ -230,38 +205,30 @@ public class GameBoard extends JPanel {
         graphics2D.draw(field);
         graphics2D.setStroke(GameUIConstants.SMALL_STROKE); //clear things out
     }
-    private void DrawingOutSoldier(Graphics2D graphics2D){
-        imageLoader.loadImage(graphics2D,gameConstants.player1_placeOfSoldier1_OnInfoBoard.x,gameConstants.player1_placeOfSoldier1_OnInfoBoard.y,GameUIConstants.Soldier1);
+    private void SoldierStates(Graphics2D graphics2D,boolean player1_Soldier1_Active,boolean player1_Soldier2_Active,boolean player2_Soldier1_Active,boolean player2_Soldier2_active){
+        imageLoader.loadImage(graphics2D,gameConstants.player1_placeOfSoldier1_OnInfoBoard.x,gameConstants.player1_placeOfSoldier1_OnInfoBoard.y,
+                player1_Soldier1_Active ? GameUIConstants.Soldier1: GameUIConstants.disabled_Soldier1);
         graphics2D.draw(gameConstants.player1_placeOfSoldier1_OnInfoBoard);
-        imageLoader.loadImage(graphics2D,gameConstants.player1_placeOfSoldier2_OnInfoBoard.x,gameConstants.player1_placeOfSoldier2_OnInfoBoard.y,GameUIConstants.Soldier2);
+        imageLoader.loadImage(graphics2D,gameConstants.player1_placeOfSoldier2_OnInfoBoard.x,gameConstants.player1_placeOfSoldier2_OnInfoBoard.y,
+                player1_Soldier2_Active ? GameUIConstants.Soldier2: GameUIConstants.disabled_Soldier2);
         graphics2D.draw(gameConstants.player1_placeOfSoldier2_OnInfoBoard);
-        imageLoader.loadImage(graphics2D,gameConstants.player2_placeOfSoldier1_OnInfoBoard.x,gameConstants.player2_placeOfSoldier1_OnInfoBoard.y,GameUIConstants.disabled_Soldier1);
+        imageLoader.loadImage(graphics2D,gameConstants.player2_placeOfSoldier1_OnInfoBoard.x,gameConstants.player2_placeOfSoldier1_OnInfoBoard.y,
+                player2_Soldier1_Active ? GameUIConstants.Soldier1 : GameUIConstants.disabled_Soldier1);
         graphics2D.draw(gameConstants.player2_placeOfSoldier1_OnInfoBoard);
-        imageLoader.loadImage(graphics2D,gameConstants.player2_placeOfSoldier2_OnInfoBoard.x,gameConstants.player2_placeOfSoldier2_OnInfoBoard.y,GameUIConstants.disabled_Soldier2);
+        imageLoader.loadImage(graphics2D,gameConstants.player2_placeOfSoldier2_OnInfoBoard.x,gameConstants.player2_placeOfSoldier2_OnInfoBoard.y,
+                player2_Soldier2_active ? GameUIConstants.Soldier1 : GameUIConstants.disabled_Soldier2);
         graphics2D.draw(gameConstants.player2_placeOfSoldier2_OnInfoBoard);
+    }
+    private void DrawingOutSoldier(Graphics2D graphics2D){
+
         if(GameLogic.playerTurn == PlayerTurn.PLAYER1){
-            imageLoader.loadImage(graphics2D,gameConstants.player1_placeOfSoldier1_OnInfoBoard.x,gameConstants.player1_placeOfSoldier1_OnInfoBoard.y,GameUIConstants.Soldier1);
-            graphics2D.draw(gameConstants.player1_placeOfSoldier1_OnInfoBoard);
-            imageLoader.loadImage(graphics2D,gameConstants.player1_placeOfSoldier2_OnInfoBoard.x,gameConstants.player1_placeOfSoldier2_OnInfoBoard.y,GameUIConstants.Soldier2);
-            graphics2D.draw(gameConstants.player1_placeOfSoldier2_OnInfoBoard);
-            imageLoader.loadImage(graphics2D,gameConstants.player2_placeOfSoldier1_OnInfoBoard.x,gameConstants.player2_placeOfSoldier1_OnInfoBoard.y,GameUIConstants.disabled_Soldier1);
-            graphics2D.draw(gameConstants.player2_placeOfSoldier1_OnInfoBoard);
-            imageLoader.loadImage(graphics2D,gameConstants.player2_placeOfSoldier2_OnInfoBoard.x,gameConstants.player2_placeOfSoldier2_OnInfoBoard.y,GameUIConstants.disabled_Soldier2);
-            graphics2D.draw(gameConstants.player2_placeOfSoldier2_OnInfoBoard);
+            SoldierStates(graphics2D,true,true,false,false);
         }
         else if(GameLogic.playerTurn == PlayerTurn.PLAYER2){
-            imageLoader.loadImage(graphics2D,gameConstants.player1_placeOfSoldier1_OnInfoBoard.x,gameConstants.player1_placeOfSoldier1_OnInfoBoard.y,GameUIConstants.disabled_Soldier1);
-            graphics2D.draw(gameConstants.player1_placeOfSoldier1_OnInfoBoard);
-            imageLoader.loadImage(graphics2D,gameConstants.player1_placeOfSoldier2_OnInfoBoard.x,gameConstants.player1_placeOfSoldier2_OnInfoBoard.y,GameUIConstants.disabled_Soldier2);
-            graphics2D.draw(gameConstants.player1_placeOfSoldier2_OnInfoBoard);
-            imageLoader.loadImage(graphics2D,gameConstants.player2_placeOfSoldier1_OnInfoBoard.x,gameConstants.player2_placeOfSoldier1_OnInfoBoard.y,GameUIConstants.Soldier1);
-            graphics2D.draw(gameConstants.player2_placeOfSoldier1_OnInfoBoard);
-            imageLoader.loadImage(graphics2D,gameConstants.player2_placeOfSoldier2_OnInfoBoard.x,gameConstants.player2_placeOfSoldier2_OnInfoBoard.y,GameUIConstants.Soldier2);
-            graphics2D.draw(gameConstants.player2_placeOfSoldier2_OnInfoBoard);
+            SoldierStates(graphics2D,false,false,true,true);
         }
     }
     private void drawOutEndButton(Graphics2D graphics2D){//todo: when someone clicks on this the tower image become disabled
-        System.out.println(GameLogic.playerTurn);
         graphics2D.setStroke(GameUIConstants.SMALL_STROKE);
         graphics2D.drawString(GameLogic.playerTurn==PlayerTurn.PLAYER1 ? "not my turn" : "end turn",
                 gameConstants.player2_text_onInfoBoard.x,gameConstants.player2_text_onInfoBoard.y);
