@@ -90,3 +90,12 @@
 | 1         | GIVEN | That I clicked on the save game button                           |
 |           | WHEN  |                                                                  |
 |           | THEN  | The game gets saved                                              |
+
+Terminál:
+Before: `git pull -r`  
+New branch: `git checkout -b "your_branch_name"`  
+Change branch: `git checkout "your_branch_name"` 
+View existing branch: `git branch`  
+Delete branch: `git branch -D "your_branch_name"` 
+Fetch origin: `git fetch origin`  
+Merge to your branch: `git merge origin/main`
