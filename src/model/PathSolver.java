@@ -24,11 +24,16 @@ class Node
     }
 }
 
-class PathFinder
+class PathSolver
 {
     // Below arrays detail all four possible movements from a cell
     private static int[] row = { -1, 0, 0, 1 };
     private static int[] col = { 0, -1, 1, 0 };
+    private static int[][] matrix;
+
+    public void initPatrix(int N) {
+        matrix = new int[N][N];
+    }
 
     // The function returns false if (x, y) is not a valid position
     private static boolean isValid(int x, int y, int N) {
@@ -44,10 +49,15 @@ class PathFinder
         }
     }
 
+    public void setMatrixField(int x, int y, int value) {
+        matrix[x][y] = value;
+    }
+
     // Find the shortest route in a matrix from source cell (x, y) to
     // destination cell (N-1, N-1)
-    public static List<String> findPath(int[][] matrix, int x, int y, int destX, int destY)
+    private static List<String> findPath(int[][] matrix, int x, int y, int destX, int destY)
     {
+
         // list to store shortest path
         List<String> path = new ArrayList<>();
 
@@ -118,7 +128,7 @@ class PathFinder
         return path;
     }
 
-    public static void PathFinderHandler(int[][] matrix)
+    public static ArrayList<Integer>[] getPath(int startX, int startY, int endX, int endY)
     {
         // Find a route in the matrix from source cell (0, 0) to
         // destination cell (N-1, N-1)
@@ -180,6 +190,7 @@ class PathFinder
                 }
                 */
             }
+            /*
             System.out.print("\n\n");
             for(int x = 0; x < matrix.length; ++x) {
                 for(int y = 0; y < matrix.length; ++y) {
@@ -197,9 +208,14 @@ class PathFinder
                 }
                 System.out.print("\n");
             }
-            //TODO: RETURN!!!
+            */
+            ArrayList<Integer>[] res = new ArrayList[2];
+            res[0] = XChords;
+            res[1] = YChords;
+            return res;
         } else {
             System.out.println("Destination is not found");
+            return null;
         }
     }
 }

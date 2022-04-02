@@ -9,7 +9,7 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Scanner;
-import java.util.concurrent.ThreadLocalRandom;
+
 
 
 public class GameBoard extends JPanel {
@@ -22,8 +22,7 @@ public class GameBoard extends JPanel {
 
     private Timer timer;
 
-    private Position player1Castle;
-    private Position player2Castle;
+
     private TheScreen ScreenMethods;
     private ImageLoader imageLoader;
 
@@ -77,8 +76,8 @@ public class GameBoard extends JPanel {
 
                 }
                 else if(ScreenMethods.playerInfoBoardEndTurn_clicked(e.getX(),e.getY())){
-                    //TODO: create simulated part by setting variable to 0
                     if (GameLogic.playerTurn == PlayerTurn.PLAYER2){
+                        //after P2 ends their turn the attack phase begins
                         gameLogic.initAttackPhase();
                     }
                     else if(GameLogic.playerTurn == PlayerTurn.PLAYER1){
@@ -96,6 +95,9 @@ public class GameBoard extends JPanel {
         this.timer.start();
         gameLogic.newGame(gameConstants.GAMEAREA_HEIGHT_canBeDividedBy,gameConstants.GAMEAREA_WIDTH_canBeDividedBy, name);
         //making random castle for player 1 in his field area
+        //TODO: MI A FASZ KÖZE VAN A RANDOM CASTLE GENERÁLÁSNAK A FRAMEHEZ?
+        // MAJD A GAME LOGIC MEGKÉRDEZI: HALLOD HOL VAN A TORONY?
+        /*
         int Player1castleRandomX = ThreadLocalRandom.current().nextInt(0, gameConstants.GAMEAREA_WIDTH_canBeDividedBy/4);
         int Player2castleRandomX = ThreadLocalRandom.current().nextInt(gameConstants.GAMEAREA_WIDTH_canBeDividedBy/4*3, gameConstants.GAMEAREA_WIDTH_canBeDividedBy-1);
         int castleRandomY = ThreadLocalRandom.current().nextInt(0, gameConstants.GAMEAREA_HEIGHT_canBeDividedBy);//It's the same for both castles
@@ -104,6 +106,7 @@ public class GameBoard extends JPanel {
         gameLogic.setTypeElement(castleRandomY,Player1castleRandomX,Type.CASTLE);
         gameLogic.setTypeElement(castleRandomY,Player2castleRandomX,Type.CASTLE);
         gameLogic.setFillTowerType(Type.TOWER1);
+        */
     }
 
     private final Action oneGameCycleAction = new AbstractAction() {

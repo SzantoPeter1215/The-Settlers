@@ -9,6 +9,8 @@ public class TheScreen {
     public TheScreen() {
         gameConstants = new GameUIConstants();//it will calculate the area based on the current screen
     }
+    //TODO: formázás: átláthatóbb lenne, ha spacek lennének
+    // az összehasónlító operandusok előtt ÉS után a>=b<c>d&&a||v vagy a >= b < c > d && a || v
     public boolean playerInfoBoardTower1_clicked(int x, int y){
         if(GameLogic.playerTurn== PlayerTurn.PLAYER1){
             int startOfThePlayer1InfoBoard = (gameConstants.player1InfoBoard.y+(GameUIConstants.SMALL_FONT.getSize()*2));
@@ -24,7 +26,24 @@ public class TheScreen {
         }
         return false;
     }
+    //TODO: mi a különbésg a változók között?? Konstansokat adunk össze
+    // meg szorzunk ez miért nem lehet lokális változó?
     public boolean playerInfoBoardTower2_clicked(int x, int y){
+        if(GameLogic.playerTurn==PlayerTurn.PLAYER1){
+            int startOfThePlayer1InfoBoard = (gameConstants.player1InfoBoard.y+(GameUIConstants.SMALL_FONT.getSize()*2));
+            int endOfThePlayer1InfoBoard = startOfThePlayer1InfoBoard+GameUIConstants.GAME_AREA_RECTANGLE;
+            if((y>=startOfThePlayer1InfoBoard&&y<=endOfThePlayer1InfoBoard)&&(x>=GameUIConstants.GAME_AREA_RECTANGLE&&x<=(GameUIConstants.GAME_AREA_RECTANGLE*2))){
+                return true;
+            }
+        }
+        if(GameLogic.playerTurn==PlayerTurn.PLAYER2) {
+            int startOfThePlayer2InfoBoard = (gameConstants.player2InfoBoard.y+(GameUIConstants.SMALL_FONT.getSize()*2));
+            int endOfThePlayer2InfoBoard = startOfThePlayer2InfoBoard+GameUIConstants.GAME_AREA_RECTANGLE;
+            return (y >= startOfThePlayer2InfoBoard && y <= endOfThePlayer2InfoBoard) && (x >= GameUIConstants.GAME_AREA_RECTANGLE && x <= (GameUIConstants.GAME_AREA_RECTANGLE * 2));
+        }
+        return false;
+    }
+    public boolean playerInfoBoardSolder1_clicked(int x, int y){
         if(GameLogic.playerTurn==PlayerTurn.PLAYER1){
             int startOfThePlayer1InfoBoard = (gameConstants.player1InfoBoard.y+(GameUIConstants.SMALL_FONT.getSize()*2));
             int endOfThePlayer1InfoBoard = startOfThePlayer1InfoBoard+GameUIConstants.GAME_AREA_RECTANGLE;

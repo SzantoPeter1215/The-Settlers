@@ -1,17 +1,25 @@
 package model;
 
+import gui.GameUIConstants;
+import gui.Position;
 import model.info.InfoBoard;
+import java.util.concurrent.ThreadLocalRandom;
 
 public final class GameLogic {
+    private final GameUIConstants gameConstants;
+
     private int row;
     private int column;
-    private String player1_Name;
-    private String player2_Name;
     private Type FillTowerType;
     public static PlayerTurn playerTurn = PlayerTurn.PLAYER1;
     private int player1Gold = GameConstants.START_GOLD_PLAYER;
     private int player2Gold = GameConstants.START_GOLD_PLAYER;
+    //TODO: a castle helyét am nem a logicban kéne tartani?
+    // Vagy jó a megjelenítési rétegben mert nem függ tőle a többi esemény.
+    private Position player1Castle;
+    private Position player2Castle;
 
+    private PathSolver path;
 
 
     public int getPlayer1Gold() {
@@ -61,22 +69,34 @@ public final class GameLogic {
     private int stepCounter;
 
     public GameLogic() {
-
+        gameConstants = new GameUIConstants();
     }
 
     public void newGame(int row, int column, String userName){
         this.row = row;
         this.column = column;
 
+        path = new PathSolver();
+
         grids = new Type[row][column];
         stepCounter = 0;
         initGrid();
 
         initInfoBoard();
+        path.initPatrix(column);
 
         //TODO: set the grids to their default type. (according to the map we choose)
 
         infoBoard.reset(userName);
+
+        int Player1castleRandomX = ThreadLocalRandom.current().nextInt(0, gameConstants.GAMEAREA_WIDTH_canBeDividedBy/4);
+        int Player2castleRandomX = ThreadLocalRandom.current().nextInt(gameConstants.GAMEAREA_WIDTH_canBeDividedBy/4*3, gameConstants.GAMEAREA_WIDTH_canBeDividedBy-1);
+        int castleRandomY = ThreadLocalRandom.current().nextInt(0, gameConstants.GAMEAREA_HEIGHT_canBeDividedBy);//It's the same for both castles
+        this.player1Castle = new Position(Player1castleRandomX,castleRandomY);
+        this.player2Castle = new Position(Player2castleRandomX,castleRandomY);
+        setTypeElement(castleRandomY,Player1castleRandomX,Type.CASTLE);
+        setTypeElement(castleRandomY,Player2castleRandomX,Type.CASTLE);
+        setFillTowerType(Type.TOWER1);
     }
 
     private void initInfoBoard() {
@@ -124,10 +144,26 @@ public final class GameLogic {
         return false;
     }
 
+    private void updatePathMatrix() {
+        for (int i = 0; i < row; ++i) {
+            for (int j = 0; j < column; ++j) {
+                switch (grids[i][j]) {
+                    case EMPTY: {
+                        path.setMatrixField(i, j, 1);
+                        break;
+                    }
+                    default: {
+                        path.setMatrixField(i, j, 0);
+                    }
+                }
+            }
+        }
+    }
     public void initAttackPhase() {
         GameLogic.playerTurn = PlayerTurn.ATTACK;
         System.out.println("ATTACK!");
         stepCounter = 0;
+        updatePathMatrix();
     }
 
     public void nextAttackPhase() {
@@ -138,22 +174,24 @@ public final class GameLogic {
         ++stepCounter;
         //TODO: create a method that accepts a function and executes it to all the grid elements.
         //TODO: HANDLE WHEN TWO THINGS ARE IN THE SAME PLACE!!!
+
         for (int i = 0; i < row; ++i) {
             for (int j = 0; j < column; ++j) {
                 Type current = grids[i][j];
                 switch (current) {
                     case TOWER1: {
+                        PathSolver.getPath(i, j, player2Castle.x, player2Castle.y);
                         grids[i][j] = Type.EMPTY;
                         if(j >= column - 1) break; //out of index stb
                         //TODO: where are the solders
-                        grids[i][j + 1] = Type.SOLDER;
+                        grids[i][j + 1] = Type.TOWER1;
                         ++j;
                         break;
                     }
                     case TOWER2: {
                         grids[i][j] = Type.EMPTY;
                         if(j <= 1) break;
-                        grids[i][j - 3] = Type.SOLDER;
+                        grids[i][j - 3] = Type.TOWER2;
                         break;
                     }
                     default: {
