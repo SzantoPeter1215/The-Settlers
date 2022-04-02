@@ -124,9 +124,14 @@ public final class GameLogic {
         return false;
     }
 
+    public void initAttackPhase() {
+        GameLogic.playerTurn = PlayerTurn.ATTACK;
+        System.out.println("ATTACK!");
+        stepCounter = 0;
+    }
+
     public void nextAttackPhase() {
         if(stepCounter >= 3) {
-            stepCounter = 0;
             playerTurn = PlayerTurn.PLAYER1;
             return;
         }
@@ -140,14 +145,15 @@ public final class GameLogic {
                     case TOWER1: {
                         grids[i][j] = Type.EMPTY;
                         if(j >= column - 1) break; //out of index stb
-                        grids[i][j + 1] = Type.TOWER1;
+                        //TODO: where are the solders
+                        grids[i][j + 1] = Type.SOLDER;
                         ++j;
                         break;
                     }
                     case TOWER2: {
                         grids[i][j] = Type.EMPTY;
                         if(j <= 1) break;
-                        grids[i][j - 3] = Type.TOWER2;
+                        grids[i][j - 3] = Type.SOLDER;
                         break;
                     }
                     default: {

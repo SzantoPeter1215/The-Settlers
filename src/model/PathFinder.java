@@ -1,3 +1,5 @@
+package model;
+
 import java.util.*;
 
 // A queue node used in BFS
@@ -116,28 +118,14 @@ class PathFinder
         return path;
     }
 
-    public static void main(String[] args)
+    public static void PathFinderHandler(int[][] matrix)
     {
-        int[][] matrix =
-                {
-                        { 1, 1, 1, 1, 1, 0, 2, 2, 2, 2 },
-                        { 1, 1, 1, 1, 1, 0, 2, 2, 2, 2 },
-                        { 1, 1, 1, 1, 1, 0, 2, 2, 2, 2 },
-                        { 1, 1, 1, 1, 1, 0, 2, 2, 2, 2 },
-                        { 1, 1, 1, 1, 1, 0, 2, 2, 2, 2 },
-                        { 3, 3, 1, 1, 1, 0, 0, 0, 0, 0 },
-                        { 3, 3, 3, 3, 3, 0, 1, 1, 1, 1 },
-                        { 3, 3, 3, 3, 3, 0, 1, 1, 1, 1 },
-                        { 3, 3, 3, 3, 3, 0, 1, 1, 1, 1 },
-                        { 3, 3, 3, 3, 3, 0, 1, 1, 1, 1 }
-                };
-
         // Find a route in the matrix from source cell (0, 0) to
         // destination cell (N-1, N-1)
         List<String> path = findPath(matrix, 0, 0, 9, 9);
 
         if (path != null && path.size() > 0) {
-            System.out.print("The shortest path is " + path);
+            //System.out.print("The shortest path is " + path);
 
             int pathSize = path.size();
 
@@ -209,6 +197,7 @@ class PathFinder
                 }
                 System.out.print("\n");
             }
+            //TODO: RETURN!!!
         } else {
             System.out.println("Destination is not found");
         }
