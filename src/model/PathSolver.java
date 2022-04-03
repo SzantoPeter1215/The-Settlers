@@ -31,7 +31,7 @@ class PathSolver
     private static int[] col = { 0, -1, 1, 0 };
     private static int[][] matrix;
 
-    public void initPatrix(int N) {
+    public void initMatrix(int N) {
         matrix = new int[N][N];
     }
 
@@ -68,6 +68,7 @@ class PathSolver
 
         // `N × N` matrix
         int N = matrix.length;
+        //System.out.println("Matrix length: " + N);
 
         // create a queue and enqueue the first node
         Queue<Node> q = new ArrayDeque<>();
@@ -128,12 +129,16 @@ class PathSolver
         return path;
     }
 
-    public static ArrayList<Integer>[] getPath(int startX, int startY, int endX, int endY)
+    public ArrayList<Integer>[] getPath(int startX, int startY, int endX, int endY)
     {
         // Find a route in the matrix from source cell (0, 0) to
         // destination cell (N-1, N-1)
-        List<String> path = findPath(matrix, 0, 0, 9, 9);
+        List<String> path = findPath(matrix, startX, startY, endX, endY);
 
+        //System.out.println("Start: " + startX + ", " + startY + "\nEnd: " + endX + ", " + endY);
+        //System.out.println(Arrays.deepToString(matrix).replace("], ", "]\n").replace("[[", "[").replace("]]", "]"));
+
+        //System.out.println(path.toString());
         if (path != null && path.size() > 0) {
             //System.out.print("The shortest path is " + path);
 
@@ -190,7 +195,7 @@ class PathSolver
                 }
                 */
             }
-            /*
+/*
             System.out.print("\n\n");
             for(int x = 0; x < matrix.length; ++x) {
                 for(int y = 0; y < matrix.length; ++y) {
@@ -208,12 +213,13 @@ class PathSolver
                 }
                 System.out.print("\n");
             }
-            */
+*/
             ArrayList<Integer>[] res = new ArrayList[2];
             res[0] = XChords;
             res[1] = YChords;
             return res;
         } else {
+
             System.out.println("Destination is not found");
             return null;
         }

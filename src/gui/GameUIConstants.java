@@ -44,7 +44,7 @@ public final class GameUIConstants {
         while (HEIGHT_hasToBeDividedByRectSize>0&&HEIGHT_hasToBeDividedByRectSize%GAME_AREA_RECTANGLE!=0){
             HEIGHT_hasToBeDividedByRectSize-=1;
         }
-        GAMEAREA_WIDTH = WIDTH_hasToBeDividedByRectSize;
+        GAMEAREA_WIDTH = HEIGHT_hasToBeDividedByRectSize;//WIDTH_hasToBeDividedByRectSize;
         GAMEAREA_HEIGHT = HEIGHT_hasToBeDividedByRectSize;
         GAMEAREA_HEIGHT_canBeDividedBy = (int)(GAMEAREA_HEIGHT/GAME_AREA_RECTANGLE);
         GAMEAREA_WIDTH_canBeDividedBy = (int)(GAMEAREA_WIDTH/GAME_AREA_RECTANGLE);

@@ -32,7 +32,8 @@ public class GameBoard extends JPanel {
         ScreenMethods = new TheScreen();
         imageLoader = new ImageLoader();
         this.gameLogic = gameLogic;
-        setPreferredSize(new Dimension(GameUIConstants.GAME_WIDTH, GameUIConstants.GAME_HEIGHT));
+        //setPreferredSize(new Dimension(GameUIConstants.GAME_WIDTH, GameUIConstants.GAME_HEIGHT));
+        setPreferredSize(new Dimension(GameUIConstants.GAME_HEIGHT, GameUIConstants.GAME_HEIGHT));
         setBackground(GameUIConstants.BACKGROUND_COLOR);
         setFocusable(true);
 

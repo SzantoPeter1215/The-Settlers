@@ -3,6 +3,8 @@ package model;
 import gui.GameUIConstants;
 import gui.Position;
 import model.info.InfoBoard;
+
+import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
 public final class GameLogic {
@@ -83,7 +85,7 @@ public final class GameLogic {
         initGrid();
 
         initInfoBoard();
-        path.initPatrix(column);
+        path.initMatrix(column);
 
         //TODO: set the grids to their default type. (according to the map we choose)
 
@@ -139,7 +141,6 @@ public final class GameLogic {
                 this.player2Gold -= minusGold;
                 return true;
             }
-
         }
         return false;
     }
@@ -148,8 +149,9 @@ public final class GameLogic {
         for (int i = 0; i < row; ++i) {
             for (int j = 0; j < column; ++j) {
                 switch (grids[i][j]) {
-                    case EMPTY: {
-                        path.setMatrixField(i, j, 1);
+                    case EMPTY:
+                    case TOWER1: { //TODO: MAKE SOLDER TO TOWER
+                            path.setMatrixField(i, j, 1);
                         break;
                     }
                     default: {
@@ -180,11 +182,19 @@ public final class GameLogic {
                 Type current = grids[i][j];
                 switch (current) {
                     case TOWER1: {
-                        PathSolver.getPath(i, j, player2Castle.x, player2Castle.y);
+                        ArrayList<Integer>[] currentPath = path.getPath(i, j, player2Castle.x, player2Castle.y);
+                        //ArrayList<Integer> currentPathX = currentPath[0];
+                        //ArrayList<Integer> currentPathY = currentPath[1];
+
+
                         grids[i][j] = Type.EMPTY;
-                        if(j >= column - 1) break; //out of index stb
-                        //TODO: where are the solders
-                        grids[i][j + 1] = Type.TOWER1;
+                        //if(j >= column - 1) break; //out of index stb
+                        //TODO: where are the solders?
+
+                        System.out.println("Castle: " + player2Castle.x + ", " + player2Castle.y);
+                        System.out.println(currentPath[0].toString() + "\n" + currentPath[1].toString());
+                        System.out.println("\n");
+                        grids[currentPath[0].get(1)][currentPath[1].get(1)] = Type.TOWER1;
                         ++j;
                         break;
                     }
