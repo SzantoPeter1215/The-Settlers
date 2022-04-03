@@ -3,6 +3,8 @@ package model;
 import gui.GameUIConstants;
 import gui.Position;
 import model.info.InfoBoard;
+import model.soldier.Soldier;
+import model.soldier.SoldierType;
 
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
@@ -22,6 +24,10 @@ public final class GameLogic {
     private Position player2Castle;
 
     private PathSolver path;
+
+    private ArrayList<Soldier> player1Soldiers;
+    private ArrayList<Soldier> player2Soldiers;
+
 
 
     public int getPlayer1Gold() {
@@ -87,6 +93,28 @@ public final class GameLogic {
         initInfoBoard();
         path.initMatrix(column);
 
+        player1Soldiers = new ArrayList<Soldier>();
+        player2Soldiers = new ArrayList<Soldier>();
+
+        //TODO: remove the inital solder makes after yopu can create your own!
+
+
+        grids[1][1] = Type.SOLDER1;
+        player1Soldiers.add(new Soldier(SoldierType.REGULAR, 1,1));
+
+        grids[10][1] = Type.SOLDER1;
+        player1Soldiers.add(new Soldier(SoldierType.CLIMBER, 10,1));
+
+        grids[1][10] = Type.SOLDER2;
+        player2Soldiers.add(new Soldier(SoldierType.REGULAR, 1,10));
+
+        grids[10][10] = Type.SOLDER2;
+        player2Soldiers.add(new Soldier(SoldierType.CLIMBER, 10,10));
+
+
+
+
+
         //TODO: set the grids to their default type. (according to the map we choose)
 
         infoBoard.reset(userName);
@@ -145,12 +173,23 @@ public final class GameLogic {
         return false;
     }
 
+    private void addMoney(int amount, int player) {
+
+        if(player == 1) {
+            player1Gold += amount;
+        } else {
+            player2Gold += amount;
+
+        }
+    }
+
     private void updatePathMatrix() {
         for (int i = 0; i < row; ++i) {
             for (int j = 0; j < row; ++j) {
                 switch (grids[i][j]) {
                     case EMPTY:
-                    case TOWER1: { //TODO: MAKE SOLDER TO TOWER
+                    case SOLDER1:
+                    case SOLDER2: {
                             path.setMatrixField(i, j, 1);
                         break;
                     }
@@ -161,11 +200,30 @@ public final class GameLogic {
             }
         }
     }
+    private void clearGridSoldiers() {
+        for (int i = 0; i < row; ++i) {
+            for (int j = 0; j < row; ++j) {
+                if(grids[i][j] == Type.SOLDER1 || grids[i][j] == Type.SOLDER2) {
+                    grids[i][j] = Type.EMPTY;
+                }
+            }
+        }
+    }
     public void initAttackPhase() {
+        //TODO: itt kéne összeszámolni a katonákat és pénzt adni a megfelelő játékosnak
         GameLogic.playerTurn = PlayerTurn.ATTACK;
         System.out.println("ATTACK!");
         stepCounter = 0;
         updatePathMatrix();
+
+        for(Soldier s : player1Soldiers) {
+            s.createPath(path, player2Castle.x, player2Castle.y);
+            addMoney(s.getTax(), 1);
+        }
+        for(Soldier s : player2Soldiers) {
+            s.createPath(path, player1Castle.y, player1Castle.x);
+            addMoney(s.getTax(), 2);
+        }
     }
 
     public void nextAttackPhase() {
@@ -177,41 +235,20 @@ public final class GameLogic {
         //TODO: create a method that accepts a function and executes it to all the grid elements.
         //TODO: HANDLE WHEN TWO THINGS ARE IN THE SAME PLACE!!!
 
-        boolean run = true;
+        clearGridSoldiers();
 
-        for (int i = 0; i < row && run; ++i) {
-            for (int j = 0; j < column && run; ++j) {
-                Type current = grids[i][j];
-                switch (current) {
-                    case TOWER1: {
-                        ArrayList<Integer>[] currentPath = path.getPath(j, i, player2Castle.x, player2Castle.y);
+        for(Soldier s : player1Soldiers) {
+            s.step();
+            int[] cords = s.getPos();
+            grids[cords[0]][cords[1]] = s.getType();
 
+        }
 
-                        grids[i][j] = Type.EMPTY;
-                        //if(j >= column - 1) break; //out of index stb
-                        //TODO: where are the solders?
+        for(Soldier s : player2Soldiers) {
+            s.step();
+            int[] cords = s.getPos();
+            grids[cords[0]][cords[1]] = s.getType();
 
-                        System.out.println("Castle: " + player2Castle.x + ", " + player2Castle.y);
-                        System.out.println("Origin: " + j + ", " + i);
-                        System.out.println(currentPath[0].toString() + "\n" + currentPath[1].toString());
-                        System.out.println("\n");
-                        grids[currentPath[0].get(1)][currentPath[1].get(1)] = Type.TOWER1;
-                        ++j;
-                        run = false;
-                        stepCounter = 5;
-                        break;
-                    }
-                    case TOWER2: {
-                        grids[i][j] = Type.EMPTY;
-                        if(j <= 1) break;
-                        grids[i][j - 3] = Type.TOWER2;
-                        break;
-                    }
-                    default: {
-                    //TODO: add the other types once done
-                    }
-                }
-            }
         }
     }
 

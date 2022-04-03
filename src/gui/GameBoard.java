@@ -119,6 +119,8 @@ public class GameBoard extends JPanel {
             repaint();
         }
     };
+
+
     private void drawStartScreen(Graphics2D graphics2D) {
 
         //TODO: remove all this. just example
@@ -203,6 +205,7 @@ public class GameBoard extends JPanel {
         graphics2D.setStroke(GameUIConstants.SMALL_STROKE);
 
         Type[][] localGrid = gameLogic.getGrids();
+        //TODO: SWICH A SOK IF HELYETT! meg ez az image loaderes dolog is ismétlés.
         for (int y_col = 0; y_col < gameConstants.GAMEAREA_HEIGHT_canBeDividedBy; y_col++) {
             for (int x_row = 0; x_row < gameConstants.GAMEAREA_WIDTH_canBeDividedBy; x_row++) {
                 Rectangle currentField = new Rectangle(gameConstants.gameareaREACT.x+x_row*GameUIConstants.GAME_AREA_RECTANGLE,gameConstants.gameareaREACT.y+y_col*GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.GAME_AREA_RECTANGLE);
@@ -212,6 +215,12 @@ public class GameBoard extends JPanel {
                 }
                 else if(localGrid[y_col][x_row] == Type.TOWER2){
                     imageLoader.loadImage(graphics2D,currentField.x,currentField.y,GameUIConstants.Tower2Image);
+                }
+                else if(localGrid[y_col][x_row] == Type.SOLDER1){
+                    imageLoader.loadImage(graphics2D,currentField.x,currentField.y,GameUIConstants.Soldier1);
+                }
+                else if(localGrid[y_col][x_row] == Type.SOLDER2){
+                    imageLoader.loadImage(graphics2D,currentField.x,currentField.y,GameUIConstants.Soldier2);
                 }
                 else if(localGrid[y_col][x_row]== Type.CASTLE){
                     imageLoader.loadImage(graphics2D,currentField.x,currentField.y,GameUIConstants.Castle);

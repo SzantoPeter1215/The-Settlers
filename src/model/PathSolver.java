@@ -24,7 +24,7 @@ class Node
     }
 }
 
-class PathSolver
+public class PathSolver
 {
     // Below arrays detail all four possible movements from a cell
     private static int[] row = { -1, 0, 0, 1 };
@@ -232,3 +232,5 @@ class PathSolver
         }
     }
 }
+
+// https://en.wikipedia.org/wiki/Breadth-first_search
