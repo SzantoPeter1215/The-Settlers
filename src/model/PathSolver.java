@@ -24,11 +24,21 @@ class Node
     }
 }
 
-class PathFinder
+class PathSolver
 {
     // Below arrays detail all four possible movements from a cell
     private static int[] row = { -1, 0, 0, 1 };
     private static int[] col = { 0, -1, 1, 0 };
+    private static int[][] matrix;
+
+    public void initMatrix(int N) {
+        matrix = new int[N][N];
+        for(int i = 0; i < N; ++i) {
+            for(int j = 0; j < N; ++j) {
+                matrix[i][j] = 1;
+            }
+        }
+    }
 
     // The function returns false if (x, y) is not a valid position
     private static boolean isValid(int x, int y, int N) {
@@ -44,10 +54,15 @@ class PathFinder
         }
     }
 
+    public void setMatrixField(int x, int y, int value) {
+        matrix[x][y] = value;
+    }
+
     // Find the shortest route in a matrix from source cell (x, y) to
     // destination cell (N-1, N-1)
-    public static List<String> findPath(int[][] matrix, int x, int y, int destX, int destY)
+    private static List<String> findPath(int[][] matrix, int x, int y, int destX, int destY)
     {
+
         // list to store shortest path
         List<String> path = new ArrayList<>();
 
@@ -58,6 +73,7 @@ class PathFinder
 
         // `N × N` matrix
         int N = matrix.length;
+        //System.out.println("Matrix length: " + N);
 
         // create a queue and enqueue the first node
         Queue<Node> q = new ArrayDeque<>();
@@ -118,12 +134,16 @@ class PathFinder
         return path;
     }
 
-    public static void PathFinderHandler(int[][] matrix)
+    public ArrayList<Integer>[] getPath(int startX, int startY, int endX, int endY)
     {
         // Find a route in the matrix from source cell (0, 0) to
         // destination cell (N-1, N-1)
-        List<String> path = findPath(matrix, 0, 0, 9, 9);
+        List<String> path = findPath(matrix, startX, startY, endX, endY);
 
+        //System.out.println("Start: " + startX + ", " + startY + "\nEnd: " + endX + ", " + endY);
+        //System.out.println(Arrays.deepToString(matrix).replace("], ", "]\n").replace("[[", "[").replace("]]", "]"));
+
+        //System.out.println(path.toString());
         if (path != null && path.size() > 0) {
             //System.out.print("The shortest path is " + path);
 
@@ -133,13 +153,14 @@ class PathFinder
             ArrayList<Integer> YChords = new ArrayList<>();
 
             String[] raw = path.get(0).split(", ");
-            XChords.add(Integer.parseInt(String.valueOf(raw[0].charAt(1))));
-            YChords.add(Integer.parseInt(String.valueOf(raw[1].charAt(0))));
+            //TODO: ITT A HIBA
+            XChords.add(Integer.parseInt(String.valueOf(raw[0].split("\\(")[1])));
+            YChords.add(Integer.parseInt(String.valueOf(raw[1].split("\\)")[0])));
 
             for(int i = 1; i < pathSize; ++i) {
                 raw = path.get(i).split(", ");
-                XChords.add(Integer.parseInt(String.valueOf(raw[0].charAt(1))));
-                YChords.add(Integer.parseInt(String.valueOf(raw[1].charAt(0))));
+                XChords.add(Integer.parseInt(String.valueOf(raw[0].split("\\(")[1])));
+                YChords.add(Integer.parseInt(String.valueOf(raw[1].split("\\)")[0])));
 
                 //TODO: use this filler if we need steps greater than 1 or 0!!!
                 /*
@@ -180,8 +201,9 @@ class PathFinder
                 }
                 */
             }
-            System.out.print("\n\n");
-            for(int x = 0; x < matrix.length; ++x) {
+
+            //System.out.print("\n\n");
+            for(int x = 0; x < matrix.length && false; ++x) {
                 for(int y = 0; y < matrix.length; ++y) {
                     boolean found = false;
                     for(int p = 0; p < XChords.size(); ++p) {
@@ -197,9 +219,16 @@ class PathFinder
                 }
                 System.out.print("\n");
             }
-            //TODO: RETURN!!!
+
+            ArrayList<Integer>[] res = new ArrayList[2];
+            res[0] = XChords;
+            res[1] = YChords;
+
+            return res;
         } else {
+
             System.out.println("Destination is not found");
+            return null;
         }
     }
 }
