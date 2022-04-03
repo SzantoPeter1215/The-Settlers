@@ -134,19 +134,33 @@ public class GameBoard extends JPanel {
 
 
     }
-    //TODO: Tower's range should not cover up other towers
+    //TODO:refactor!
     private void drawTowerRange(Graphics2D graphics2D){
         Type[][] localGrid = gameLogic.getGrids();
         for (int y_col = 0; y_col < gameConstants.GAMEAREA_HEIGHT_canBeDividedBy; y_col++) {
             for (int x_row = 0; x_row < gameConstants.GAMEAREA_WIDTH_canBeDividedBy; x_row++) {
                 if(localGrid[y_col][x_row] == Type.TOWER1 || localGrid[y_col][x_row] == Type.TOWER2 || localGrid[y_col][x_row]== Type.CASTLE){
-                    Rectangle area = new Rectangle(gameConstants.gameareaREACT.x+x_row*GameUIConstants.GAME_AREA_RECTANGLE-GameUIConstants.GAME_AREA_RECTANGLE,gameConstants.gameareaREACT.y+y_col*GameUIConstants.GAME_AREA_RECTANGLE-GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.GAME_AREA_RECTANGLE*3,GameUIConstants.GAME_AREA_RECTANGLE*3);
+                    int width = 3;
+                    int height =3;
+                    int x_adjust = 1;
+                    int y_adjust = 1;
+                    if(y_col == 0) {
+                        height = 2;
+                        y_adjust = 0;
+                    }else if(y_col == gameConstants.GAMEAREA_HEIGHT_canBeDividedBy - 1) {
+                        height = 2;
+                    }
+                    if(x_row == 0){
+                        width = 2;
+                        x_adjust = 0;
+                    }else if(x_row == gameConstants.GAMEAREA_WIDTH_canBeDividedBy - 1){
+                        width = 2;
+                    }
+                    Rectangle area = new Rectangle(gameConstants.gameareaREACT.x + x_row * GameUIConstants.GAME_AREA_RECTANGLE - x_adjust * GameUIConstants.GAME_AREA_RECTANGLE, gameConstants.gameareaREACT.y + y_col * GameUIConstants.GAME_AREA_RECTANGLE - y_adjust * GameUIConstants.GAME_AREA_RECTANGLE, GameUIConstants.GAME_AREA_RECTANGLE * width, GameUIConstants.GAME_AREA_RECTANGLE * height);
                     Rectangle currentField = new Rectangle(gameConstants.gameareaREACT.x+x_row*GameUIConstants.GAME_AREA_RECTANGLE,gameConstants.gameareaREACT.y+y_col*GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.GAME_AREA_RECTANGLE);
                     Color c1 = new Color(255,102,102);
                     graphics2D.setColor(c1);
                     graphics2D.fill(area);
-                    graphics2D.setColor(Color.red);
-                    graphics2D.draw(area);
                     if(localGrid[y_col][x_row] == Type.TOWER1){
                         imageLoader.loadImage(graphics2D,currentField.x,currentField.y,GameUIConstants.Tower1Image);
                     }
@@ -156,6 +170,24 @@ public class GameBoard extends JPanel {
                     else if(localGrid[y_col][x_row]== Type.CASTLE) {
                         imageLoader.loadImage(graphics2D, currentField.x, currentField.y, GameUIConstants.Castle);
                     }
+                }
+            }
+        }
+        for (int y_col = 0; y_col < gameConstants.GAMEAREA_HEIGHT_canBeDividedBy; y_col++) {
+            for (int x_row = 0; x_row < gameConstants.GAMEAREA_WIDTH_canBeDividedBy; x_row++) {
+                Rectangle currentField = new Rectangle(gameConstants.gameareaREACT.x+x_row*GameUIConstants.GAME_AREA_RECTANGLE,gameConstants.gameareaREACT.y+y_col*GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.GAME_AREA_RECTANGLE);
+                graphics2D.setColor(Color.BLACK);
+                if(localGrid[y_col][x_row] == Type.TOWER1){
+                    imageLoader.loadImage(graphics2D,currentField.x,currentField.y,GameUIConstants.Tower1Image);
+                }
+                else if(localGrid[y_col][x_row] == Type.TOWER2){
+                    imageLoader.loadImage(graphics2D,currentField.x,currentField.y,GameUIConstants.Tower2Image);
+                }
+                else if(localGrid[y_col][x_row]== Type.CASTLE){
+                    imageLoader.loadImage(graphics2D,currentField.x,currentField.y,GameUIConstants.Castle);
+                }
+                else{
+                    graphics2D.draw(currentField);
                 }
             }
         }
@@ -288,6 +320,9 @@ public class GameBoard extends JPanel {
     private void drawAll(Graphics2D graphics2D) {
         drawGameArea(graphics2D);
         drawInfoBoard(graphics2D);
+        /*if(GameLogic.playerTurn == PlayerTurn.ATTACK){
+            drawTowerRange(graphics2D);
+        }*/
         drawTowerRange(graphics2D);
     }
 
