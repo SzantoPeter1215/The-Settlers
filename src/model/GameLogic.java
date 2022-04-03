@@ -147,7 +147,7 @@ public final class GameLogic {
 
     private void updatePathMatrix() {
         for (int i = 0; i < row; ++i) {
-            for (int j = 0; j < column; ++j) {
+            for (int j = 0; j < row; ++j) {
                 switch (grids[i][j]) {
                     case EMPTY:
                     case TOWER1: { //TODO: MAKE SOLDER TO TOWER
@@ -177,14 +177,14 @@ public final class GameLogic {
         //TODO: create a method that accepts a function and executes it to all the grid elements.
         //TODO: HANDLE WHEN TWO THINGS ARE IN THE SAME PLACE!!!
 
-        for (int i = 0; i < row; ++i) {
-            for (int j = 0; j < column; ++j) {
+        boolean run = true;
+
+        for (int i = 0; i < row && run; ++i) {
+            for (int j = 0; j < column && run; ++j) {
                 Type current = grids[i][j];
                 switch (current) {
                     case TOWER1: {
-                        ArrayList<Integer>[] currentPath = path.getPath(i, j, player2Castle.x, player2Castle.y);
-                        //ArrayList<Integer> currentPathX = currentPath[0];
-                        //ArrayList<Integer> currentPathY = currentPath[1];
+                        ArrayList<Integer>[] currentPath = path.getPath(j, i, player2Castle.x, player2Castle.y);
 
 
                         grids[i][j] = Type.EMPTY;
@@ -192,10 +192,13 @@ public final class GameLogic {
                         //TODO: where are the solders?
 
                         System.out.println("Castle: " + player2Castle.x + ", " + player2Castle.y);
+                        System.out.println("Origin: " + j + ", " + i);
                         System.out.println(currentPath[0].toString() + "\n" + currentPath[1].toString());
                         System.out.println("\n");
                         grids[currentPath[0].get(1)][currentPath[1].get(1)] = Type.TOWER1;
                         ++j;
+                        run = false;
+                        stepCounter = 5;
                         break;
                     }
                     case TOWER2: {

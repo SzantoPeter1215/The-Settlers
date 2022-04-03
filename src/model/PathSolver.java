@@ -33,6 +33,11 @@ class PathSolver
 
     public void initMatrix(int N) {
         matrix = new int[N][N];
+        for(int i = 0; i < N; ++i) {
+            for(int j = 0; j < N; ++j) {
+                matrix[i][j] = 1;
+            }
+        }
     }
 
     // The function returns false if (x, y) is not a valid position
@@ -148,13 +153,14 @@ class PathSolver
             ArrayList<Integer> YChords = new ArrayList<>();
 
             String[] raw = path.get(0).split(", ");
-            XChords.add(Integer.parseInt(String.valueOf(raw[0].charAt(1))));
-            YChords.add(Integer.parseInt(String.valueOf(raw[1].charAt(0))));
+            //TODO: ITT A HIBA
+            XChords.add(Integer.parseInt(String.valueOf(raw[0].split("\\(")[1])));
+            YChords.add(Integer.parseInt(String.valueOf(raw[1].split("\\)")[0])));
 
             for(int i = 1; i < pathSize; ++i) {
                 raw = path.get(i).split(", ");
-                XChords.add(Integer.parseInt(String.valueOf(raw[0].charAt(1))));
-                YChords.add(Integer.parseInt(String.valueOf(raw[1].charAt(0))));
+                XChords.add(Integer.parseInt(String.valueOf(raw[0].split("\\(")[1])));
+                YChords.add(Integer.parseInt(String.valueOf(raw[1].split("\\)")[0])));
 
                 //TODO: use this filler if we need steps greater than 1 or 0!!!
                 /*
@@ -195,9 +201,9 @@ class PathSolver
                 }
                 */
             }
-/*
-            System.out.print("\n\n");
-            for(int x = 0; x < matrix.length; ++x) {
+
+            //System.out.print("\n\n");
+            for(int x = 0; x < matrix.length && false; ++x) {
                 for(int y = 0; y < matrix.length; ++y) {
                     boolean found = false;
                     for(int p = 0; p < XChords.size(); ++p) {
@@ -213,10 +219,11 @@ class PathSolver
                 }
                 System.out.print("\n");
             }
-*/
+
             ArrayList<Integer>[] res = new ArrayList[2];
             res[0] = XChords;
             res[1] = YChords;
+
             return res;
         } else {
 
