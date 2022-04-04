@@ -23,6 +23,43 @@ public final class GameLogic {
     private Position player1Castle;
     private Position player2Castle;
 
+    public int getPlayer1Unit1Number() {
+        return Player1Unit1Number;
+    }
+
+    public void incPlayer1Unit1Number() {
+        Player1Unit1Number += 1;
+    }
+
+    public int getPlayer1Unit2Number() {
+        return Player1Unit2Number;
+    }
+
+    public void incPlayer1Unit2Number() {
+        Player1Unit2Number += 1;
+    }
+
+    public int getPlayer2Unit1Number() {
+        return Player2Unit1Number;
+    }
+
+    public void incPlayer2Unit1Number() {
+        Player2Unit1Number += 1;
+    }
+
+    public int getPlayer2Unit2Number() {
+        return Player2Unit2Number;
+    }
+
+    public void incPlayer2Unit2Number() {
+        Player2Unit2Number += 1;
+    }
+
+    private int Player1Unit1Number;
+    private int Player1Unit2Number;
+    private int Player2Unit1Number;
+    private int Player2Unit2Number;
+
     private PathSolver path;
 
     private ArrayList<Soldier> player1Soldiers;
@@ -99,7 +136,7 @@ public final class GameLogic {
         //TODO: remove the inital solder makes after yopu can create your own!
 
 
-        grids[1][1] = Type.SOLDER1;
+/*        grids[1][1] = Type.SOLDER1;
         player1Soldiers.add(new Soldier(SoldierType.REGULAR, 1,1));
 
         grids[10][1] = Type.SOLDER1;
@@ -109,7 +146,7 @@ public final class GameLogic {
         player2Soldiers.add(new Soldier(SoldierType.REGULAR, 1,10));
 
         grids[10][10] = Type.SOLDER2;
-        player2Soldiers.add(new Soldier(SoldierType.CLIMBER, 10,10));
+        player2Soldiers.add(new Soldier(SoldierType.CLIMBER, 10,10));*/
 
 
 
@@ -127,6 +164,9 @@ public final class GameLogic {
         setTypeElement(castleRandomY,Player1castleRandomX,Type.CASTLE);
         setTypeElement(castleRandomY,Player2castleRandomX,Type.CASTLE);
         setFillTowerType(Type.TOWER1);
+    }
+    public void createPlayer1Soldier1(){
+        player1Soldiers.add(new Soldier(SoldierType.REGULAR, this.player1Castle.x,this.player1Castle.y));
     }
 
     private void initInfoBoard() {
@@ -256,5 +296,4 @@ public final class GameLogic {
     public InfoBoard getInfoBoard() {
         return infoBoard;
     }
-
 }

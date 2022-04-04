@@ -34,7 +34,7 @@ public final class GameUIConstants {
     public Position player2_text_onInfoBoard;
     public Position player1_moneyAndNameText;
     public Position player2_moneyAndNameText;
-    public static final int GAME_AREA_RECTANGLE = 30;
+    public static final int GAME_AREA_RECTANGLE = 50;
     public GameUIConstants(){//in this method we calculate the gamearea size. It's important that i can be divided by the small react(it will be one unit on the game where the user can put things)
         int WIDTH_hasToBeDividedByRectSize = GAME_WIDTH;
         while (WIDTH_hasToBeDividedByRectSize>0&&WIDTH_hasToBeDividedByRectSize%GAME_AREA_RECTANGLE!=0){

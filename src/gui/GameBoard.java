@@ -76,6 +76,27 @@ public class GameBoard extends JPanel {
                     gameLogic.setFillTowerType(Type.TOWER2);
 
                 }
+                else if(ScreenMethods.onPlayer1Unit1(e.getX(),e.getY())){
+                    if(GameLogic.playerTurn==PlayerTurn.PLAYER1){
+                        gameLogic.incPlayer1Unit1Number();
+                        gameLogic.createPlayer1Soldier1();
+                    }
+                }
+                else if(ScreenMethods.onPlayer1Unit2(e.getX(),e.getY())){
+                    if(GameLogic.playerTurn==PlayerTurn.PLAYER1){
+                        gameLogic.incPlayer1Unit2Number();
+                    }
+                }
+                else if(ScreenMethods.onPlayer2Unit1(e.getX(),e.getY())){
+                    if(GameLogic.playerTurn==PlayerTurn.PLAYER2){
+                        gameLogic.incPlayer2Unit1Number();
+                    }
+                }
+                else if(ScreenMethods.onPlayer2Unit2(e.getX(),e.getY())){
+                    if(GameLogic.playerTurn==PlayerTurn.PLAYER2){
+                        gameLogic.incPlayer2Unit2Number();
+                    }
+                }
                 else if(ScreenMethods.playerInfoBoardEndTurn_clicked(e.getX(),e.getY())){
                     if (GameLogic.playerTurn == PlayerTurn.PLAYER2){
                         //after P2 ends their turn the attack phase begins
@@ -312,9 +333,9 @@ public class GameBoard extends JPanel {
 
         graphics2D.setColor(GameUIConstants.TEXT_COLOR);
         graphics2D.setFont(GameUIConstants.SMALL_FONT);
-        graphics2D.drawString("Player 1         Gold: "+gameLogic.getPlayer1Gold(),
+        graphics2D.drawString("Player 1         Gold: "+gameLogic.getPlayer1Gold()+"    Unit 1: "+gameLogic.getPlayer1Unit1Number()+" Unit 2:"+gameLogic.getPlayer1Unit2Number(),
                 gameConstants.player1_moneyAndNameText.x,gameConstants.player1_moneyAndNameText.y);
-        graphics2D.drawString("Player 2         Gold: "+gameLogic.getPlayer2Gold(),
+        graphics2D.drawString("Player 2         Gold: "+gameLogic.getPlayer2Gold()+"    Unit 1: "+gameLogic.getPlayer2Unit1Number()+" Unit 2:"+gameLogic.getPlayer2Unit2Number(),
                 gameConstants.player2_moneyAndNameText.x,gameConstants.player2_moneyAndNameText.y);
 
         if(GameLogic.playerTurn==PlayerTurn.PLAYER1){

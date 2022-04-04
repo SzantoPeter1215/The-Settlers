@@ -85,4 +85,44 @@ public class TheScreen {
         int endOfTheGameBoard_Y = gameConstants.gameareaREACT.y;
         return y <= startOfTheGameBoard_Y && y >= endOfTheGameBoard_Y && x <= gameConstants.gameareaREACT.width;
     }
+    public boolean onPlayer1Unit1(int x, int y){
+        int infoX = gameConstants.player1_placeOfSoldier1_OnInfoBoard.x;
+        int infoY = gameConstants.player1_placeOfSoldier1_OnInfoBoard.y;
+        if(infoX<x&&
+                x<infoX+GameUIConstants.GAME_AREA_RECTANGLE
+        &&infoY<y&&y<infoY+GameUIConstants.GAME_AREA_RECTANGLE){
+            return true;
+        }
+        return false;
+    }
+    public boolean onPlayer1Unit2(int x, int y){
+        int infoX = gameConstants.player1_placeOfSoldier2_OnInfoBoard.x;
+        int infoY = gameConstants.player1_placeOfSoldier2_OnInfoBoard.y;
+        if(infoX<x&&
+                x<infoX+GameUIConstants.GAME_AREA_RECTANGLE
+                &&infoY<y&&y<infoY+GameUIConstants.GAME_AREA_RECTANGLE){
+            return true;
+        }
+        return false;
+    }
+    public boolean onPlayer2Unit1(int x, int y){
+        int infoX = gameConstants.player2_placeOfSoldier1_OnInfoBoard.x;
+        int infoY = gameConstants.player2_placeOfSoldier1_OnInfoBoard.y;
+        if(infoX<x&&
+                x<infoX+GameUIConstants.GAME_AREA_RECTANGLE
+                &&infoY<y&&y<infoY+GameUIConstants.GAME_AREA_RECTANGLE){
+            return true;
+        }
+        return false;
+    }
+    public boolean onPlayer2Unit2(int x, int y){
+        int infoX = gameConstants.player2_placeOfSoldier2_OnInfoBoard.x;
+        int infoY = gameConstants.player2_placeOfSoldier2_OnInfoBoard.y;
+        if(infoX<x&&
+                x<infoX+GameUIConstants.GAME_AREA_RECTANGLE
+                &&infoY<y&&y<infoY+GameUIConstants.GAME_AREA_RECTANGLE){
+            return true;
+        }
+        return false;
+    }
 }
