@@ -7,7 +7,10 @@ public class Field {
         stuffOnTheField = new ArrayList<Type>();
     }
     public void add(Type thing){
-        if(isTower(thing)&&!isTowerOnTheField()) {
+        if(isTower(thing)&&isTowerOnTheField()) {
+            stuffOnTheField.add(thing);
+        }
+        else {
             stuffOnTheField.add(thing);
         }
     }
@@ -22,5 +25,26 @@ public class Field {
             return  true;
         }
         return false;
+    }
+    public Type getMainType(){
+        if(stuffOnTheField.size()>0) {
+            return stuffOnTheField.get(0);
+        }
+        else{
+            return Type.EMPTY;
+        }
+    }
+    public void removeSoldier(){
+        ArrayList<Integer> removingIndexes = new ArrayList<Integer>();
+        for (int i = 0; i < stuffOnTheField.size(); i++) {
+            if(stuffOnTheField.get(i)==Type.SOLDER1||stuffOnTheField.get(i)==Type.SOLDER2){
+                removingIndexes.add(i);
+            }
+        }
+        for (Integer removingIndex : removingIndexes) {
+            stuffOnTheField.remove((int)removingIndex);
+            //stuffOnTheField.clear();
+        }
+
     }
 }

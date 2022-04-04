@@ -92,18 +92,23 @@ public final class GameLogic {
     }
 
     public void setTypeElement(int x, int y,Type element){
-        this.grids[x][y] = element;
+        if(element==Type.EMPTY){
+            grids[x][y].stuffOnTheField.clear();
+        }
+        grids[x][y].add(element);
     }
 
     public Type[][] getGrids() {
-        return grids;
+        Type[][] convertedGrid = new Type[row][column];
+        for(int i = 0;i<column;i++){
+            for (int j = 0; j < row; j++) {
+                convertedGrid[i][j] = grids[i][j].getMainType();
+            }
+        }
+        return convertedGrid;
     }
 
-    public void setGrids(Type[][] grids) {
-        this.grids = grids;
-    }
-
-    private Type[][] grids;
+    private Field[][] grids;
 
     private InfoBoard infoBoard;
 
@@ -123,7 +128,7 @@ public final class GameLogic {
 
         path = new PathSolver();
 
-        grids = new Type[row][column];
+        grids = new Field[row][column];
         stepCounter = 0;
         initGrid();
 
@@ -185,7 +190,8 @@ public final class GameLogic {
     private void initGrid() {
         for (int i = 0; i < row; ++i) {
             for (int j = 0; j < column; ++j) {
-                grids[i][j] = Type.EMPTY;
+                //grids[i][j] = Type.EMPTY;
+                grids[i][j] = new Field();
             }
         }
     }
@@ -226,7 +232,7 @@ public final class GameLogic {
     private void updatePathMatrix() {
         for (int i = 0; i < row; ++i) {
             for (int j = 0; j < row; ++j) {
-                switch (grids[i][j]) {
+                switch (grids[i][j].getMainType()) {
                     case EMPTY:
                     case SOLDER1:
                     case SOLDER2: {
@@ -243,8 +249,8 @@ public final class GameLogic {
     private void clearGridSoldiers() {
         for (int i = 0; i < row; ++i) {
             for (int j = 0; j < row; ++j) {
-                if(grids[i][j] == Type.SOLDER1 || grids[i][j] == Type.SOLDER2) {
-                    grids[i][j] = Type.EMPTY;
+                if(grids[i][j].getMainType() == Type.SOLDER1 || grids[i][j].getMainType() == Type.SOLDER2) {
+                    grids[i][j].removeSoldier();
                 }
             }
         }
@@ -280,14 +286,14 @@ public final class GameLogic {
         for(Soldier s : player1Soldiers) {
             s.step();
             int[] cords = s.getPos();
-            grids[cords[0]][cords[1]] = s.getType();
+            grids[cords[0]][cords[1]].add(s.getType());
 
         }
 
         for(Soldier s : player2Soldiers) {
             s.step();
             int[] cords = s.getPos();
-            grids[cords[0]][cords[1]] = s.getType();
+            grids[cords[0]][cords[1]].add(s.getType());
 
         }
     }
