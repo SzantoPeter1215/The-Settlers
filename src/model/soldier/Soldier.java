@@ -88,4 +88,9 @@ public class Soldier {
     public int getTax() {
         return this.tax;
     }
+
+
+    public int getHealth() { return health; }
+
+    public void setHealth(int health) { this.health = health; }
 }

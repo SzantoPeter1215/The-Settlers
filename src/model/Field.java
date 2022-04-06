@@ -14,7 +14,7 @@ public class Field {
             stuffOnTheField.add(thing);
         }
     }
-    private boolean isTowerOnTheField(){
+    public boolean isTowerOnTheField(){
         if (stuffOnTheField.contains(Type.TOWER1)||stuffOnTheField.contains(Type.TOWER2)){
             return true;
         }

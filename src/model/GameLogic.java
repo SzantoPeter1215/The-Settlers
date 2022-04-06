@@ -296,8 +296,53 @@ public final class GameLogic {
             grids[cords[0]][cords[1]].add(s.getType());
 
         }
+
+        soldiersHealth();
+        damageSoldiers();
+        soldiersHealth();
     }
 
+    public void damageSoldiers(){
+        for(Soldier s : player1Soldiers) {
+            int[] cords = s.getPos();
+            boolean takesDamage = false;
+            for(int i = -1; i <= 1; i++){
+                for(int j = -1; j <= 1; j++){
+                    if(grids[cords[0]+i][cords[1]+i].isTowerOnTheField()) {
+                        takesDamage = true;
+                    }
+                }
+            }
+            if(takesDamage){
+                s.setHealth(s.getHealth()-30);
+            }
+        }
+
+        for(Soldier s : player2Soldiers) {
+            int[] cords = s.getPos();
+            boolean takesDamage = false;
+            for(int i = -1; i <= 1; i++){
+                for(int j = -1; j <= 1; j++){
+                    if(grids[cords[0]+i][cords[1]+i].isTowerOnTheField()) {
+                        takesDamage = true;
+                    }
+                }
+            }
+            if(takesDamage){
+                s.setHealth(s.getHealth()-30);
+            }
+        }
+    }
+
+    public void soldiersHealth(){
+        for(Soldier s : player1Soldiers) {
+            System.out.println(s.getHealth());
+        }
+
+        for(Soldier s : player2Soldiers) {
+            System.out.println(s.getHealth());
+        }
+    }
 
     public InfoBoard getInfoBoard() {
         return infoBoard;

@@ -208,6 +208,12 @@ public class GameBoard extends JPanel {
                 else if(localGrid[y_col][x_row] == Type.TOWER2){
                     imageLoader.loadImage(graphics2D,currentField.x,currentField.y,GameUIConstants.Tower2Image);
                 }
+                else if(localGrid[y_col][x_row] == Type.SOLDER1){
+                    imageLoader.loadImage(graphics2D,currentField.x,currentField.y,GameUIConstants.Soldier1);
+                }
+                else if(localGrid[y_col][x_row] == Type.SOLDER2){
+                    imageLoader.loadImage(graphics2D,currentField.x,currentField.y,GameUIConstants.Soldier2);
+                }
                 else if(localGrid[y_col][x_row]== Type.CASTLE){
                     imageLoader.loadImage(graphics2D,currentField.x,currentField.y,GameUIConstants.Castle);
                 }
@@ -352,10 +358,9 @@ public class GameBoard extends JPanel {
     private void drawAll(Graphics2D graphics2D) {
         drawGameArea(graphics2D);
         drawInfoBoard(graphics2D);
-        /*if(GameLogic.playerTurn == PlayerTurn.ATTACK){
+        if(GameLogic.playerTurn == PlayerTurn.ATTACK){
             drawTowerRange(graphics2D);
-        }*/
-        drawTowerRange(graphics2D);
+        }
     }
 
     @Override
