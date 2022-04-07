@@ -34,6 +34,9 @@ public class Field {
             return Type.EMPTY;
         }
     }
+    public boolean hasMoreThingOnTheField(){
+        return  stuffOnTheField.size()>1;
+    }
     public void removeSoldier(){
         ArrayList<Integer> removingIndexes = new ArrayList<Integer>();
         for (int i = 0; i < stuffOnTheField.size(); i++) {
