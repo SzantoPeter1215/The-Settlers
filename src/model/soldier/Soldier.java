@@ -1,17 +1,20 @@
 package model.soldier;
+import gui.GameUIConstants;
 import model.PathSolver;
+import model.PlayerTurn;
 import model.Type;
 
 import java.util.ArrayList;
 
 public class Soldier {
-    private int health;
+    public int health;
     private int damage;
     private int price;
     private int tax;
     private boolean canClimb;
     private Type type;
-
+    public PlayerTurn OwnerPlayer;
+    public Type SoldierType;
     private int x;
     private int y;
 
@@ -19,6 +22,12 @@ public class Soldier {
     private ArrayList<Integer> currentPathY;
 
     private boolean climber;
+
+    public Soldier(PlayerTurn isPlayer1Owened,int health,Type SoldierType){
+        this.OwnerPlayer = isPlayer1Owened;
+        this.health = health;
+        this.SoldierType = SoldierType;
+    }
 
     public Soldier(SoldierType solder, int x, int y) {
         this.x = x;
@@ -79,6 +88,21 @@ public class Soldier {
         currentPathY.remove(0);
         this.x = currentPathX.get(0);
         this.y = currentPathY.get(0);
+    }
+    public String getSoliderImage(){
+        if(OwnerPlayer==PlayerTurn.PLAYER1&&SoldierType==Type.SOLDER1){
+            return GameUIConstants.player1Soldier1;
+        }
+        else if(OwnerPlayer==PlayerTurn.PLAYER1&&SoldierType==Type.SOLDER2){
+            return GameUIConstants.player1Soldier2;
+        }
+        else if(OwnerPlayer==PlayerTurn.PLAYER2&&SoldierType==Type.SOLDER1){
+            return GameUIConstants.player2Soldier1;
+        }
+        else if(OwnerPlayer==PlayerTurn.PLAYER2&&SoldierType==Type.SOLDER2){
+            return GameUIConstants.player2Soldier2;
+        }
+        return "";
     }
 
     public Type getType() {

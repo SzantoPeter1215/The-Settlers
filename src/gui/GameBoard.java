@@ -2,6 +2,7 @@ package gui;
 
 import model.*;
 import model.info.InfoBoard;
+import model.soldier.Soldier;
 
 import javax.swing.*;
 import java.awt.*;
@@ -52,15 +53,17 @@ public class GameBoard extends JPanel {
                     startNewGame();
 
                 }
-                if(ScreenMethods.onGameArea(e.getX(),e.getY())) {
+                if(ScreenMethods.onGameArea(e.getX(),e.getY())) {//we want to place a tower on the gamearea
                     if(gameLogic.getFillTowerType()!=null) {
                         int x = ScreenMethods.convertYtoModelX_GameArea(e.getY());
                         int y = ScreenMethods.convertXtoModelY_GameArea(e.getX());
-                        if(gameLogic.getGrids()[x][y]==Type.EMPTY) {
+                        if(gameLogic.grids[x][y].isEmpty()) {
                             int minusMoney = gameLogic.getFillTowerType()==Type.TOWER1 ? GameConstants.TOWER1_PRICE : 0;
                             minusMoney = gameLogic.getFillTowerType()==Type.TOWER2 ? GameConstants.TOWER2_PRICE : minusMoney;
                             if(gameLogic.removeMoney(minusMoney,GameLogic.playerTurn)){
-                                gameLogic.setTypeElement(x,y,gameLogic.getFillTowerType());
+                                Tower newTowerOnThisField = new Tower(GameLogic.playerTurn,100,gameLogic.getFillTowerType());
+                                gameLogic.grids[x][y].addTower(newTowerOnThisField);
+
                             }
                             else{
                                 PopUp popUp = new PopUp("No money");
@@ -161,10 +164,10 @@ public class GameBoard extends JPanel {
     }
     //TODO:refactor!
     private void drawTowerRange(Graphics2D graphics2D){
-        Type[][] localGrid = gameLogic.getGrids();
+        Field[][] localGrid = gameLogic.getGrids();
         for (int y_col = 0; y_col < gameConstants.GAMEAREA_HEIGHT_canBeDividedBy; y_col++) {
             for (int x_row = 0; x_row < gameConstants.GAMEAREA_WIDTH_canBeDividedBy; x_row++) {
-                if(localGrid[y_col][x_row] == Type.TOWER1 || localGrid[y_col][x_row] == Type.TOWER2 || localGrid[y_col][x_row]== Type.CASTLE){
+                if(localGrid[y_col][x_row].hasRange()){
                     int width = 3;
                     int height =3;
                     int x_adjust = 1;
@@ -186,36 +189,36 @@ public class GameBoard extends JPanel {
                     Color c1 = new Color(255,102,102);
                     graphics2D.setColor(c1);
                     graphics2D.fill(area);
-                    if(localGrid[y_col][x_row] == Type.TOWER1){
-                        imageLoader.loadImage(graphics2D,currentField.x,currentField.y,GameUIConstants.Tower1Image);
+                    //todo omg it needs to be redone
+                    if(localGrid[y_col][x_row].isCastleOnTheField()){
+                        imageLoader.loadImage(graphics2D,currentField.x,currentField.y,Castle.castleImage(Castle.getCastlePlayer(GameLogic.playerTurn)));
                     }
-                    else if(localGrid[y_col][x_row] == Type.TOWER2){
-                        imageLoader.loadImage(graphics2D,currentField.x,currentField.y,GameUIConstants.Tower2Image);
-                    }
-                    else if(localGrid[y_col][x_row]== Type.CASTLE) {
-                        imageLoader.loadImage(graphics2D, currentField.x, currentField.y, GameUIConstants.Castle);
+                    else if(localGrid[y_col][x_row].isTowerOnTheField()){
+                        Tower towerOnThisField = localGrid[y_col][x_row].getTowerOnTheField();
+                        imageLoader.loadImage(graphics2D,currentField.x,currentField.y,Tower.towerImage(Tower.playerTowerType(towerOnThisField.OwnerPlayer,towerOnThisField.TowerType)));
                     }
                 }
             }
         }
+        towerRangeHelper(graphics2D, localGrid);
+    }
+
+    private void towerRangeHelper(Graphics2D graphics2D, Field[][] localGrid) {
         for (int y_col = 0; y_col < gameConstants.GAMEAREA_HEIGHT_canBeDividedBy; y_col++) {
             for (int x_row = 0; x_row < gameConstants.GAMEAREA_WIDTH_canBeDividedBy; x_row++) {
-                Rectangle currentField = new Rectangle(gameConstants.gameareaREACT.x+x_row*GameUIConstants.GAME_AREA_RECTANGLE,gameConstants.gameareaREACT.y+y_col*GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.GAME_AREA_RECTANGLE);
+                Rectangle currentField = new Rectangle(gameConstants.gameareaREACT.x+x_row* GameUIConstants.GAME_AREA_RECTANGLE,gameConstants.gameareaREACT.y+y_col*GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.GAME_AREA_RECTANGLE);
                 graphics2D.setColor(Color.BLACK);
-                if(localGrid[y_col][x_row] == Type.TOWER1){
-                    imageLoader.loadImage(graphics2D,currentField.x,currentField.y,GameUIConstants.Tower1Image);
+                //todo it needs to beredone
+                if(localGrid[y_col][x_row].isCastleOnTheField()){
+                    imageLoader.loadImage(graphics2D,currentField.x,currentField.y,Castle.castleImage(Castle.getCastlePlayer(GameLogic.playerTurn)));
                 }
-                else if(localGrid[y_col][x_row] == Type.TOWER2){
-                    imageLoader.loadImage(graphics2D,currentField.x,currentField.y,GameUIConstants.Tower2Image);
+                else if(localGrid[y_col][x_row].isTowerOnTheField()){
+                    Tower towerOnThisField = localGrid[y_col][x_row].getTowerOnTheField();
+                    imageLoader.loadImage(graphics2D,currentField.x,currentField.y,Tower.towerImage(Tower.playerTowerType(towerOnThisField.OwnerPlayer,towerOnThisField.TowerType)));
                 }
-                else if(localGrid[y_col][x_row] == Type.SOLDER1){
-                    imageLoader.loadImage(graphics2D,currentField.x,currentField.y,GameUIConstants.Soldier1);
-                }
-                else if(localGrid[y_col][x_row] == Type.SOLDER2){
-                    imageLoader.loadImage(graphics2D,currentField.x,currentField.y,GameUIConstants.Soldier2);
-                }
-                else if(localGrid[y_col][x_row]== Type.CASTLE){
-                    imageLoader.loadImage(graphics2D,currentField.x,currentField.y,GameUIConstants.Castle);
+                else if(localGrid[y_col][x_row].CountOfTheSoldier()>0){
+                    Soldier soldier = localGrid[y_col][x_row].getFirstSoldier();
+                    imageLoader.loadImage(graphics2D,currentField.x,currentField.y,soldier.getSoliderImage());
                 }
                 else{
                     graphics2D.draw(currentField);
@@ -223,6 +226,7 @@ public class GameBoard extends JPanel {
             }
         }
     }
+
     private void drawGameArea(Graphics2D graphics2D) {
         graphics2D.setColor(GameUIConstants.GRID_COLOR);
         graphics2D.fill(gameConstants.gameareaREACT);
@@ -231,42 +235,19 @@ public class GameBoard extends JPanel {
         graphics2D.draw(gameConstants.gameareaREACT);
         graphics2D.setStroke(GameUIConstants.SMALL_STROKE);
 
-        Type[][] localGrid = gameLogic.getGrids();
+        Field[][] localGrid = gameLogic.getGrids();
         //TODO: SWICH A SOK IF HELYETT! meg ez az image loaderes dolog is ismétlés.
-        for (int y_col = 0; y_col < gameConstants.GAMEAREA_HEIGHT_canBeDividedBy; y_col++) {
-            for (int x_row = 0; x_row < gameConstants.GAMEAREA_WIDTH_canBeDividedBy; x_row++) {
-                Rectangle currentField = new Rectangle(gameConstants.gameareaREACT.x+x_row*GameUIConstants.GAME_AREA_RECTANGLE,gameConstants.gameareaREACT.y+y_col*GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.GAME_AREA_RECTANGLE);
-                graphics2D.setColor(Color.BLACK);
-                if(localGrid[y_col][x_row] == Type.TOWER1){
-                    imageLoader.loadImage(graphics2D,currentField.x,currentField.y,GameUIConstants.Tower1Image);
-                }
-                else if(localGrid[y_col][x_row] == Type.TOWER2){
-                    imageLoader.loadImage(graphics2D,currentField.x,currentField.y,GameUIConstants.Tower2Image);
-                }
-                else if(localGrid[y_col][x_row] == Type.SOLDER1){
-                    imageLoader.loadImage(graphics2D,currentField.x,currentField.y,GameUIConstants.Soldier1);
-                }
-                else if(localGrid[y_col][x_row] == Type.SOLDER2){
-                    imageLoader.loadImage(graphics2D,currentField.x,currentField.y,GameUIConstants.Soldier2);
-                }
-                else if(localGrid[y_col][x_row]== Type.CASTLE){
-                    imageLoader.loadImage(graphics2D,currentField.x,currentField.y,GameUIConstants.Castle);
-                }
-                else{
-                    graphics2D.draw(currentField);
-                }
-            }
-        }
+        towerRangeHelper(graphics2D, localGrid);
     }
     private void drawOutTowerUnitsInfoboard(Graphics2D graphics2D,boolean player1Tower1,boolean player1Tower2,boolean player2Tower1,boolean player2Tower2, boolean isPlayer1Turn,boolean isPlayer2Turn){
         drawFixedRectAngleFieldWithImage(graphics2D,gameConstants.player1_placeOfTower1_OnInfoBoard.x,gameConstants.player1_placeOfTower1_OnInfoBoard.y,
-                isPlayer1Turn ? GameUIConstants.Tower1Image : GameUIConstants.disabled_Tower1Image,player1Tower1);
+                isPlayer1Turn ? GameUIConstants.Player1Tower1 : GameUIConstants.disabled_Tower1Image,player1Tower1);
         drawFixedRectAngleFieldWithImage(graphics2D,gameConstants.player1_placeOfTower2_OnInfoBoard.x,gameConstants.player1_placeOfTower2_OnInfoBoard.y,
-                isPlayer1Turn ? GameUIConstants.Tower2Image : GameUIConstants.disalbed_Tower2Image,player1Tower2);
+                isPlayer1Turn ? GameUIConstants.Player1Tower2 : GameUIConstants.disalbed_Tower2Image,player1Tower2);
         drawFixedRectAngleFieldWithImage(graphics2D,gameConstants.player2_placeOfTower1_OnInfoBoard.x,gameConstants.player2_placeOfTower1_OnInfoBoard.y,
-                isPlayer2Turn ?GameUIConstants.Tower1Image : GameUIConstants.disabled_Tower1Image,player2Tower1);
+                isPlayer2Turn ?GameUIConstants.Player2Tower1 : GameUIConstants.disabled_Tower1Image,player2Tower1);
         drawFixedRectAngleFieldWithImage(graphics2D,gameConstants.player2_placeOfTower2_OnInfoBoard.x,gameConstants.player2_placeOfTower2_OnInfoBoard.y,
-                isPlayer2Turn ? GameUIConstants.Tower2Image : GameUIConstants.disalbed_Tower2Image,player2Tower2);
+                isPlayer2Turn ? GameUIConstants.Player2Tower2 : GameUIConstants.disalbed_Tower2Image,player2Tower2);
     }
     private void drawOutTheTowerField(Graphics2D graphics2D,boolean isThePlayer_Player2){//drawing out the tower fields on the infobroads in the following order:
             //default state:
@@ -303,16 +284,16 @@ public class GameBoard extends JPanel {
     }
     private void SoldierStates(Graphics2D graphics2D,boolean player1_Soldier1_Active,boolean player1_Soldier2_Active,boolean player2_Soldier1_Active,boolean player2_Soldier2_active){
         imageLoader.loadImage(graphics2D,gameConstants.player1_placeOfSoldier1_OnInfoBoard.x,gameConstants.player1_placeOfSoldier1_OnInfoBoard.y,
-                player1_Soldier1_Active ? GameUIConstants.Soldier1: GameUIConstants.disabled_Soldier1);
+                player1_Soldier1_Active ? GameUIConstants.player1Soldier1: GameUIConstants.disabled_Soldier1);
         graphics2D.draw(gameConstants.player1_placeOfSoldier1_OnInfoBoard);
         imageLoader.loadImage(graphics2D,gameConstants.player1_placeOfSoldier2_OnInfoBoard.x,gameConstants.player1_placeOfSoldier2_OnInfoBoard.y,
-                player1_Soldier2_Active ? GameUIConstants.Soldier2: GameUIConstants.disabled_Soldier2);
+                player1_Soldier2_Active ? GameUIConstants.player1Soldier2: GameUIConstants.disabled_Soldier2);
         graphics2D.draw(gameConstants.player1_placeOfSoldier2_OnInfoBoard);
         imageLoader.loadImage(graphics2D,gameConstants.player2_placeOfSoldier1_OnInfoBoard.x,gameConstants.player2_placeOfSoldier1_OnInfoBoard.y,
-                player2_Soldier1_Active ? GameUIConstants.Soldier1 : GameUIConstants.disabled_Soldier1);
+                player2_Soldier1_Active ? GameUIConstants.player2Soldier1 : GameUIConstants.disabled_Soldier1);
         graphics2D.draw(gameConstants.player2_placeOfSoldier1_OnInfoBoard);
         imageLoader.loadImage(graphics2D,gameConstants.player2_placeOfSoldier2_OnInfoBoard.x,gameConstants.player2_placeOfSoldier2_OnInfoBoard.y,
-                player2_Soldier2_active ? GameUIConstants.Soldier1 : GameUIConstants.disabled_Soldier2);
+                player2_Soldier2_active ? GameUIConstants.player2Soldier2 : GameUIConstants.disabled_Soldier2);
         graphics2D.draw(gameConstants.player2_placeOfSoldier2_OnInfoBoard);
     }
     private void DrawingOutSoldier(Graphics2D graphics2D){

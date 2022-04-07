@@ -91,24 +91,24 @@ public final class GameLogic {
         this.row = row;
     }
 
-    public void setTypeElement(int x, int y,Type element){
+    /*public void setTypeElement(int x, int y,Type element){
         if(element==Type.EMPTY){
             grids[x][y].stuffOnTheField.clear();
         }
         grids[x][y].add(element);
-    }
-
-    public Type[][] getGrids() {
-        Type[][] convertedGrid = new Type[row][column];
+    }*/
+    public Field[][] getGrids() {
+        /*Type[][] convertedGrid = new Type[row][column];
         for(int i = 0;i<column;i++){
             for (int j = 0; j < row; j++) {
                 convertedGrid[i][j] = grids[i][j].getMainType();
             }
         }
-        return convertedGrid;
+        return convertedGrid;*/
+        return grids;
     }
 
-    private Field[][] grids;
+    public Field[][] grids;
 
     private InfoBoard infoBoard;
 
@@ -166,8 +166,10 @@ public final class GameLogic {
         int castleRandomY = ThreadLocalRandom.current().nextInt(0, gameConstants.GAMEAREA_HEIGHT_canBeDividedBy);//It's the same for both castles
         this.player1Castle = new Position(Player1castleRandomX,castleRandomY);
         this.player2Castle = new Position(Player2castleRandomX,castleRandomY);
-        setTypeElement(castleRandomY,Player1castleRandomX,Type.CASTLE);
-        setTypeElement(castleRandomY,Player2castleRandomX,Type.CASTLE);
+        Castle castle_Player1 = new Castle(playerTurn,100,Type.PLAYER1_CASTLE);
+        grids[castleRandomY][Player1castleRandomX].addCaslte(castle_Player1);
+        Castle castle_Player2 = new Castle(playerTurn,100,Type.PLAYER2_CASTLE);
+        grids[castleRandomY][Player2castleRandomX].addCaslte(castle_Player2);
         setFillTowerType(Type.TOWER1);
     }
     public void createPlayer1Soldier1(){
@@ -232,16 +234,11 @@ public final class GameLogic {
     private void updatePathMatrix() {
         for (int i = 0; i < row; ++i) {
             for (int j = 0; j < row; ++j) {
-                switch (grids[i][j].getMainType()) {
-                    case EMPTY:
-                    case SOLDER1:
-                    case SOLDER2: {
-                            path.setMatrixField(i, j, 1);
-                        break;
-                    }
-                    default: {
-                        path.setMatrixField(i, j, 0);
-                    }
+                if(!grids[i][j].isCastleOnTheField()&&!grids[i][j].isTowerOnTheField()){
+                    path.setMatrixField(i, j, 1);
+                }
+                else{
+                    path.setMatrixField(i, j, 0);
                 }
             }
         }
@@ -249,7 +246,7 @@ public final class GameLogic {
     private void clearGridSoldiers() {
         for (int i = 0; i < row; ++i) {
             for (int j = 0; j < row; ++j) {
-                if(grids[i][j].getMainType() == Type.SOLDER1 || grids[i][j].getMainType() == Type.SOLDER2) {
+                if(grids[i][j].soldiersOnTheField.size()>0) {
                     grids[i][j].removeSoldier();
                 }
             }
@@ -286,14 +283,14 @@ public final class GameLogic {
         for(Soldier s : player1Soldiers) {
             s.step();
             int[] cords = s.getPos();
-            grids[cords[0]][cords[1]].add(s.getType());
+            grids[cords[0]][cords[1]].addSoldier(s);
 
         }
 
         for(Soldier s : player2Soldiers) {
             s.step();
             int[] cords = s.getPos();
-            grids[cords[0]][cords[1]].add(s.getType());
+            grids[cords[0]][cords[1]].addSoldier(s);
 
         }
 
