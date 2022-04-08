@@ -1,3 +1,5 @@
+package path_finders;
+
 import java.util.LinkedList;
 public class Type2_pathFinder {
 
