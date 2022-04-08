@@ -11,7 +11,7 @@ public class Castle {
         this.health = health;
         this.TowerType = TowerType;
     }
-    public static Type getCastlePlayer(PlayerTurn OwnerPlayer){
+    public Type getCastlePlayer(PlayerTurn OwnerPlayer){
         if(OwnerPlayer==PlayerTurn.PLAYER1){
             return Type.PLAYER1_CASTLE;
         }
@@ -19,8 +19,8 @@ public class Castle {
             return Type.PLAYER2_CASTLE;
         }
     }
-    public static String castleImage(Type CastleType){
-        if(Type.PLAYER1_CASTLE==CastleType){
+    public String castleImage(){
+        if(OwnerPlayer==PlayerTurn.PLAYER1){
             return GameUIConstants.Player1_Castle;
         }
         else{

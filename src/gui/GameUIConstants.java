@@ -53,10 +53,11 @@ public final class GameUIConstants {
         while (HEIGHT_hasToBeDividedByRectSize>0&&HEIGHT_hasToBeDividedByRectSize%GAME_AREA_RECTANGLE!=0){
             HEIGHT_hasToBeDividedByRectSize-=1;
         }
-        GAMEAREA_WIDTH = HEIGHT_hasToBeDividedByRectSize;//WIDTH_hasToBeDividedByRectSize;
+        GAMEAREA_WIDTH = WIDTH_hasToBeDividedByRectSize;//WIDTH_hasToBeDividedByRectSize;
         GAMEAREA_HEIGHT = HEIGHT_hasToBeDividedByRectSize;
         GAMEAREA_HEIGHT_canBeDividedBy = (int)(GAMEAREA_HEIGHT/GAME_AREA_RECTANGLE);
         GAMEAREA_WIDTH_canBeDividedBy = (int)(GAMEAREA_WIDTH/GAME_AREA_RECTANGLE);
+
         gameareaREACT = new Rectangle(0,(GAME_HEIGHT-GAMEAREA_HEIGHT)/2,GAMEAREA_WIDTH,GAMEAREA_HEIGHT);
         player1InfoBoard = new Rectangle(0,0,GAMEAREA_WIDTH,(GAME_HEIGHT-GAMEAREA_HEIGHT)/2);
         player2InfoBoard = new Rectangle(0,GAME_HEIGHT-((GAME_HEIGHT-GAMEAREA_HEIGHT)/2),GAMEAREA_WIDTH,(GAME_HEIGHT-GAMEAREA_HEIGHT)/2);

@@ -34,7 +34,7 @@ public class GameBoard extends JPanel {
         imageLoader = new ImageLoader();
         this.gameLogic = gameLogic;
         //setPreferredSize(new Dimension(GameUIConstants.GAME_WIDTH, GameUIConstants.GAME_HEIGHT));
-        setPreferredSize(new Dimension(GameUIConstants.GAME_HEIGHT, GameUIConstants.GAME_HEIGHT));
+        setPreferredSize(new Dimension(GameUIConstants.GAME_WIDTH, GameUIConstants.GAME_HEIGHT));
         setBackground(GameUIConstants.BACKGROUND_COLOR);
         setFocusable(true);
 
@@ -47,6 +47,10 @@ public class GameBoard extends JPanel {
                 if(GameLogic.playerTurn == null) return;
                 int startOfThePlayer1InfoBoard = (gameConstants.player1InfoBoard.y+(GameUIConstants.SMALL_FONT.getSize()*2));
                 int endOfThePlayer1InfoBoard = startOfThePlayer1InfoBoard+GameUIConstants.GAME_AREA_RECTANGLE;
+                int player1_castle_x = gameLogic.player1Castle.x;
+                int player1_castle_y = gameLogic.player1Castle.y;
+                int player2_castle_x = gameLogic.player2Castle.x;
+                int player2_castle_y = gameLogic.player2Castle.y;
                 //TODO: REFACTOR!
                 InfoBoard infoBoard = gameLogic.getInfoBoard();
                 if (infoBoard.isGameOver()) {
@@ -80,24 +84,39 @@ public class GameBoard extends JPanel {
 
                 }
                 else if(ScreenMethods.onPlayer1Unit1(e.getX(),e.getY())){
+                    int x = ScreenMethods.convertYtoModelX_GameArea(e.getY());
+                    int y = ScreenMethods.convertXtoModelY_GameArea(e.getX());
                     if(GameLogic.playerTurn==PlayerTurn.PLAYER1){
                         gameLogic.incPlayer1Unit1Number();
-                        gameLogic.createPlayer1Soldier1();
+                        Soldier soldier = new Soldier(PlayerTurn.PLAYER1,100,Type.PLAYER1_SOLDIER1);
+                        gameLogic.grids[player1_castle_x][player1_castle_y].addSoldier(soldier); //caslte start
                     }
                 }
                 else if(ScreenMethods.onPlayer1Unit2(e.getX(),e.getY())){
+                    int x = ScreenMethods.convertYtoModelX_GameArea(e.getY());
+                    int y = ScreenMethods.convertXtoModelY_GameArea(e.getX());
                     if(GameLogic.playerTurn==PlayerTurn.PLAYER1){
                         gameLogic.incPlayer1Unit2Number();
+                        Soldier soldier = new Soldier(PlayerTurn.PLAYER1,100,Type.PLAYER1_SOLDIER2);
+                        gameLogic.grids[player1_castle_x][player1_castle_y].addSoldier(soldier);
                     }
                 }
                 else if(ScreenMethods.onPlayer2Unit1(e.getX(),e.getY())){
+                    int x = ScreenMethods.convertYtoModelX_GameArea(e.getY());
+                    int y = ScreenMethods.convertXtoModelY_GameArea(e.getX());
                     if(GameLogic.playerTurn==PlayerTurn.PLAYER2){
                         gameLogic.incPlayer2Unit1Number();
+                        Soldier soldier = new Soldier(PlayerTurn.PLAYER2,100,Type.PLAYER2_SOLDIER1);
+                        gameLogic.grids[player2_castle_x][player2_castle_y].addSoldier(soldier);
                     }
                 }
                 else if(ScreenMethods.onPlayer2Unit2(e.getX(),e.getY())){
+                    int x = ScreenMethods.convertYtoModelX_GameArea(e.getY());
+                    int y = ScreenMethods.convertXtoModelY_GameArea(e.getX());
                     if(GameLogic.playerTurn==PlayerTurn.PLAYER2){
                         gameLogic.incPlayer2Unit2Number();
+                        Soldier soldier = new Soldier(PlayerTurn.PLAYER2,100,Type.PLAYER2_SOLDIER2);
+                        gameLogic.grids[player2_castle_x][player2_castle_y].addSoldier(soldier);
                     }
                 }
                 else if(ScreenMethods.playerInfoBoardEndTurn_clicked(e.getX(),e.getY())){
@@ -165,8 +184,8 @@ public class GameBoard extends JPanel {
     //TODO:refactor!
     private void drawTowerRange(Graphics2D graphics2D){
         Field[][] localGrid = gameLogic.getGrids();
-        for (int y_col = 0; y_col < gameConstants.GAMEAREA_HEIGHT_canBeDividedBy; y_col++) {
-            for (int x_row = 0; x_row < gameConstants.GAMEAREA_WIDTH_canBeDividedBy; x_row++) {
+        for (int y_col = 0; y_col < gameLogic.getRow(); y_col++) {
+            for (int x_row = 0; x_row < gameLogic.getColumn(); x_row++) {
                 if(localGrid[y_col][x_row].hasRange()){
                     int width = 3;
                     int height =3;
@@ -191,7 +210,8 @@ public class GameBoard extends JPanel {
                     graphics2D.fill(area);
                     //todo omg it needs to be redone
                     if(localGrid[y_col][x_row].isCastleOnTheField()){
-                        imageLoader.loadImage(graphics2D,currentField.x,currentField.y,Castle.castleImage(Castle.getCastlePlayer(GameLogic.playerTurn)));
+                        Castle castleOnTheField = localGrid[y_col][x_row].getCastleOnTheField();
+                        imageLoader.loadImage(graphics2D,currentField.x,currentField.y,castleOnTheField.castleImage());
                     }
                     else if(localGrid[y_col][x_row].isTowerOnTheField()){
                         Tower towerOnThisField = localGrid[y_col][x_row].getTowerOnTheField();
@@ -204,13 +224,14 @@ public class GameBoard extends JPanel {
     }
 
     private void towerRangeHelper(Graphics2D graphics2D, Field[][] localGrid) {
-        for (int y_col = 0; y_col < gameConstants.GAMEAREA_HEIGHT_canBeDividedBy; y_col++) {
-            for (int x_row = 0; x_row < gameConstants.GAMEAREA_WIDTH_canBeDividedBy; x_row++) {
+        for (int y_col = 0; y_col < gameLogic.getRow(); y_col++) {
+            for (int x_row = 0; x_row < gameLogic.getColumn(); x_row++) {
                 Rectangle currentField = new Rectangle(gameConstants.gameareaREACT.x+x_row* GameUIConstants.GAME_AREA_RECTANGLE,gameConstants.gameareaREACT.y+y_col*GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.GAME_AREA_RECTANGLE);
                 graphics2D.setColor(Color.BLACK);
                 //todo it needs to beredone
                 if(localGrid[y_col][x_row].isCastleOnTheField()){
-                    imageLoader.loadImage(graphics2D,currentField.x,currentField.y,Castle.castleImage(Castle.getCastlePlayer(GameLogic.playerTurn)));
+                    Castle castleOnTheField = localGrid[y_col][x_row].getCastleOnTheField();
+                    imageLoader.loadImage(graphics2D,currentField.x,currentField.y,castleOnTheField.castleImage());
                 }
                 else if(localGrid[y_col][x_row].isTowerOnTheField()){
                     Tower towerOnThisField = localGrid[y_col][x_row].getTowerOnTheField();

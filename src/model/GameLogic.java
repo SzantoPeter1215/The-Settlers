@@ -20,8 +20,8 @@ public final class GameLogic {
     private int player2Gold = GameConstants.START_GOLD_PLAYER;
     //TODO: a castle helyét am nem a logicban kéne tartani?
     // Vagy jó a megjelenítési rétegben mert nem függ tőle a többi esemény.
-    private Position player1Castle;
-    private Position player2Castle;
+    public Position player1Castle;
+    public Position player2Castle;
 
     public int getPlayer1Unit1Number() {
         return Player1Unit1Number;
@@ -86,10 +86,13 @@ public final class GameLogic {
     public int getRow() {
         return row;
     }
-
-    public void setRow(int row) {
-        this.row = row;
+    public int getColumn(){
+        return column;
     }
+
+    /*public void setRow(int row) {
+        //this.row = row;
+    }*/
 
     /*public void setTypeElement(int x, int y,Type element){
         if(element==Type.EMPTY){
@@ -123,8 +126,8 @@ public final class GameLogic {
     }
 
     public void newGame(int row, int column, String userName){
-        this.row = row;
-        this.column = column;
+        this.row = gameConstants.GAMEAREA_HEIGHT_canBeDividedBy;
+        this.column = gameConstants.GAMEAREA_WIDTH_canBeDividedBy;
 
         path = new PathSolver();
 
@@ -164,16 +167,17 @@ public final class GameLogic {
         int Player1castleRandomX = ThreadLocalRandom.current().nextInt(0, gameConstants.GAMEAREA_WIDTH_canBeDividedBy/4);
         int Player2castleRandomX = ThreadLocalRandom.current().nextInt(gameConstants.GAMEAREA_WIDTH_canBeDividedBy/4*3, gameConstants.GAMEAREA_WIDTH_canBeDividedBy-1);
         int castleRandomY = ThreadLocalRandom.current().nextInt(0, gameConstants.GAMEAREA_HEIGHT_canBeDividedBy);//It's the same for both castles
-        this.player1Castle = new Position(Player1castleRandomX,castleRandomY);
-        this.player2Castle = new Position(Player2castleRandomX,castleRandomY);
-        Castle castle_Player1 = new Castle(playerTurn,100,Type.PLAYER1_CASTLE);
+        this.player1Castle = new Position(castleRandomY,Player1castleRandomX);
+        this.player2Castle = new Position(castleRandomY,Player2castleRandomX);
+        Castle castle_Player1 = new Castle(PlayerTurn.PLAYER1,100,Type.PLAYER1_CASTLE);
         grids[castleRandomY][Player1castleRandomX].addCaslte(castle_Player1);
-        Castle castle_Player2 = new Castle(playerTurn,100,Type.PLAYER2_CASTLE);
+        Castle castle_Player2 = new Castle(PlayerTurn.PLAYER2,100,Type.PLAYER2_CASTLE);
         grids[castleRandomY][Player2castleRandomX].addCaslte(castle_Player2);
         setFillTowerType(Type.TOWER1);
     }
     public void createPlayer1Soldier1(){
-        player1Soldiers.add(new Soldier(SoldierType.REGULAR, this.player1Castle.x,this.player1Castle.y));
+        //player1Soldiers.add(new Soldier(SoldierType.REGULAR, this.player1Castle.x,this.player1Castle.y));
+
     }
 
     private void initInfoBoard() {
@@ -232,8 +236,8 @@ public final class GameLogic {
     }
 
     private void updatePathMatrix() {
-        for (int i = 0; i < row; ++i) {
-            for (int j = 0; j < row; ++j) {
+        for (int i = 0; i < this.row; ++i) {
+            for (int j = 0; j < this.column; ++j) {
                 if(!grids[i][j].isCastleOnTheField()&&!grids[i][j].isTowerOnTheField()){
                     path.setMatrixField(i, j, 1);
                 }
@@ -244,8 +248,8 @@ public final class GameLogic {
         }
     }
     private void clearGridSoldiers() {
-        for (int i = 0; i < row; ++i) {
-            for (int j = 0; j < row; ++j) {
+        for (int i = 0; i < this.row; ++i) {
+            for (int j = 0; j < this.column; ++j) {
                 if(grids[i][j].soldiersOnTheField.size()>0) {
                     grids[i][j].removeSoldier();
                 }
@@ -264,7 +268,7 @@ public final class GameLogic {
             addMoney(s.getTax(), 1);
         }
         for(Soldier s : player2Soldiers) {
-            s.createPath(path, player1Castle.y, player1Castle.x);
+            s.createPath(path, player1Castle.x, player1Castle.y);
             addMoney(s.getTax(), 2);
         }
     }

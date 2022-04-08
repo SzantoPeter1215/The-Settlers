@@ -103,6 +103,12 @@ public class Field {
             return null;
         }
     }
+    public Castle getCastleOnTheField(){
+        if(isCastleOnTheField()){
+            return castlesOnTheField.get(0);
+        }
+        return null;
+    }
     public int CountOfTheSoldier(){
         return soldiersOnTheField.size();
     }
