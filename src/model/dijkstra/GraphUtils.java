@@ -92,16 +92,21 @@ public class GraphUtils {
     }
     */
 
+
+
     public static Graph[] constructGraph(Field[][] matrix) {
 
         Graph graph1 = new Graph();
         Graph graph2 = new Graph();
 
         // Converting table to nodes
+
+        /*
         for(int y = 0; y < matrix.length; ++y) {
             for(int x = 0; x < matrix[y].length; ++x) {
 
                 Field current = matrix[y][x];
+
 
                 String thisNodeName = "(" + x + ", " + y + ")";
 
@@ -109,7 +114,10 @@ public class GraphUtils {
                 int weightClimber = 1;
 
                 if(current.getWater() || current.isTowerOnTheField()) {
-                    break;
+                    System.out.println("breaked");
+                    System.out.println(thisNodeName);
+
+                    continue;
                 }
                 if(current.getHill()) {
                     weightRegular = 3;
@@ -142,6 +150,80 @@ public class GraphUtils {
                 }
 
             }
+        }*/
+
+        ArrayList<String> blockList = new ArrayList<>();
+
+        for(int y = 0; y < matrix.length; ++y) {
+            for(int x = 0; x < matrix[y].length; ++x) {
+
+                Field current = matrix[y][x];
+
+
+                String thisNodeName = "(" + y + ", " + x + ")";
+
+                int weightRegular;
+                int weightClimber = 1;
+
+                if(current.getWater() || current.isTowerOnTheField()) {
+                    //System.out.println("breaked");
+                    //System.out.println(thisNodeName);
+                    blockList.add(thisNodeName);
+                    continue;
+                }
+                if(current.getHill()) {
+                    weightRegular = 3;
+                } else {
+                    weightRegular = 1;
+                }
+
+                if (y > 0) {
+                    String destNodeName = "(" + (y - 1) + ", " + x + ")";
+                    if(blockList.contains(destNodeName)) continue;
+                    graph1.addEdge(thisNodeName, destNodeName, weightRegular);
+                    graph2.addEdge(thisNodeName, destNodeName, weightClimber);
+
+                    //System.out.print(thisNodeName + "-" + destNodeName + " | ");
+                }
+
+                if (y < matrix.length - 1) {
+                    String destNodeName = "(" + (y + 1) + ", " + x + ")";
+                    if(blockList.contains(destNodeName)) continue;
+                    graph1.addEdge(thisNodeName, destNodeName, weightRegular);
+                    graph2.addEdge(thisNodeName, destNodeName, weightClimber);
+                    //System.out.print(thisNodeName + "-" + destNodeName + " | ");
+
+                }
+
+                if (x < matrix[y].length - 1) {
+                    String destNodeName = "(" + y + ", " + (x + 1) + ")";
+                    if(blockList.contains(destNodeName)) continue;
+                    graph1.addEdge(thisNodeName, destNodeName, weightRegular);
+                    graph2.addEdge(thisNodeName, destNodeName, weightClimber);
+                    //System.out.print(thisNodeName + "-" + destNodeName + " | ");
+
+                }
+
+                if (x > 0) {
+                    String destNodeName = "(" + y + ", " + (x - 1) + ")";
+                    if(blockList.contains(destNodeName)) continue;
+                    graph1.addEdge(thisNodeName, destNodeName, weightRegular);
+                    graph2.addEdge(thisNodeName, destNodeName, weightClimber);
+                    //System.out.print(thisNodeName + "-" + destNodeName + " | ");
+
+                }
+
+            }
+            //System.out.print("\n");
+
+        }
+
+        for(int y = 0; y < matrix.length && false; ++y) {
+            System.out.print(y + ": ");
+            for(int x = 0; x < matrix[y].length; ++x) {
+                System.out.print(x + " ");
+            }
+            System.out.print("\n");
         }
         Graph[] res = new Graph[2];
         res[0] = graph1;

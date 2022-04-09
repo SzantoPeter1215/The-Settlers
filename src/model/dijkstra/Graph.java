@@ -64,6 +64,7 @@ public class Graph {
                     temp.add(new PathNode(neighbor.name, currentPathNode.name, distance2root));
                 }
 
+
                 /*
                 System.out.println("current node: " + currentPathNode.name);
                 System.out.println("PriorityQueue: " + temp);

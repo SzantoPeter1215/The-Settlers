@@ -239,7 +239,6 @@ public class GameBoard extends JPanel {
                 }
                 else if(localGrid[y_col][x_row].CountOfTheSoldier()>0){
                     Soldier soldier = localGrid[y_col][x_row].getFirstSoldier();
-                    System.out.println("fuck me: "+soldier.getSoliderImage());
                     imageLoader.loadImage(graphics2D,currentField.x,currentField.y,soldier.getSoliderImage());
                 }
                 else{

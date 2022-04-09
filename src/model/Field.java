@@ -81,16 +81,10 @@ public class Field {
         return isTowerOnTheField() || isCastleOnTheField();
     }
     public boolean isTowerOnTheField(){
-        if (towersOnTheField.size()>0){
-            return true;
-        }
-        return false;
+        return towersOnTheField.size() > 0;
     }
     public boolean isCastleOnTheField(){
-        if(castlesOnTheField.size()>0){
-            return true;
-        }
-        return false;
+        return castlesOnTheField.size() > 0;
     }
     /*public Type getMainType(){//it's used when you are sure that you have castle,tower1 or tower2
         if(stuffOnTheField.size()>0) {
