@@ -9,6 +9,7 @@ import model.soldier.Soldier;
 import model.soldier.SoldierType;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public final class GameLogic {
@@ -32,8 +33,7 @@ public final class GameLogic {
 
     //private PathSolver path;
 
-    private ArrayList<Soldier> player1Soldiers;
-    private ArrayList<Soldier> player2Soldiers;
+    private ArrayList<Soldier> allSoldiers;
 
     Graph graphForRegular;
     Graph graphForCLimber;
@@ -143,8 +143,7 @@ public final class GameLogic {
         initInfoBoard();
         //path.initMatrix(column);
 
-        player1Soldiers = new ArrayList<>();
-        player2Soldiers = new ArrayList<>();
+        allSoldiers = new ArrayList<>();
 
         graphForRegular = new Graph();
         graphForCLimber = new Graph();
@@ -279,18 +278,21 @@ public final class GameLogic {
         graphForRegular = res[0];
         graphForCLimber = res[1];
 
-        for(Soldier s : player1Soldiers) {
+        addSoldiersToLists();
+        for(Soldier s : allSoldiers) {
 
-            s.createPath(s.getType() == Type.PLAYER1_SOLDIER1?
-                    graphForRegular :
-                    graphForCLimber ,player2Castle.x, player2Castle.y);
-            addMoney(s.getTax(), 1);
-        }
-        for(Soldier s : player2Soldiers) {
-            s.createPath(s.getType() == Type.PLAYER2_SOLDIER1 ?
-                    graphForRegular :
-                    graphForCLimber ,player2Castle.x, player2Castle.y);
-            addMoney(s.getTax(), 2);
+            if(PlayerTurn.PLAYER1==s.OwnerPlayer){
+                s.createPath(s.getType() == Type.PLAYER1_SOLDIER1?
+                        graphForRegular :
+                        graphForCLimber ,player2Castle.x, player2Castle.y);
+                addMoney(s.getTax(), 1);
+            }
+            else{
+                s.createPath(s.getType() == Type.PLAYER2_SOLDIER1?
+                        graphForRegular :
+                        graphForCLimber ,player1Castle.x, player1Castle.y);
+                addMoney(s.getTax(), 2);
+            }
         }
     }
 
@@ -305,12 +307,13 @@ public final class GameLogic {
 
         clearGridSoldiers();
 
-        for(Soldier s : player1Soldiers) {
+        for(Soldier s : allSoldiers) {
             s.step();
             int[] cords = s.getPos();
             grids[cords[0]][cords[1]].addSoldier(s);
 
         }
+/*
 
         for(Soldier s : player2Soldiers) {
             s.step();
@@ -318,29 +321,26 @@ public final class GameLogic {
             grids[cords[0]][cords[1]].addSoldier(s);
 
         }
+*/
 
         soldiersHealth();
         damageSoldiers();
         soldiersHealth();
     }
 
-    public void damageSoldiers(){
-        for(Soldier s : player1Soldiers) {
-            int[] cords = s.getPos();
-            boolean takesDamage = false;
-            for(int i = -1; i <= 1; i++){
-                for(int j = -1; j <= 1; j++){
-                    if(grids[cords[0]+i][cords[1]+i].isTowerOnTheField()) {
-                        takesDamage = true;
-                    }
+    private void addSoldiersToLists() {
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < column; j++) {
+                List<Soldier> toMovedSoldier =grids[i][j].getSoliders();
+                if(toMovedSoldier!=null){
+                    allSoldiers.addAll(grids[i][j].getSoliders());
                 }
             }
-            if(takesDamage){
-                s.setHealth(s.getHealth()-30);
-            }
         }
+    }
 
-        for(Soldier s : player2Soldiers) {
+    public void damageSoldiers(){
+        for(Soldier s : allSoldiers) {
             int[] cords = s.getPos();
             boolean takesDamage = false;
             for(int i = -1; i <= 1; i++){
@@ -357,11 +357,7 @@ public final class GameLogic {
     }
 
     public void soldiersHealth(){
-        for(Soldier s : player1Soldiers) {
-            System.out.println(s.getHealth());
-        }
-
-        for(Soldier s : player2Soldiers) {
+        for(Soldier s : allSoldiers) {
             System.out.println(s.getHealth());
         }
     }

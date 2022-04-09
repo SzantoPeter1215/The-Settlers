@@ -239,7 +239,12 @@ public class GameBoard extends JPanel {
                 }
                 else if(localGrid[y_col][x_row].CountOfTheSoldier()>0){
                     Soldier soldier = localGrid[y_col][x_row].getFirstSoldier();
-                    imageLoader.loadImage(graphics2D,currentField.x,currentField.y,soldier.getSoliderImage());
+                    try{
+                        imageLoader.loadImage(graphics2D,currentField.x,currentField.y,soldier.getSoliderImage());
+                    }
+                    catch (Exception ex){
+                        System.out.println(ex);
+                    }
                 }
                 else{
                     graphics2D.draw(currentField);
