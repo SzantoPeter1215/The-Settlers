@@ -1,6 +1,5 @@
 package model.soldier;
 import gui.GameUIConstants;
-import model.PathSolver;
 import model.PlayerTurn;
 import model.Type;
 import model.dijkstra.Graph;
