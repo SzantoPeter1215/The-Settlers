@@ -97,16 +97,16 @@ public class Soldier {
         this.y = currentPathY.get(0);
     }
     public String getSoliderImage(){
-        if(OwnerPlayer==PlayerTurn.PLAYER1&&SoldierType==Type.SOLDER1){
+        if(OwnerPlayer==PlayerTurn.PLAYER1&&SoldierType==Type.PLAYER1_SOLDIER1){
             return GameUIConstants.player1Soldier1;
         }
-        else if(OwnerPlayer==PlayerTurn.PLAYER1&&SoldierType==Type.SOLDER2){
+        else if(OwnerPlayer==PlayerTurn.PLAYER1&&SoldierType==Type.PLAYER1_SOLDIER2){
             return GameUIConstants.player1Soldier2;
         }
-        else if(OwnerPlayer==PlayerTurn.PLAYER2&&SoldierType==Type.SOLDER1){
+        else if(OwnerPlayer==PlayerTurn.PLAYER2&&SoldierType==Type.PLAYER2_SOLDIER1){
             return GameUIConstants.player2Soldier1;
         }
-        else if(OwnerPlayer==PlayerTurn.PLAYER2&&SoldierType==Type.SOLDER2){
+        else if(OwnerPlayer==PlayerTurn.PLAYER2&&SoldierType==Type.PLAYER2_SOLDIER2){
             return GameUIConstants.player2Soldier2;
         }
         return "";

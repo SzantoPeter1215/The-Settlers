@@ -323,9 +323,9 @@ public final class GameLogic {
         }
 */
 
-        soldiersHealth();
-        damageSoldiers();
-        soldiersHealth();
+        //soldiersHealth();
+        //damageSoldiers();
+        //soldiersHealth();
     }
 
     private void addSoldiersToLists() {
