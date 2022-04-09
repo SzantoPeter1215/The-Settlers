@@ -88,7 +88,7 @@ public class GameBoard extends JPanel {
                     int y = ScreenMethods.convertXtoModelY_GameArea(e.getX());
                     if(GameLogic.playerTurn==PlayerTurn.PLAYER1){
                         gameLogic.incPlayer1Unit1Number();
-                        Soldier soldier = new Soldier(PlayerTurn.PLAYER1,100,Type.PLAYER1_SOLDIER1);
+                        Soldier soldier = new Soldier(PlayerTurn.PLAYER1,100,Type.PLAYER1_SOLDIER1,player1_castle_x,player1_castle_y);
                         gameLogic.grids[player1_castle_x][player1_castle_y].addSoldier(soldier); //caslte start
                     }
                 }
@@ -97,7 +97,7 @@ public class GameBoard extends JPanel {
                     int y = ScreenMethods.convertXtoModelY_GameArea(e.getX());
                     if(GameLogic.playerTurn==PlayerTurn.PLAYER1){
                         gameLogic.incPlayer1Unit2Number();
-                        Soldier soldier = new Soldier(PlayerTurn.PLAYER1,100,Type.PLAYER1_SOLDIER2);
+                        Soldier soldier = new Soldier(PlayerTurn.PLAYER1,100,Type.PLAYER1_SOLDIER2,player1_castle_x,player1_castle_y);
                         gameLogic.grids[player1_castle_x][player1_castle_y].addSoldier(soldier);
                     }
                 }
@@ -106,7 +106,7 @@ public class GameBoard extends JPanel {
                     int y = ScreenMethods.convertXtoModelY_GameArea(e.getX());
                     if(GameLogic.playerTurn==PlayerTurn.PLAYER2){
                         gameLogic.incPlayer2Unit1Number();
-                        Soldier soldier = new Soldier(PlayerTurn.PLAYER2,100,Type.PLAYER2_SOLDIER1);
+                        Soldier soldier = new Soldier(PlayerTurn.PLAYER2,100,Type.PLAYER2_SOLDIER1,player2_castle_x,player2_castle_y);
                         gameLogic.grids[player2_castle_x][player2_castle_y].addSoldier(soldier);
                     }
                 }
@@ -115,7 +115,7 @@ public class GameBoard extends JPanel {
                     int y = ScreenMethods.convertXtoModelY_GameArea(e.getX());
                     if(GameLogic.playerTurn==PlayerTurn.PLAYER2){
                         gameLogic.incPlayer2Unit2Number();
-                        Soldier soldier = new Soldier(PlayerTurn.PLAYER2,100,Type.PLAYER2_SOLDIER2);
+                        Soldier soldier = new Soldier(PlayerTurn.PLAYER2,100,Type.PLAYER2_SOLDIER2,player2_castle_x,player2_castle_y);
                         gameLogic.grids[player2_castle_x][player2_castle_y].addSoldier(soldier);
                     }
                 }

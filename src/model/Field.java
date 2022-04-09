@@ -3,6 +3,7 @@ import model.soldier.Soldier;
 
 import java.security.PublicKey;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Field {
     //public ArrayList<Type> stuffOnTheField;
@@ -22,11 +23,17 @@ public class Field {
         isWater = false;
     }
     public boolean addSoldier(Soldier soldier){
-        if(isTowerOnTheField()||isCastleOnTheField()){
+        if(isTowerOnTheField()){
             return false;
         }
         soldiersOnTheField.add(soldier);
         return true;
+    }
+    public List<Soldier> getSoliders(){
+        if(soldiersOnTheField.size()>0){
+            return soldiersOnTheField;
+        }
+        return null;
     }
     public boolean addTower(Tower tower){
         if(isEmpty()){
@@ -125,7 +132,9 @@ public class Field {
         return soldiersOnTheField.size()>1;
     }
     public void removeSoldier(){
-        soldiersOnTheField.clear();
+        if(soldiersOnTheField.size()>0) {
+            soldiersOnTheField.clear();
+        }
     }
     public Tower getTowerOnTheField(){
         if(isTowerOnTheField()){

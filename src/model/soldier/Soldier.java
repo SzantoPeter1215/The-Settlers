@@ -17,18 +17,20 @@ public class Soldier {
     private Type type;
     public PlayerTurn OwnerPlayer;
     public Type SoldierType;
-    private int x;
-    private int y;
+    public int x;
+    public int y;
 
     private ArrayList<Integer> currentPathX;
     private ArrayList<Integer> currentPathY;
 
     private boolean climber;
 
-    public Soldier(PlayerTurn isPlayer1Owened,int health,Type SoldierType){
+    public Soldier(PlayerTurn isPlayer1Owened,int health,Type SoldierType, int x, int y){
         this.OwnerPlayer = isPlayer1Owened;
         this.health = health;
         this.SoldierType = SoldierType;
+        this.x = x;
+        this.y = y;
     }
 
     /*
