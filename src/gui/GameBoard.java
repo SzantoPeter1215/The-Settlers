@@ -240,6 +240,14 @@ public class GameBoard extends JPanel {
                 else if(localGrid[y_col][x_row].CountOfTheSoldier()>0){
                     Soldier soldier = localGrid[y_col][x_row].getFirstSoldier();
                     imageLoader.loadImage(graphics2D,currentField.x,currentField.y,soldier.getSoliderImage());
+                    Rectangle healthbar = new Rectangle(gameConstants.gameareaREACT.x+x_row* GameUIConstants.GAME_AREA_RECTANGLE + 5,gameConstants.gameareaREACT.y+y_col*GameUIConstants.GAME_AREA_RECTANGLE,40,5);
+                    graphics2D.setColor(Color.red);
+                    graphics2D.fill(healthbar);
+                    double percentage = (double) soldier.getHealth() / 100;
+                    System.out.println(percentage);
+                    Rectangle health = new Rectangle(gameConstants.gameareaREACT.x+x_row* GameUIConstants.GAME_AREA_RECTANGLE + 5,gameConstants.gameareaREACT.y+y_col*GameUIConstants.GAME_AREA_RECTANGLE,(int)(percentage * 40),5);
+                    graphics2D.setColor(Color.green);
+                    graphics2D.fill(health);
                 }
                 else{
                     graphics2D.draw(currentField);

@@ -322,10 +322,7 @@ public final class GameLogic {
 
         }
 */
-
-        //soldiersHealth();
-        //damageSoldiers();
-        //soldiersHealth();
+        damageSoldiers();
     }
 
     private void addSoldiersToLists() {
@@ -353,12 +350,6 @@ public final class GameLogic {
             if(takesDamage){
                 s.setHealth(s.getHealth()-30);
             }
-        }
-    }
-
-    public void soldiersHealth(){
-        for(Soldier s : allSoldiers) {
-            System.out.println(s.getHealth());
         }
     }
 
