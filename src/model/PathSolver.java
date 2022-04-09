@@ -153,7 +153,6 @@ public class PathSolver
             ArrayList<Integer> YChords = new ArrayList<>();
 
             String[] raw = path.get(0).split(", ");
-            //TODO: ITT A HIBA
             XChords.add(Integer.parseInt(String.valueOf(raw[0].split("\\(")[1])));
             YChords.add(Integer.parseInt(String.valueOf(raw[1].split("\\)")[0])));
 

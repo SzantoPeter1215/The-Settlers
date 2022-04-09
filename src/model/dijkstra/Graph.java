@@ -1,4 +1,4 @@
-package path_finders.dijkstra;
+package model.dijkstra;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -64,11 +64,14 @@ public class Graph {
                     temp.add(new PathNode(neighbor.name, currentPathNode.name, distance2root));
                 }
 
+                /*
                 System.out.println("current node: " + currentPathNode.name);
                 System.out.println("PriorityQueue: " + temp);
                 System.out.println("Parents: " + parents);
                 System.out.println("Visited: " + visited);
                 System.out.println("");
+
+                 */
             }
         }
         return null;

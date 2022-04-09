@@ -3,6 +3,8 @@ import gui.GameUIConstants;
 import model.PathSolver;
 import model.PlayerTurn;
 import model.Type;
+import model.dijkstra.Graph;
+import model.dijkstra.GraphUtils;
 
 import java.util.ArrayList;
 
@@ -29,6 +31,7 @@ public class Soldier {
         this.SoldierType = SoldierType;
     }
 
+    /*
     public Soldier(SoldierType solder, int x, int y) {
         this.x = x;
         this.y = y;
@@ -62,7 +65,7 @@ public class Soldier {
             }
 
         }
-    }
+    }*/
 
     public void setPos(int x, int y) {
         this.x = x;
@@ -76,9 +79,11 @@ public class Soldier {
         return res;
     }
 
-    public void createPath(PathSolver path, int castleX, int castleY) {
-        //System.out.println(x + " " + y + " " + castleX + " " + castleY);
-        ArrayList<Integer>[] currentPath = path.getPath(x, y, castleX, castleY);
+    public void createPath(Graph tree, int castleX, int castleY) {
+        System.out.println(x + " " + y + " " + castleX + " " + castleY);
+        ArrayList<Integer>[] currentPath = GraphUtils.getPath(tree, x, y, castleX, castleY);
+
+        assert currentPath != null;
         currentPathX = currentPath[0];
         currentPathY = currentPath[1];
     }

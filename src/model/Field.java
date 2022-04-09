@@ -9,10 +9,17 @@ public class Field {
     public ArrayList<Soldier> soldiersOnTheField;
     public ArrayList<Tower> towersOnTheField;
     public ArrayList<Castle> castlesOnTheField;
+
+    public boolean isHill;
+    public boolean isWater;
+
     public Field(){
         soldiersOnTheField = new ArrayList<Soldier>();
         towersOnTheField = new ArrayList<Tower>();
         castlesOnTheField = new ArrayList<Castle>();
+
+        isHill = false;
+        isWater = false;
     }
     public boolean addSoldier(Soldier soldier){
         if(isTowerOnTheField()||isCastleOnTheField()){
@@ -35,6 +42,31 @@ public class Field {
         }
         return  false;
     }
+
+    public boolean addHill() {
+        if(isEmpty()){
+            this.isHill = true;
+            return true;
+        }
+        return  false;
+    }
+
+    public boolean addWater() {
+        if(isEmpty()){
+            this.isWater = true;
+            return true;
+        }
+        return  false;
+    }
+
+    public boolean getHill() {
+        return this.isHill;
+    }
+
+    public boolean getWater() {
+        return this.isWater;
+    }
+
     public boolean isEmpty(){
         return soldiersOnTheField.size()==0&&towersOnTheField.size()==0;
     }

@@ -1,12 +1,15 @@
-package path_finders.dijkstra;
+package model.dijkstra;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import model.Field;
+
+import java.util.ArrayList;
 import java.util.List;
-import org.junit.jupiter.api.Test;
 
-public class GraphTest {
+public class GraphUtils {
 
+    /*
     @Test
     public void testShortestPath1() {
         Graph graph = this.constructGraph();
@@ -44,6 +47,8 @@ public class GraphTest {
         assertEquals(result.get(3), "F");
     }
 
+
+
     @Test
     public void testShortestPath4() {
         int[][] matrix= {
@@ -54,9 +59,11 @@ public class GraphTest {
         Graph graph = this.constructGraph(matrix);
         List<String> result = graph.shortestPath("(0, 0)", "(2, 3)");
         System.out.println("shortest path between (0, 0) and (2, 3): " + result);
+        assertEquals(result.toString(), "[(0, 0), (0, 1), (0, 2), (1, 2), (2, 2), (2, 3)]");
     }
 
-    /**
+
+
      * Create a graph for testing
      *
      *
@@ -70,7 +77,7 @@ public class GraphTest {
      *         C     8    E
      *
      *
-     */
+
     private Graph constructGraph() {
         Graph graph = new Graph();
         graph.addEdge("A", "B", 5);
@@ -83,43 +90,91 @@ public class GraphTest {
         graph.addEdge("D", "F", 6);
         return graph;
     }
+    */
 
-    private Graph constructGraph(int[][] matrix) {
+    public static Graph[] constructGraph(Field[][] matrix) {
 
-        Graph graph = new Graph();
+        Graph graph1 = new Graph();
+        Graph graph2 = new Graph();
 
         // Converting table to nodes
         for(int y = 0; y < matrix.length; ++y) {
             for(int x = 0; x < matrix[y].length; ++x) {
 
+                Field current = matrix[y][x];
+
                 String thisNodeName = "(" + x + ", " + y + ")";
 
+                int weightRegular;
+                int weightClimber = 1;
+
+                if(current.getWater() || current.isTowerOnTheField()) {
+                    break;
+                }
+                if(current.getHill()) {
+                    weightRegular = 3;
+                } else {
+                    weightRegular = 1;
+                }
+
                 if (y > 0) {
-                    //int top = matrix[y - 1][x];
                     String destNodeName = "(" + x + ", " + (y - 1) + ")";
-                    graph.addEdge(thisNodeName, destNodeName, matrix[y][x]);
+                    graph1.addEdge(thisNodeName, destNodeName, weightRegular);
+                    graph2.addEdge(thisNodeName, destNodeName, weightClimber);
                 }
 
                 if (y < matrix.length - 1) {
-                    //int bottom = matrix[y + 1][x];
                     String destNodeName = "(" + (x) + ", " + (y + 1) + ")";
-                    graph.addEdge(thisNodeName, destNodeName, matrix[y][x]);
+                    graph1.addEdge(thisNodeName, destNodeName, weightRegular);
+                    graph2.addEdge(thisNodeName, destNodeName, weightClimber);
                 }
 
                 if (x < matrix[y].length - 1) {
-                    //int right = matrix[y][x + 1];
                     String destNodeName = "(" + (x + 1) + ", " + (y) + ")";
-                    graph.addEdge(thisNodeName, destNodeName, matrix[y][x]);
+                    graph1.addEdge(thisNodeName, destNodeName, weightRegular);
+                    graph2.addEdge(thisNodeName, destNodeName, weightClimber);
                 }
 
                 if (x > 0) {
-                    //int left = matrix[y][x - 1];
                     String destNodeName = "(" + (x - 1) + ", " + (y) + ")";
-                    graph.addEdge(thisNodeName, destNodeName, matrix[y][x]);
+                    graph1.addEdge(thisNodeName, destNodeName, weightRegular);
+                    graph2.addEdge(thisNodeName, destNodeName, weightClimber);
                 }
 
             }
         }
-        return graph;
+        Graph[] res = new Graph[2];
+        res[0] = graph1;
+        res[1] = graph2;
+
+        return res;
+    }
+
+    public static ArrayList<Integer>[] getPath(Graph tree, int startX, int startY, int endX, int endY) {
+
+        List<String> result = tree.shortestPath(    "(" + startX + ", " + startY + ")",
+                                                    "(" + endX +", " + endY + ")");
+
+        if(result!=null && result.size() > 0) {
+            System.out.println("shortest path between (" + startX +", " + startY + ") and " +
+                    "(" + endX + ", " + endY + "): " + result);
+
+            ArrayList<Integer> XChords = new ArrayList<>();
+            ArrayList<Integer> YChords = new ArrayList<>();
+
+            for(String chords : result ) {
+                String[] raw = chords.split(", ");
+                XChords.add(Integer.parseInt(String.valueOf(raw[0].split("\\(")[1])));
+                YChords.add(Integer.parseInt(String.valueOf(raw[1].split("\\)")[0])));
+            }
+            ArrayList<Integer>[] res = new ArrayList[2];
+            res[0] = XChords;
+            res[1] = YChords;
+
+            return res;
+        } else {
+            System.out.println("NO ROUTE");
+            return null;
+        }
     }
 }

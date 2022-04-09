@@ -2,6 +2,8 @@ package model;
 
 import gui.GameUIConstants;
 import gui.Position;
+import model.dijkstra.Graph;
+import model.dijkstra.GraphUtils;
 import model.info.InfoBoard;
 import model.soldier.Soldier;
 import model.soldier.SoldierType;
@@ -22,6 +24,29 @@ public final class GameLogic {
     // Vagy jó a megjelenítési rétegben mert nem függ tőle a többi esemény.
     public Position player1Castle;
     public Position player2Castle;
+
+    private int Player1Unit1Number;
+    private int Player1Unit2Number;
+    private int Player2Unit1Number;
+    private int Player2Unit2Number;
+
+    //private PathSolver path;
+
+    private ArrayList<Soldier> player1Soldiers;
+    private ArrayList<Soldier> player2Soldiers;
+
+    Graph graphForRegular;
+    Graph graphForCLimber;
+
+    public Field[][] grids;
+
+    private InfoBoard infoBoard;
+
+    /*
+        Durning attack phase we count how much rounds has been elpased
+        and we swich back to the forst player once it's done.
+    **/
+    private int stepCounter;
 
     public int getPlayer1Unit1Number() {
         return Player1Unit1Number;
@@ -54,18 +79,6 @@ public final class GameLogic {
     public void incPlayer2Unit2Number() {
         Player2Unit2Number += 1;
     }
-
-    private int Player1Unit1Number;
-    private int Player1Unit2Number;
-    private int Player2Unit1Number;
-    private int Player2Unit2Number;
-
-    private PathSolver path;
-
-    private ArrayList<Soldier> player1Soldiers;
-    private ArrayList<Soldier> player2Soldiers;
-
-
 
     public int getPlayer1Gold() {
         return player1Gold;
@@ -111,15 +124,7 @@ public final class GameLogic {
         return grids;
     }
 
-    public Field[][] grids;
 
-    private InfoBoard infoBoard;
-
-    /*
-        Durning attack phase we count how much rounds has been elpased
-        and we swich back to the forst player once it's done.
-    **/
-    private int stepCounter;
 
     public GameLogic() {
         gameConstants = new GameUIConstants();
@@ -129,17 +134,20 @@ public final class GameLogic {
         this.row = gameConstants.GAMEAREA_HEIGHT_canBeDividedBy;
         this.column = gameConstants.GAMEAREA_WIDTH_canBeDividedBy;
 
-        path = new PathSolver();
+        //path = new PathSolver();
 
         grids = new Field[row][column];
         stepCounter = 0;
         initGrid();
 
         initInfoBoard();
-        path.initMatrix(column);
+        //path.initMatrix(column);
 
-        player1Soldiers = new ArrayList<Soldier>();
-        player2Soldiers = new ArrayList<Soldier>();
+        player1Soldiers = new ArrayList<>();
+        player2Soldiers = new ArrayList<>();
+
+        graphForRegular = new Graph();
+        graphForCLimber = new Graph();
 
         //TODO: remove the inital solder makes after yopu can create your own!
 
@@ -235,6 +243,7 @@ public final class GameLogic {
         }
     }
 
+    /*
     private void updatePathMatrix() {
         for (int i = 0; i < this.row; ++i) {
             for (int j = 0; j < this.column; ++j) {
@@ -247,6 +256,7 @@ public final class GameLogic {
             }
         }
     }
+     */
     private void clearGridSoldiers() {
         for (int i = 0; i < this.row; ++i) {
             for (int j = 0; j < this.column; ++j) {
@@ -261,20 +271,31 @@ public final class GameLogic {
         GameLogic.playerTurn = PlayerTurn.ATTACK;
         System.out.println("ATTACK!");
         stepCounter = 0;
-        updatePathMatrix();
+        //updatePathMatrix();
+
+        //Time to create the two graphs for the path finder to solve
+        Graph[] res = GraphUtils.constructGraph(grids);
+
+        graphForRegular = res[0];
+        graphForCLimber = res[1];
 
         for(Soldier s : player1Soldiers) {
-            s.createPath(path, player2Castle.x, player2Castle.y);
+
+            s.createPath(s.getType() == Type.PLAYER1_SOLDIER1?
+                    graphForRegular :
+                    graphForCLimber ,player2Castle.x, player2Castle.y);
             addMoney(s.getTax(), 1);
         }
         for(Soldier s : player2Soldiers) {
-            s.createPath(path, player1Castle.x, player1Castle.y);
+            s.createPath(s.getType() == Type.PLAYER2_SOLDIER1 ?
+                    graphForRegular :
+                    graphForCLimber ,player2Castle.x, player2Castle.y);
             addMoney(s.getTax(), 2);
         }
     }
 
     public void nextAttackPhase() {
-        if(stepCounter >= 3) {
+        if(stepCounter >= GameConstants.ATTACK_ROUNDS) {
             playerTurn = PlayerTurn.PLAYER1;
             return;
         }
