@@ -172,7 +172,9 @@ public class GameBoard extends JPanel {
         int time = gameConstants.TIMER;
         this.timer = new Timer(time, this.oneGameCycleAction);
         this.timer.start();
+        GameLogic.playerTurn=PlayerTurn.PLAYER1;
         gameLogic.newGame(gameConstants.GAMEAREA_HEIGHT_canBeDividedBy,gameConstants.GAMEAREA_WIDTH_canBeDividedBy, name);
+        repaint();
     }
 
     private final Action oneGameCycleAction = new AbstractAction() {

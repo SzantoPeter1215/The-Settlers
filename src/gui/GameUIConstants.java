@@ -82,8 +82,8 @@ public final class GameUIConstants {
 
     // height will store the height of the screen
     public static final int SCREENHEIGHT = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();
-    public static final int GAME_WIDTH = SCREENWIDTH-(int)(SCREENWIDTH*0.1);
-    public static final int GAME_HEIGHT = SCREENHEIGHT-(int)(SCREENHEIGHT*0.1);
+    public static final int GAME_WIDTH = 1000; //SCREENWIDTH-(int)(SCREENWIDTH*0.1);
+    public static final int GAME_HEIGHT = 1000; //SCREENHEIGHT-(int)(SCREENHEIGHT*0.1);
 
 
     public static final Color BACKGROUND_COLOR = new Color(0xDDEEFF);
