@@ -130,27 +130,36 @@ public class GameBoard extends JPanel {
                     int x = ScreenMethods.convertYtoModelX_GameArea(e.getY());
                     int y = ScreenMethods.convertXtoModelY_GameArea(e.getX());
                     if(GameLogic.playerTurn==PlayerTurn.PLAYER1){
-                        gameLogic.incPlayer1Unit2Number();
                         Soldier soldier = new Soldier(PlayerTurn.PLAYER1,100,Type.PLAYER1_SOLDIER2,player1_castle_x,player1_castle_y);
-                        gameLogic.grids[player1_castle_x][player1_castle_y].addSoldier(soldier);
+                            if(gameLogic.removeMoney(soldier.getPrice(),gameLogic.playerTurn)){
+                                gameLogic.incPlayer1Unit2Number();
+                                gameLogic.grids[player1_castle_x][player1_castle_y].addSoldier(soldier);
+
+                            }
                     }
                 }
                 else if(ScreenMethods.onPlayer2Unit1(e.getX(),e.getY())){
                     int x = ScreenMethods.convertYtoModelX_GameArea(e.getY());
                     int y = ScreenMethods.convertXtoModelY_GameArea(e.getX());
                     if(GameLogic.playerTurn==PlayerTurn.PLAYER2){
-                        gameLogic.incPlayer2Unit1Number();
+
                         Soldier soldier = new Soldier(PlayerTurn.PLAYER2,100,Type.PLAYER2_SOLDIER1,player2_castle_x,player2_castle_y);
-                        gameLogic.grids[player2_castle_x][player2_castle_y].addSoldier(soldier);
+                        if(gameLogic.removeMoney(soldier.getPrice(),gameLogic.playerTurn)){
+                            gameLogic.incPlayer2Unit1Number();
+                            gameLogic.grids[player2_castle_x][player2_castle_y].addSoldier(soldier);
+                        }
+
                     }
                 }
                 else if(ScreenMethods.onPlayer2Unit2(e.getX(),e.getY())){
                     int x = ScreenMethods.convertYtoModelX_GameArea(e.getY());
                     int y = ScreenMethods.convertXtoModelY_GameArea(e.getX());
                     if(GameLogic.playerTurn==PlayerTurn.PLAYER2){
-                        gameLogic.incPlayer2Unit2Number();
                         Soldier soldier = new Soldier(PlayerTurn.PLAYER2,100,Type.PLAYER2_SOLDIER2,player2_castle_x,player2_castle_y);
-                        gameLogic.grids[player2_castle_x][player2_castle_y].addSoldier(soldier);
+                        if(gameLogic.removeMoney(soldier.getPrice(),gameLogic.playerTurn)){
+                            gameLogic.incPlayer2Unit1Number();
+                            gameLogic.grids[player2_castle_x][player2_castle_y].addSoldier(soldier);
+                        }
                     }
                 }
                 else if(ScreenMethods.playerInfoBoardEndTurn_clicked(e.getX(),e.getY())){
