@@ -34,6 +34,7 @@ public class Soldier {
         this.x = x;
         this.y = y;
         this.energy = 10;
+        this.damage = 15;
 
         this.tax = 40;
     }
@@ -157,4 +158,11 @@ public class Soldier {
 
     public int getHealth() { return health; }
 
+    public int getDamage() {
+        return damage;
+    }
+
+    public int getPrice() {
+        return price;
+    }
 }

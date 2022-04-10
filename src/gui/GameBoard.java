@@ -105,9 +105,12 @@ public class GameBoard extends JPanel {
                     int x = ScreenMethods.convertYtoModelX_GameArea(e.getY());
                     int y = ScreenMethods.convertXtoModelY_GameArea(e.getX());
                     if(GameLogic.playerTurn==PlayerTurn.PLAYER1){
-                        gameLogic.incPlayer1Unit1Number();
                         Soldier soldier = new Soldier(PlayerTurn.PLAYER1,100,Type.PLAYER1_SOLDIER1,player1_castle_x,player1_castle_y);
-                        gameLogic.grids[player1_castle_x][player1_castle_y].addSoldier(soldier); //caslte start
+                        if(gameLogic.removeMoney(soldier.getPrice(),gameLogic.playerTurn)){
+                            gameLogic.incPlayer1Unit1Number();
+                            gameLogic.grids[player1_castle_x][player1_castle_y].addSoldier(soldier); //caslte start
+                            gameLogic.a
+                        }
                     }
                 }
                 else if(ScreenMethods.onPlayer1Unit2(e.getX(),e.getY())){
@@ -237,6 +240,7 @@ public class GameBoard extends JPanel {
                 //todo it needs to beredone
                 if(localGrid[y_col][x_row].isCastleOnTheField()){
                     Castle castleOnTheField = localGrid[y_col][x_row].getCastleOnTheField();
+
                     drawFixedRectAngleFieldWithImage(graphics2D,currentField.x,currentField.y,castleOnTheField.castleImage(),false);
                     makeHealthBar(graphics2D,x_row,y_col,castleOnTheField.health);
                 }
@@ -330,8 +334,20 @@ public class GameBoard extends JPanel {
         graphics2D.setStroke(GameUIConstants.LARGE_STROKE); //clear things out
         if(playerTurn==PlayerTurn.PLAYER1){
             graphics2D.setColor(blue);
+/*            for (int i = 0; i < gameLogic.grids[x][y].soldiersOnTheField.size(); i++) {
+                Soldier soldier = gameLogic.grids[x][y].soldiersOnTheField.get(i);
+                if(soldier.OwnerPlayer==PlayerTurn.PLAYER2){
+                    soldier.minusHealth(10);
+                }
+            }*/
         }
         else{
+/*            for (int i = 0; i < gameLogic.grids[x][y].soldiersOnTheField.size(); i++) {
+                Soldier soldier = gameLogic.grids[x][y].soldiersOnTheField.get(i);
+                if(soldier.OwnerPlayer==PlayerTurn.PLAYER1){
+                    soldier.minusHealth(10);
+                }
+            }*/
             graphics2D.setColor(red);
         }
         graphics2D.draw(area);

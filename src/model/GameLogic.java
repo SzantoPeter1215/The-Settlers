@@ -43,6 +43,9 @@ public final class GameLogic {
 
     private InfoBoard infoBoard;
 
+    Castle castle_Player1;
+    Castle castle_Player2;
+
     /*
         Durning attack phase we count how much rounds has been elpased
         and we swich back to the forst player once it's done.
@@ -159,7 +162,7 @@ public final class GameLogic {
         return grids;
     }
     public boolean inTheDistance(int origin_x, int origin_y,int x , int y, int distance) {
-        if ((column > x && 0 <= x) && y < row && y >= 0) {
+        if ((row > x && 0 <= x) && y < column && y >= 0) {
             return Math.abs(x - origin_x) <= distance && Math.abs(y - origin_y) <= distance;
         }
         return false;
@@ -202,12 +205,6 @@ public final class GameLogic {
             }
         }
 
-        for(int k = 0; k < 20; k+=3) {
-            for(int i = 0; i < 7; i+= 2) {
-
-            }
-        }
-
 
         initInfoBoard();
         //path.initMatrix(column);
@@ -230,9 +227,9 @@ public final class GameLogic {
         int castleRandomY = ThreadLocalRandom.current().nextInt(0, gameConstants.GAMEAREA_HEIGHT_canBeDividedBy);//It's the same for both castles
         this.player1Castle = new Position(castleRandomY,Player1castleRandomX);
         this.player2Castle = new Position(castleRandomY,Player2castleRandomX);
-        Castle castle_Player1 = new Castle(PlayerTurn.PLAYER1,100,Type.PLAYER1_CASTLE,2,10);
+        castle_Player1 = new Castle(PlayerTurn.PLAYER1,100,Type.PLAYER1_CASTLE,2,10);
         grids[castleRandomY][Player1castleRandomX].addCaslte(castle_Player1);
-        Castle castle_Player2 = new Castle(PlayerTurn.PLAYER2,100,Type.PLAYER2_CASTLE,2,10);
+        castle_Player2 = new Castle(PlayerTurn.PLAYER2,100,Type.PLAYER2_CASTLE,2,10);
         grids[castleRandomY][Player2castleRandomX].addCaslte(castle_Player2);
         setFillTowerType(Type.TOWER1);
         fillUpTowerAndCastleList();
@@ -378,6 +375,20 @@ public final class GameLogic {
             int[] cords = s.getPos();
             grids[cords[0]][cords[1]].addSoldier(s);
 
+            if(s.OwnerPlayer == PlayerTurn.PLAYER1) {
+                if(player2Castle.x == s.x && player2Castle.y == s.y) {
+                    System.out.println("got in: " + s.getDamage());
+                    castle_Player1.looseHealth(s.getDamage());
+                    grids[s.x][s.y].removeSoldier();
+                }
+            } else {
+                if(player1Castle.x == s.x && player1Castle.y == s.y) {
+                    System.out.println("got in: " + s.getDamage());
+                    castle_Player2.looseHealth(s.getDamage());
+                    grids[s.x][s.y].removeSoldier();
+                }
+            }
+
         }
         addSoldiersToLists();
         //damageSoldiers();
@@ -415,7 +426,7 @@ public final class GameLogic {
                 attackerOwner = tower.OwnerPlayer;
             }
             for(Soldier s : allSoldiers) {
-                    if(s.OwnerPlayer!=attackerOwner&&inTheDistance(towerOrCastle.y,towerOrCastle.x, s.x, s.y,range)){//problem with the x and y solved this way
+                    if(s.OwnerPlayer!=attackerOwner&&inTheDistance(towerOrCastle.x,towerOrCastle.y, s.x, s.y,range)){//problem with the x and y solved this way
                         if(!s.minusHealth(damage)){
                             deathSoldier.add(s);
                         }
@@ -464,7 +475,6 @@ public final class GameLogic {
         int[] pos2 = {player2Castle.x,player2Castle.y};
 
         boolean res = CheckRouteExist.check(matrix, pos1, pos2);
-        System.out.println(res);
         return res;
     }
 }

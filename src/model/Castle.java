@@ -31,4 +31,7 @@ public class Castle {
             return GameUIConstants.Player2_Castle;
         }
     }
+    public void looseHealth(int d) {
+        health -= damage;
+    }
 }
