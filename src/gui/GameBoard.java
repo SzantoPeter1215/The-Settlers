@@ -254,6 +254,13 @@ public class GameBoard extends JPanel {
                     graphics2D.drawString("X", currentField.x,currentField.y+GameUIConstants.GAME_AREA_RECTANGLE);
                     clickableObject.add(new Position(currentField.x,currentField.y));
                 }
+                else if(localGrid[y_col][x_row].getHill()){
+                    imageLoader.loadImage(graphics2D,currentField.x,currentField.y,GameUIConstants.Hill);
+                }
+                else if(localGrid[y_col][x_row].getWater()){
+                    imageLoader.loadImage(graphics2D,currentField.x,currentField.y,GameUIConstants.Water);
+                }
+
                 else{
                     graphics2D.draw(currentField);
                 }
