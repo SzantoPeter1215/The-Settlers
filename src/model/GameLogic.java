@@ -1,6 +1,7 @@
 package model;
 
 import gui.GameUIConstants;
+import gui.PopUp;
 import gui.Position;
 import model.dijkstra.Graph;
 import model.dijkstra.GraphUtils;
@@ -164,6 +165,15 @@ public final class GameLogic {
     public boolean inTheDistance(int origin_x, int origin_y,int x , int y, int distance) {
         if ((row > x && 0 <= x) && y < column && y >= 0) {
             return Math.abs(x - origin_x) <= distance && Math.abs(y - origin_y) <= distance;
+        }
+        return false;
+    }
+    public boolean isMyArea(int y,PlayerTurn playerTurn){
+        if(y<(this.column/2)&&playerTurn==PlayerTurn.PLAYER1){
+            return true;
+        }
+        else if((this.column/2)<y&&playerTurn==PlayerTurn.PLAYER2){
+            return true;
         }
         return false;
     }
@@ -379,7 +389,7 @@ public final class GameLogic {
             int[] cords = s.getPos();
             grids[cords[0]][cords[1]].addSoldier(s);
 
-            if(s.OwnerPlayer == PlayerTurn.PLAYER1) {
+/*            if(s.OwnerPlayer == PlayerTurn.PLAYER1) {
                 if(player2Castle.x == s.x && player2Castle.y == s.y) {
                     System.out.println("got in: " + s.getDamage());
                     castle_Player1.looseHealth(s.getDamage());
@@ -391,7 +401,7 @@ public final class GameLogic {
                     castle_Player2.looseHealth(s.getDamage());
                     grids[s.x][s.y].removeSoldier();
                 }
-            }
+            }*/
 
         }
         addSoldiersToLists();
@@ -410,36 +420,64 @@ public final class GameLogic {
         }
     }
 
-    public void damageSoldiers(){
+    public void damageSoldiers() {
         List<Soldier> deathSoldier = new ArrayList<>();
-        for (Field towerOrCastle:
+        for (Field towerOrCastle :
                 towerAndCastle) {
             int damage = 0;
             int range = 0;
             PlayerTurn attackerOwner = null;
-            if(towerOrCastle.isCastleOnTheField()){
-                Castle castle =towerOrCastle.getCastleOnTheField(); 
+            if (towerOrCastle.isCastleOnTheField()) {
+                Castle castle = towerOrCastle.getCastleOnTheField();
                 damage = castle.damage;
                 range = castle.range;
                 attackerOwner = castle.OwnerPlayer;
-            }
-            else if(towerOrCastle.isTowerOnTheField()){
+            } else if (towerOrCastle.isTowerOnTheField()) {
                 Tower tower = towerOrCastle.getTowerOnTheField();
                 damage = tower.damage;
                 range = tower.range;
                 attackerOwner = tower.OwnerPlayer;
             }
-            for(Soldier s : allSoldiers) {
-                    if(s.OwnerPlayer!=attackerOwner&&inTheDistance(towerOrCastle.y,towerOrCastle.x, s.x, s.y,range)){//problem with the x and y solved this way
-                        if(!s.minusHealth(damage)){
+            for (Soldier s : allSoldiers) {
+                if (s.OwnerPlayer != attackerOwner && inTheDistance(towerOrCastle.y, towerOrCastle.x, s.x, s.y, range)) {//problem with the x and y solved this way
+                    if (!s.minusHealth(damage)) {
+                        if (!deathSoldier.contains(s)) {
                             deathSoldier.add(s);
                         }
                     }
+                }
+                if (s.OwnerPlayer == PlayerTurn.PLAYER1) {
+                    if (player2Castle.x == s.x && player2Castle.y == s.y) {
+                        System.out.println("got in: " + s.getDamage());
+                        castle_Player2.looseHealth(s.getDamage());
+                        if (!deathSoldier.contains(s)) {
+                            deathSoldier.add(s);
+                        }
+                    }
+                } else {
+                    if (player1Castle.x == s.x && player1Castle.y == s.y) {
+                        System.out.println("got in: " + s.getDamage());
+                        castle_Player1.looseHealth(s.getDamage());
+                        deathSoldier.add(s);
+                        if(!deathSoldier.contains(s)){
+                            deathSoldier.add(s);
+                        }
+                    }
+                }
             }
-            for (Soldier death:
-                 deathSoldier) {
-                descUnitsAfterDeath(death.SoldierType,death.OwnerPlayer);
-                allSoldiers.remove(death);}
+            for (Soldier death :
+                    deathSoldier) {
+                descUnitsAfterDeath(death.SoldierType, death.OwnerPlayer);
+                allSoldiers.remove(death);
+            }
+        }
+        if(castle_Player1.health<=0){
+            PopUp popUp = new PopUp("Gratulálok, Player 2.");
+            this.newGame(15,10,"");
+        }
+        else if(castle_Player2.health<=0){
+            PopUp popUp = new PopUp("Gratulálok, Player 1.");
+            this.newGame(15,10,"");
         }
     }
     public void fillUpTowerAndCastleList(){

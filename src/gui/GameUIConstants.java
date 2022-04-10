@@ -8,6 +8,7 @@ public final class GameUIConstants {
     public int GAMEAREA_WIDTH;
     public int GAMEAREA_HEIGHT_canBeDividedBy;
     public int GAMEAREA_WIDTH_canBeDividedBy;
+    public final static String Army_image = "images/army.png";
     public final static String disabled_Tower1Image = "images/disabled_towerExample.png";
     public final static String disalbed_Tower2Image = "images/disabled_tower2_Example.png";
     public final static String player1Soldier1 = "images/player1_soldier_1.png";
