@@ -279,6 +279,8 @@ public final class GameLogic {
         graphForCLimber = res[1];
 
         addSoldiersToLists();
+
+
         for(Soldier s : allSoldiers) {
 
             if(PlayerTurn.PLAYER1==s.OwnerPlayer){
@@ -313,6 +315,7 @@ public final class GameLogic {
             grids[cords[0]][cords[1]].addSoldier(s);
 
         }
+        addSoldiersToLists();
 /*
 
         for(Soldier s : player2Soldiers) {
@@ -326,6 +329,7 @@ public final class GameLogic {
     }
 
     private void addSoldiersToLists() {
+        allSoldiers.clear();
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < column; j++) {
                 List<Soldier> toMovedSoldier =grids[i][j].getSoliders();
