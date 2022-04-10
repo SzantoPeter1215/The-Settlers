@@ -19,22 +19,6 @@ class GameLogicTest {
         //assertEquals(null, gameLogic.getGrids());
     }
 
-    /*@Test
-    public void testInitAttackPhase(){
-        GameLogic gameLogic = new GameLogic();
-        GameUIConstants gameConstants = new GameUIConstants();
-        gameLogic.newGame(gameConstants.GAMEAREA_HEIGHT_canBeDividedBy,gameConstants.GAMEAREA_WIDTH_canBeDividedBy,"asd");
-        gameLogic.initAttackPhase();
-    }
-
-    @Test
-    public void testNextAttackPhase(){
-        GameLogic gameLogic = new GameLogic();
-        gameLogic.newGame(100,100,"asd");
-        gameLogic.initAttackPhase();
-        gameLogic.nextAttackPhase();
-    }*/
-
     @Test
     public void testMoney(){
         GameLogic gameLogic = new GameLogic();

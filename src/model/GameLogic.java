@@ -1,8 +1,6 @@
 package model;
 
-import gui.GameUIConstants;
-import gui.PopUp;
-import gui.Position;
+import gui.*;
 import model.dijkstra.Graph;
 import model.dijkstra.GraphUtils;
 import model.info.InfoBoard;
@@ -478,6 +476,7 @@ public final class GameLogic {
         else if(castle_Player2.health<=0){
             PopUp popUp = new PopUp("Gratulálok, Player 1.");
             this.newGame(15,10,"");
+            //new GameFrame(this);
         }
     }
     public void fillUpTowerAndCastleList(){
