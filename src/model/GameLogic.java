@@ -167,6 +167,12 @@ public final class GameLogic {
         }
         return false;
     }
+    public boolean inTheDistanceForTowerRange(int origin_x, int origin_y,int x , int y, int distance){
+        if ((column > x && 0 <= x) && y < row && y >= 0) {
+            return Math.abs(x - origin_x) <= distance && Math.abs(y - origin_y) <= distance;
+        }
+        return false;
+    }
 
 
     public GameLogic() {
