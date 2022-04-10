@@ -80,7 +80,7 @@ public class GameBoard extends JPanel {
                             int minusMoney = gameLogic.getFillTowerType()==Type.TOWER1 ? GameConstants.TOWER1_PRICE : 0;
                             minusMoney = gameLogic.getFillTowerType()==Type.TOWER2 ? GameConstants.TOWER2_PRICE : minusMoney;
                             if(!gameLogic.grids[x][y].getWater() && !gameLogic.grids[x][y].getHill() && gameLogic.canBuild(x,y)){
-                                if(gameLogic.removeMoney(minusMoney,GameLogic.playerTurn)) {
+                                if(gameLogic.isMyArea(y,GameLogic.playerTurn)&&gameLogic.removeMoney(minusMoney,GameLogic.playerTurn)) {
                                     Tower newTowerOnThisField;
                                     if(gameLogic.getFillTowerType() == Type.TOWER1) {
                                         newTowerOnThisField = new Tower(GameLogic.playerTurn,
@@ -92,7 +92,12 @@ public class GameBoard extends JPanel {
                                     }
                                     gameLogic.grids[x][y].addTower(newTowerOnThisField);
                                 } else {
-                                    PopUp popUp = new PopUp("No money");
+                                    if(!gameLogic.isMyArea(y,GameLogic.playerTurn)){
+                                        PopUp popUp = new PopUp("Az ellenség területére nem lehet tornyot rakni.");
+                                    }
+                                    else{
+                                        PopUp popUp = new PopUp("Elfogyott a pénz.");
+                                    }
                                 }
                             }
                             else{
@@ -209,7 +214,7 @@ public class GameBoard extends JPanel {
                         }
                     }
                     else if(rangedObject.isTowerOnTheField()){
-                        if(gameLogic.inTheDistance(rangedObject.x,rangedObject.y,x_row,y_col,rangedObject.getTowerOnTheField().range)){
+                        if(gameLogic.inTheDistanceForTowerRange(rangedObject.x,rangedObject.y,x_row,y_col,rangedObject.getTowerOnTheField().range)){
                             drawTowerRange(graphics2D,x_row,y_col, rangedObject.getTowerOnTheField().OwnerPlayer);
                         }
                     }
@@ -262,8 +267,9 @@ public class GameBoard extends JPanel {
                     makeHealthBar(graphics2D,x_row,y_col,soldier.getHealth());
                 }
                 else if(localGrid[y_col][x_row].CountOfTheSoldier()>1){
-                    graphics2D.setFont(GameUIConstants.MAIN_FONT);
+                      graphics2D.setFont(GameUIConstants.MAIN_FONT);
                     graphics2D.drawString("X", currentField.x,currentField.y+GameUIConstants.GAME_AREA_RECTANGLE);
+                   // drawFixedRectAngleFieldWithImage(graphics2D,currentField.x,currentField.y,GameUIConstants.Army_image,false);
                     clickableObject.add(new Position(currentField.x,currentField.y));
                 }
                 else if(localGrid[y_col][x_row].getHill()){
@@ -400,9 +406,9 @@ public class GameBoard extends JPanel {
 
         graphics2D.setColor(GameUIConstants.TEXT_COLOR);
         graphics2D.setFont(GameUIConstants.SMALL_FONT);
-        graphics2D.drawString("Player 1         Gold: "+gameLogic.getPlayer1Gold()+"    Unit 1: "+gameLogic.getPlayer1Unit1Number()+" Unit 2:"+gameLogic.getPlayer1Unit2Number(),
+        graphics2D.drawString("Player 1         Gold: "+gameLogic.getPlayer1Gold()+"    Regular: "+gameLogic.getPlayer1Unit1Number()+"  Climber: "+gameLogic.getPlayer1Unit2Number(),
                 gameConstants.player1_moneyAndNameText.x,gameConstants.player1_moneyAndNameText.y);
-        graphics2D.drawString("Player 2         Gold: "+gameLogic.getPlayer2Gold()+"    Unit 1: "+gameLogic.getPlayer2Unit1Number()+" Unit 2:"+gameLogic.getPlayer2Unit2Number(),
+        graphics2D.drawString("Player 2         Gold: "+gameLogic.getPlayer2Gold()+"    Regular: "+gameLogic.getPlayer2Unit1Number()+"  Climber: "+gameLogic.getPlayer2Unit2Number(),
                 gameConstants.player2_moneyAndNameText.x,gameConstants.player2_moneyAndNameText.y);
 
         if(GameLogic.playerTurn==PlayerTurn.PLAYER1){

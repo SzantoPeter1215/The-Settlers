@@ -32,6 +32,11 @@ public class Castle {
         }
     }
     public void looseHealth(int d) {
-        health -= damage;
+        if(health-damage>=0){
+            health -= damage;
+        }
+        else{
+            health = 0;
+        }
     }
 }
