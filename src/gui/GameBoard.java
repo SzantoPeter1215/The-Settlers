@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.PipedOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -27,7 +28,7 @@ public class GameBoard extends JPanel {
 
     private TheScreen ScreenMethods;
     private ImageLoader imageLoader;
-
+    private List<Position> clickableObject; //many things on one field
 
     public GameBoard(GameLogic gameLogic) {
         gameConstants = new GameUIConstants();//it will calculate the area
@@ -38,7 +39,7 @@ public class GameBoard extends JPanel {
         setPreferredSize(new Dimension(GameUIConstants.GAME_WIDTH, GameUIConstants.GAME_HEIGHT));
         setBackground(GameUIConstants.BACKGROUND_COLOR);
         setFocusable(true);
-
+        clickableObject = new ArrayList<>();
         startNewGame();
 
         addMouseListener(new MouseAdapter() {
@@ -58,7 +59,20 @@ public class GameBoard extends JPanel {
                     startNewGame();
 
                 }
-                if(ScreenMethods.onGameArea(e.getX(),e.getY())) {//we want to place a tower on the gamearea
+                if(ScreenMethods.clickAbleField(clickableObject,gameLogic.grids,e.getX(),e.getY())){
+                    int y = ScreenMethods.convertXtoModelY_GameArea(e.getX());
+                    int x = ScreenMethods.convertYtoModelX_GameArea(e.getY());
+                    StringBuilder severalThingOnTheField = new StringBuilder();
+                    for (Soldier soldier:
+                         gameLogic.grids[x][y].soldiersOnTheField) {
+                        severalThingOnTheField.append("Type: "+soldier.SoldierType.toString()+
+                                "\nOwner: "+soldier.OwnerPlayer.toString()+
+                                "\nHealth: "+soldier.getHealth()+"\n - \n");
+                    }
+                    PopUp pop = new PopUp(severalThingOnTheField.toString());
+                    //gameLogic.grids[x][y].soldiersOnTheField.size();
+                }
+                else if(ScreenMethods.onGameArea(e.getX(),e.getY())) {//we want to place a tower on the gamearea
                     if(gameLogic.getFillTowerType()!=null) {
                         int x = ScreenMethods.convertYtoModelX_GameArea(e.getY());
                         int y = ScreenMethods.convertXtoModelY_GameArea(e.getX());
@@ -239,7 +253,7 @@ public class GameBoard extends JPanel {
                 }
             }
         }
-        //towerRangeHelper(graphics2D, localGrid);
+        //drawModelToTheGamearea(graphics2D, localGrid);
     }
     private Rectangle getGameAreaField(int x,int y){
         return new Rectangle(gameConstants.gameareaREACT.x+x* GameUIConstants.GAME_AREA_RECTANGLE,
@@ -252,7 +266,8 @@ public class GameBoard extends JPanel {
     private Rectangle fillHealthBar(int x, int y, int percentage){
         return new Rectangle(gameConstants.gameareaREACT.x+x* GameUIConstants.GAME_AREA_RECTANGLE + 5,gameConstants.gameareaREACT.y+y*GameUIConstants.GAME_AREA_RECTANGLE,(int)(percentage * 40),5);
     }
-    private void towerRangeHelper(Graphics2D graphics2D, Field[][] localGrid) {
+    private void drawModelToTheGamearea(Graphics2D graphics2D, Field[][] localGrid) {
+        clickableObject.clear();
         for (int y_col = 0; y_col < gameLogic.getRow(); y_col++) {
             for (int x_row = 0; x_row < gameLogic.getColumn(); x_row++) {
                 Rectangle currentField = getGameAreaField(x_row,y_col);
@@ -266,7 +281,7 @@ public class GameBoard extends JPanel {
                     Tower towerOnThisField = localGrid[y_col][x_row].getTowerOnTheField();
                     imageLoader.loadImage(graphics2D,currentField.x,currentField.y,Tower.towerImage(Tower.playerTowerType(towerOnThisField.OwnerPlayer,towerOnThisField.TowerType)));
                 }
-                else if(localGrid[y_col][x_row].CountOfTheSoldier()>0){
+                else if(localGrid[y_col][x_row].CountOfTheSoldier()==1){
                     Soldier soldier = localGrid[y_col][x_row].getFirstSoldier();
                     imageLoader.loadImage(graphics2D,currentField.x,currentField.y,soldier.getSoliderImage());
                     Rectangle healthbar = getHealthBar(x_row,y_col);
@@ -276,6 +291,11 @@ public class GameBoard extends JPanel {
                     Rectangle health = fillHealthBar(x_row,y_col,(int) percentage);
                     graphics2D.setColor(Color.green);
                     graphics2D.fill(health);
+                }
+                else if(localGrid[y_col][x_row].CountOfTheSoldier()>1){
+                    graphics2D.setFont(GameUIConstants.MAIN_FONT);
+                    graphics2D.drawString("X", currentField.x,currentField.y+GameUIConstants.GAME_AREA_RECTANGLE);
+                    clickableObject.add(new Position(currentField.x,currentField.y));
                 }
                 else{
                     graphics2D.draw(currentField);
@@ -294,7 +314,7 @@ public class GameBoard extends JPanel {
 
         Field[][] localGrid = gameLogic.getGrids();
         //TODO: SWICH A SOK IF HELYETT! meg ez az image loaderes dolog is ismétlés.
-        towerRangeHelper(graphics2D, localGrid);
+        drawModelToTheGamearea(graphics2D, localGrid);
     }
     private void drawOutTowerUnitsInfoboard(Graphics2D graphics2D,boolean player1Tower1,boolean player1Tower2,boolean player2Tower1,boolean player2Tower2, boolean isPlayer1Turn,boolean isPlayer2Turn){
         drawFixedRectAngleFieldWithImage(graphics2D,gameConstants.player1_placeOfTower1_OnInfoBoard.x,gameConstants.player1_placeOfTower1_OnInfoBoard.y,

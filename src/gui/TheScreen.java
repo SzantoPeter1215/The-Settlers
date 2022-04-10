@@ -1,7 +1,10 @@
 package gui;
 
+import model.Field;
 import model.GameLogic;
 import model.PlayerTurn;
+
+import java.util.List;
 
 public class TheScreen {
 
@@ -70,6 +73,16 @@ public class TheScreen {
         int player2EndTurnY2 = gameConstants.player2InfoBoard.y+GameUIConstants.SMALL_FONT.getSize()*3;
         if((y>=player2EndTurnY1&&y<=player2EndTurnY2)&&(x>=EndTurnX1&&x<=EndTurnX2)&&GameLogic.playerTurn==PlayerTurn.PLAYER2){
             return true;
+        }
+        return false;
+    }
+    public boolean clickAbleField(List<Position> clickAbleField, Field[][] grids, int x, int y){
+        for (Position clickableObject:
+             clickAbleField) {
+            if(clickableObject.x<=x&&x<=(clickableObject.x+GameUIConstants.GAME_AREA_RECTANGLE)&&
+            clickableObject.y<=y&&y<=clickableObject.y+GameUIConstants.GAME_AREA_RECTANGLE){
+                return true;
+            }
         }
         return false;
     }

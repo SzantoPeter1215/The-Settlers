@@ -325,7 +325,7 @@ public final class GameLogic {
 
         }
 */
-        damageSoldiers();
+        //damageSoldiers();
     }
 
     private void addSoldiersToLists() {
