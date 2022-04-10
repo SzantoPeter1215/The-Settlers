@@ -237,12 +237,12 @@ public class GameBoard extends JPanel {
                 //todo it needs to beredone
                 if(localGrid[y_col][x_row].isCastleOnTheField()){
                     Castle castleOnTheField = localGrid[y_col][x_row].getCastleOnTheField();
-                    imageLoader.loadImage(graphics2D,currentField.x,currentField.y,castleOnTheField.castleImage());
+                    drawFixedRectAngleFieldWithImage(graphics2D,currentField.x,currentField.y,castleOnTheField.castleImage(),false);
                     makeHealthBar(graphics2D,x_row,y_col,castleOnTheField.health);
                 }
                 else if(localGrid[y_col][x_row].isTowerOnTheField()){
                     Tower towerOnThisField = localGrid[y_col][x_row].getTowerOnTheField();
-                    imageLoader.loadImage(graphics2D,currentField.x,currentField.y,Tower.towerImage(Tower.playerTowerType(towerOnThisField.OwnerPlayer,towerOnThisField.TowerType)));
+                    drawFixedRectAngleFieldWithImage(graphics2D,currentField.x,currentField.y,Tower.towerImage(Tower.playerTowerType(towerOnThisField.OwnerPlayer,towerOnThisField.TowerType)),false);
                 }
                 else if(localGrid[y_col][x_row].CountOfTheSoldier()==1){
                     Soldier soldier = localGrid[y_col][x_row].getFirstSoldier();
@@ -256,11 +256,9 @@ public class GameBoard extends JPanel {
                 }
                 else if(localGrid[y_col][x_row].getHill()){
                     drawFixedRectAngleFieldWithImage(graphics2D,currentField.x,currentField.y,GameUIConstants.Hill,false);
-                    imageLoader.loadImage(graphics2D,currentField.x,currentField.y,GameUIConstants.Hill);
                 }
                 else if(localGrid[y_col][x_row].getWater()){
                     drawFixedRectAngleFieldWithImage(graphics2D,currentField.x,currentField.y,GameUIConstants.Water,false);
-                    imageLoader.loadImage(graphics2D,currentField.x,currentField.y,GameUIConstants.Water);
                 }
 
                 else{
