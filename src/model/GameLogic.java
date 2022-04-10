@@ -471,11 +471,11 @@ public final class GameLogic {
         }
        if(castle_Player1.health<=0){
             PopUp popUp = new PopUp("Gratulálok, Player 2.");
-            this.newGame(15,10,"");
+            infoBoard.setGameOver();
         }
         else if(castle_Player2.health<=0){
             PopUp popUp = new PopUp("Gratulálok, Player 1.");
-            this.newGame(15,10,"");
+            infoBoard.setGameOver();
             //new GameFrame(this);
         }
     }
