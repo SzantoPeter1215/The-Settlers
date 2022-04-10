@@ -198,6 +198,9 @@ public final class GameLogic {
         stepCounter = 0;
         initGrid();
 
+        this.player1Gold = 1000;
+        this.player2Gold = 1000;
+
 
         //TODO: remove , just for testing hill and wa'er. Migh causes out of index error (decrease the sizes then)
         //0-17
