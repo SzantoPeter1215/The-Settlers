@@ -14,6 +14,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public final class GameLogic {
     private final GameUIConstants gameConstants;
+    public List<Field> towerAndCastle;
 
     private int row;
     private int column;
@@ -21,6 +22,8 @@ public final class GameLogic {
     public static PlayerTurn playerTurn = PlayerTurn.PLAYER1;
     private int player1Gold = GameConstants.START_GOLD_PLAYER;
     private int player2Gold = GameConstants.START_GOLD_PLAYER;
+    //TODO: a castle helyét am nem a logicban kéne tartani?
+    // Vagy jó a megjelenítési rétegben mert nem függ tőle a többi esemény.
     public Position player1Castle;
     public Position player2Castle;
 
@@ -52,6 +55,40 @@ public final class GameLogic {
 
     public void incPlayer1Unit1Number() {
         Player1Unit1Number += 1;
+    }
+    public void descPlayer1Unit1Number() {
+        if(Player1Unit1Number-1>=0){
+            Player1Unit1Number -= 1;
+        }
+    }
+    public void descPlayer2Unit1Number() {
+        if(Player2Unit1Number-1>=0){
+            Player2Unit1Number -= 1;
+        }
+    }
+    public void descPlayer1Unit2Number() {
+        if(Player1Unit2Number-1>=0){
+            Player1Unit2Number -= 1;
+        }
+    }
+    public void descPlayer2Unit2Number() {
+        if(Player2Unit2Number-1>=0){
+            Player2Unit2Number -= 1;
+        }
+    }
+    public void descUnitsAfterDeath(Type soldierType, PlayerTurn owner){
+        if(soldierType==Type.PLAYER1_SOLDIER1&&owner==PlayerTurn.PLAYER1){
+            this.descPlayer1Unit1Number();
+        }
+        else if(soldierType==Type.PLAYER1_SOLDIER2&&owner==PlayerTurn.PLAYER1){
+            this.descPlayer1Unit2Number();
+        }
+        else if(soldierType==Type.PLAYER2_SOLDIER1&&owner==PlayerTurn.PLAYER2){
+            this.descPlayer2Unit1Number();
+        }
+        else if(soldierType==Type.PLAYER2_SOLDIER2&&owner==PlayerTurn.PLAYER2){
+            this.descPlayer2Unit1Number();
+        }
     }
 
     public int getPlayer1Unit2Number() {
@@ -121,7 +158,12 @@ public final class GameLogic {
         return convertedGrid;*/
         return grids;
     }
-
+    public boolean inTheDistance(int origin_x, int origin_y,int x , int y, int distance) {
+        if ((column > x && 0 <= x) && y < row && y >= 0) {
+            return Math.abs(x - origin_x) <= distance && Math.abs(y - origin_y) <= distance;
+        }
+        return false;
+    }
 
 
     public GameLogic() {
@@ -135,8 +177,10 @@ public final class GameLogic {
         //path = new PathSolver();
 
         grids = new Field[row][column];
+        towerAndCastle = new ArrayList<>();
         stepCounter = 0;
         initGrid();
+
 
         //TODO: remove , just for testing hill and wa'er. Migh causes out of index error (decrease the sizes then)
         //0-17
@@ -164,12 +208,20 @@ public final class GameLogic {
             }
         }
 
+
         initInfoBoard();
+        //path.initMatrix(column);
 
         allSoldiers = new ArrayList<>();
 
         graphForRegular = new Graph();
         graphForCLimber = new Graph();
+
+
+
+
+
+        //TODO: set the grids to their default type. (according to the map we choose)
 
         infoBoard.reset(userName);
 
@@ -178,11 +230,12 @@ public final class GameLogic {
         int castleRandomY = ThreadLocalRandom.current().nextInt(0, gameConstants.GAMEAREA_HEIGHT_canBeDividedBy);//It's the same for both castles
         this.player1Castle = new Position(castleRandomY,Player1castleRandomX);
         this.player2Castle = new Position(castleRandomY,Player2castleRandomX);
-        Castle castle_Player1 = new Castle(PlayerTurn.PLAYER1,100,Type.PLAYER1_CASTLE);
+        Castle castle_Player1 = new Castle(PlayerTurn.PLAYER1,100,Type.PLAYER1_CASTLE,2,10);
         grids[castleRandomY][Player1castleRandomX].addCaslte(castle_Player1);
-        Castle castle_Player2 = new Castle(PlayerTurn.PLAYER2,100,Type.PLAYER2_CASTLE);
+        Castle castle_Player2 = new Castle(PlayerTurn.PLAYER2,100,Type.PLAYER2_CASTLE,2,10);
         grids[castleRandomY][Player2castleRandomX].addCaslte(castle_Player2);
         setFillTowerType(Type.TOWER1);
+        fillUpTowerAndCastleList();
     }
     public void createPlayer1Soldier1(){
         //player1Soldiers.add(new Soldier(SoldierType.REGULAR, this.player1Castle.x,this.player1Castle.y));
@@ -234,7 +287,7 @@ public final class GameLogic {
         return false;
     }
 
-    private void addMoney(int amount, int player) {
+    public void addMoney(int amount, int player) {
 
         if(player == 1) {
             player1Gold += amount;
@@ -243,6 +296,21 @@ public final class GameLogic {
 
         }
     }
+
+    /*
+    private void updatePathMatrix() {
+        for (int i = 0; i < this.row; ++i) {
+            for (int j = 0; j < this.column; ++j) {
+                if(!grids[i][j].isCastleOnTheField()&&!grids[i][j].isTowerOnTheField()){
+                    path.setMatrixField(i, j, 1);
+                }
+                else{
+                    path.setMatrixField(i, j, 0);
+                }
+            }
+        }
+    }
+     */
     private void clearGridSoldiers() {
         for (int i = 0; i < this.row; ++i) {
             for (int j = 0; j < this.column; ++j) {
@@ -253,6 +321,7 @@ public final class GameLogic {
         }
     }
     public void initAttackPhase() {
+        //TODO: itt kéne összeszámolni a katonákat és pénzt adni a megfelelő játékosnak
         GameLogic.playerTurn = PlayerTurn.ATTACK;
         System.out.println("ATTACK!");
         stepCounter = 0;
@@ -298,9 +367,12 @@ public final class GameLogic {
             return;
         }
         ++stepCounter;
+        //TODO: create a method that accepts a function and executes it to all the grid elements.
+        //TODO: HANDLE WHEN TWO THINGS ARE IN THE SAME PLACE!!!
 
         clearGridSoldiers();
 
+        damageSoldiers();
         for(Soldier s : allSoldiers) {
             s.step(grids);
             int[] cords = s.getPos();
@@ -324,18 +396,44 @@ public final class GameLogic {
     }
 
     public void damageSoldiers(){
-        for(Soldier s : allSoldiers) {
-            int[] cords = s.getPos();
-            boolean takesDamage = false;
-            for(int i = -1; i <= 1; i++){
-                for(int j = -1; j <= 1; j++){
-                    if(grids[cords[0]+i][cords[1]+i].isTowerOnTheField()) {
-                        takesDamage = true;
-                    }
-                }
+        List<Soldier> deathSoldier = new ArrayList<>();
+        for (Field towerOrCastle:
+                towerAndCastle) {
+            int damage = 0;
+            int range = 0;
+            PlayerTurn attackerOwner = null;
+            if(towerOrCastle.isCastleOnTheField()){
+                Castle castle =towerOrCastle.getCastleOnTheField(); 
+                damage = castle.damage;
+                range = castle.range;
+                attackerOwner = castle.OwnerPlayer;
             }
-            if(takesDamage){
-                s.setHealth(s.getHealth()-30);
+            else if(towerOrCastle.isTowerOnTheField()){
+                Tower tower = towerOrCastle.getTowerOnTheField();
+                damage = tower.damage;
+                range = tower.range;
+                attackerOwner = tower.OwnerPlayer;
+            }
+            for(Soldier s : allSoldiers) {
+                    if(s.OwnerPlayer!=attackerOwner&&inTheDistance(towerOrCastle.y,towerOrCastle.x, s.x, s.y,range)){//problem with the x and y solved this way
+                        if(!s.minusHealth(damage)){
+                            deathSoldier.add(s);
+                        }
+                    }
+            }
+            for (Soldier death:
+                 deathSoldier) {
+                descUnitsAfterDeath(death.SoldierType,death.OwnerPlayer);
+                allSoldiers.remove(death);}
+        }
+    }
+    public void fillUpTowerAndCastleList(){
+        towerAndCastle.clear();
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < column; j++) {
+                if(grids[i][j].isTowerOnTheField()||grids[i][j].isCastleOnTheField()){
+                    towerAndCastle.add(grids[i][j]);
+                }
             }
         }
     }

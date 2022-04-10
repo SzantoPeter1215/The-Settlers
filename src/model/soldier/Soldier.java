@@ -9,7 +9,7 @@ import model.dijkstra.GraphUtils;
 import java.util.ArrayList;
 
 public class Soldier {
-    public int health;
+    private int health;
     private int damage;
     private int price;
     private final int tax;
@@ -36,6 +36,13 @@ public class Soldier {
         this.energy = 10;
 
         this.tax = 40;
+    }
+    public boolean minusHealth(int damage){
+        if((health-damage)>=0){
+            health -= damage;
+            return true;
+        }
+        return false;
     }
 
     /*
@@ -150,5 +157,4 @@ public class Soldier {
 
     public int getHealth() { return health; }
 
-    public void setHealth(int health) { this.health = health; }
 }
