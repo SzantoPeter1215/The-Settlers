@@ -259,7 +259,7 @@ public final class GameLogic {
         return false;
     }
 
-    private void addMoney(int amount, int player) {
+    public void addMoney(int amount, int player) {
 
         if(player == 1) {
             player1Gold += amount;
