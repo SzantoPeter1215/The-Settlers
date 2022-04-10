@@ -81,7 +81,15 @@ public class GameBoard extends JPanel {
                             minusMoney = gameLogic.getFillTowerType()==Type.TOWER2 ? GameConstants.TOWER2_PRICE : minusMoney;
                             if(!gameLogic.grids[x][y].getWater() && !gameLogic.grids[x][y].getHill() && gameLogic.canBuild(x,y)){
                                 if(gameLogic.removeMoney(minusMoney,GameLogic.playerTurn)) {
-                                    Tower newTowerOnThisField = new Tower(GameLogic.playerTurn, 100, gameLogic.getFillTowerType(),2,10);
+                                    Tower newTowerOnThisField;
+                                    if(gameLogic.getFillTowerType() == Type.TOWER1) {
+                                        newTowerOnThisField = new Tower(GameLogic.playerTurn,
+                                                100, gameLogic.getFillTowerType(),1,10);
+                                    } else {
+                                        newTowerOnThisField = new Tower(GameLogic.playerTurn,
+                                                100, gameLogic.getFillTowerType(),2,10);
+
+                                    }
                                     gameLogic.grids[x][y].addTower(newTowerOnThisField);
                                 } else {
                                     PopUp popUp = new PopUp("No money");
