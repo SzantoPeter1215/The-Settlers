@@ -109,7 +109,6 @@ public class GameBoard extends JPanel {
                         if(gameLogic.removeMoney(soldier.getPrice(),gameLogic.playerTurn)){
                             gameLogic.incPlayer1Unit1Number();
                             gameLogic.grids[player1_castle_x][player1_castle_y].addSoldier(soldier); //caslte start
-                            gameLogic.a
                         }
                     }
                 }

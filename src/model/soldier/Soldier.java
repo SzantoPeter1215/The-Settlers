@@ -35,6 +35,7 @@ public class Soldier {
         this.y = y;
         this.energy = 10;
         this.damage = 15;
+        this.price = 50;
 
         this.tax = 40;
     }

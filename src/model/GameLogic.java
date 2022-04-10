@@ -364,8 +364,6 @@ public final class GameLogic {
             return;
         }
         ++stepCounter;
-        //TODO: create a method that accepts a function and executes it to all the grid elements.
-        //TODO: HANDLE WHEN TWO THINGS ARE IN THE SAME PLACE!!!
 
         clearGridSoldiers();
 
@@ -426,7 +424,7 @@ public final class GameLogic {
                 attackerOwner = tower.OwnerPlayer;
             }
             for(Soldier s : allSoldiers) {
-                    if(s.OwnerPlayer!=attackerOwner&&inTheDistance(towerOrCastle.x,towerOrCastle.y, s.x, s.y,range)){//problem with the x and y solved this way
+                    if(s.OwnerPlayer!=attackerOwner&&inTheDistance(towerOrCastle.y,towerOrCastle.x, s.x, s.y,range)){//problem with the x and y solved this way
                         if(!s.minusHealth(damage)){
                             deathSoldier.add(s);
                         }
