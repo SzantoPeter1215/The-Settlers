@@ -21,8 +21,6 @@ public final class GameLogic {
     public static PlayerTurn playerTurn = PlayerTurn.PLAYER1;
     private int player1Gold = GameConstants.START_GOLD_PLAYER;
     private int player2Gold = GameConstants.START_GOLD_PLAYER;
-    //TODO: a castle helyét am nem a logicban kéne tartani?
-    // Vagy jó a megjelenítési rétegben mert nem függ tőle a többi esemény.
     public Position player1Castle;
     public Position player2Castle;
 
@@ -140,34 +138,30 @@ public final class GameLogic {
         stepCounter = 0;
         initGrid();
 
+        //TODO: remove , just for testing hill and wa'er. Migh causes out of index error (decrease the sizes then)
+        //0-17
+        for(int k = 0; k < 23; ++k) {
+            for(int i = 0; i < 10; ++i) {
+                if(k % 6 == 0) continue;
+                if(i == 5) continue;
+                grids[i][13 + k].addHill();
+
+            }
+        }
+
+        for(int k = 0; k < 23; k+=3) {
+            for(int i = 0; i < 10; i+= 2) {
+                grids[i][13 + k].isHill = false;
+                grids[i][13 + k].addWater();
+            }
+        }
+
         initInfoBoard();
-        //path.initMatrix(column);
 
         allSoldiers = new ArrayList<>();
 
         graphForRegular = new Graph();
         graphForCLimber = new Graph();
-
-        //TODO: remove the inital solder makes after yopu can create your own!
-
-
-/*        grids[1][1] = Type.SOLDER1;
-        player1Soldiers.add(new Soldier(SoldierType.REGULAR, 1,1));
-
-        grids[10][1] = Type.SOLDER1;
-        player1Soldiers.add(new Soldier(SoldierType.CLIMBER, 10,1));
-
-        grids[1][10] = Type.SOLDER2;
-        player2Soldiers.add(new Soldier(SoldierType.REGULAR, 1,10));
-
-        grids[10][10] = Type.SOLDER2;
-        player2Soldiers.add(new Soldier(SoldierType.CLIMBER, 10,10));*/
-
-
-
-
-
-        //TODO: set the grids to their default type. (according to the map we choose)
 
         infoBoard.reset(userName);
 
@@ -241,21 +235,6 @@ public final class GameLogic {
 
         }
     }
-
-    /*
-    private void updatePathMatrix() {
-        for (int i = 0; i < this.row; ++i) {
-            for (int j = 0; j < this.column; ++j) {
-                if(!grids[i][j].isCastleOnTheField()&&!grids[i][j].isTowerOnTheField()){
-                    path.setMatrixField(i, j, 1);
-                }
-                else{
-                    path.setMatrixField(i, j, 0);
-                }
-            }
-        }
-    }
-     */
     private void clearGridSoldiers() {
         for (int i = 0; i < this.row; ++i) {
             for (int j = 0; j < this.column; ++j) {
@@ -266,7 +245,6 @@ public final class GameLogic {
         }
     }
     public void initAttackPhase() {
-        //TODO: itt kéne összeszámolni a katonákat és pénzt adni a megfelelő játékosnak
         GameLogic.playerTurn = PlayerTurn.ATTACK;
         System.out.println("ATTACK!");
         stepCounter = 0;
@@ -304,8 +282,6 @@ public final class GameLogic {
             return;
         }
         ++stepCounter;
-        //TODO: create a method that accepts a function and executes it to all the grid elements.
-        //TODO: HANDLE WHEN TWO THINGS ARE IN THE SAME PLACE!!!
 
         clearGridSoldiers();
 

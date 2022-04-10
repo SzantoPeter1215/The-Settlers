@@ -22,6 +22,8 @@ public final class GameUIConstants {
     public final static String Player1Tower2 = "images/player1_tower2.png";
     public final static String Player2Tower1 = "images/player2_tower1.png";
     public final static String Player2Tower2 = "images/player2_tower2.png";
+    public final static String Hill = "images/mountain_final.png";
+    public final static String Water = "images/water.png";
     public Rectangle gameareaREACT;
     public Rectangle player1InfoBoard;
     public Rectangle player2InfoBoard;

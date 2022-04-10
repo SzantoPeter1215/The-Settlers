@@ -29,8 +29,6 @@ public class TheScreen {
         }
         return false;
     }
-    //TODO: mi a különbésg a változók között?? Konstansokat adunk össze
-    // meg szorzunk ez miért nem lehet lokális változó?
     public boolean playerInfoBoardTower2_clicked(int x, int y){
         if(GameLogic.playerTurn==PlayerTurn.PLAYER1){
             int startOfThePlayer1InfoBoard = (gameConstants.player1InfoBoard.y+(GameUIConstants.SMALL_FONT.getSize()*2));

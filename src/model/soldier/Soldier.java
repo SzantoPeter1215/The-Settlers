@@ -11,7 +11,7 @@ public class Soldier {
     public int health;
     private int damage;
     private int price;
-    private int tax;
+    private final int tax;
     private boolean canClimb;
     private Type type;
     public PlayerTurn OwnerPlayer;
@@ -30,6 +30,8 @@ public class Soldier {
         this.SoldierType = SoldierType;
         this.x = x;
         this.y = y;
+
+        this.tax = 40;
     }
 
     /*
