@@ -1,5 +1,6 @@
 package model.soldier;
 import gui.GameUIConstants;
+import model.Field;
 import model.PlayerTurn;
 import model.Type;
 import model.dijkstra.Graph;
@@ -19,6 +20,8 @@ public class Soldier {
     public int x;
     public int y;
 
+    public int energy;
+
     private ArrayList<Integer> currentPathX;
     private ArrayList<Integer> currentPathY;
 
@@ -30,6 +33,7 @@ public class Soldier {
         this.SoldierType = SoldierType;
         this.x = x;
         this.y = y;
+        this.energy = 10;
 
         this.tax = 40;
     }
@@ -82,21 +86,43 @@ public class Soldier {
         return res;
     }
 
-    public void createPath(Graph tree, int castleX, int castleY) {
+    public boolean createPath(Graph tree, int castleX, int castleY) {
         System.out.println(x + " " + y + " " + castleX + " " + castleY);
         ArrayList<Integer>[] currentPath = GraphUtils.getPath(tree, x, y, castleX, castleY);
 
-        assert currentPath != null;
+        //assert currentPath != null;
+        if(currentPath == null) return false;
         currentPathX = currentPath[0];
         currentPathY = currentPath[1];
+        return true;
     }
 
-    public void step() {
+    public void restoreEnergy() {
+        this.energy = 10;
+    }
+
+    public void step(Field matrix[][]) {
         currentPathX.remove(0);
         currentPathY.remove(0);
-        this.x = currentPathX.get(0);
-        this.y = currentPathY.get(0);
+        int toStepX = currentPathX.get(0);
+        int toStepY = currentPathY.get(0);
+
+        if(matrix[toStepX][toStepY].getHill()) {
+            if(this.SoldierType == Type.PLAYER1_SOLDIER1 || this.SoldierType == Type.PLAYER2_SOLDIER1) {
+                this.energy -= 9;
+            }
+        } else {
+            this.energy--;
+        }
+
+        if(energy >= 0) {
+            this.x = toStepX;
+            this.y = toStepY;
+        }
+
     }
+
+
     public String getSoliderImage(){
         if(OwnerPlayer==PlayerTurn.PLAYER1&&SoldierType==Type.PLAYER1_SOLDIER1){
             return GameUIConstants.player1Soldier1;
@@ -114,7 +140,7 @@ public class Soldier {
     }
 
     public Type getType() {
-        return this.type;
+        return this.SoldierType;
     }
 
     public int getTax() {

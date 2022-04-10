@@ -9,6 +9,6 @@ public final class GameConstants {
     public static final int TOWER1_PRICE = 50;
     public static final int TOWER2_PRICE = 100;
 
-    public static final int ATTACK_ROUNDS = 3;
+    public static final int ATTACK_ROUNDS = 10;
 
 }

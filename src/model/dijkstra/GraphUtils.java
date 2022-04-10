@@ -99,123 +99,128 @@ public class GraphUtils {
         Graph graph1 = new Graph();
         Graph graph2 = new Graph();
 
-        // Converting table to nodes
+        ArrayList<String> blockList = new ArrayList<>();
+        ArrayList<String> hillList = new ArrayList<>();
 
-        /*
+
         for(int y = 0; y < matrix.length; ++y) {
             for(int x = 0; x < matrix[y].length; ++x) {
 
                 Field current = matrix[y][x];
-
-
-                String thisNodeName = "(" + x + ", " + y + ")";
-
-                int weightRegular;
-                int weightClimber = 1;
+                String thisNodeName = "(" + y + ", " + x + ")";
 
                 if(current.getWater() || current.isTowerOnTheField()) {
-                    System.out.println("breaked");
-                    System.out.println(thisNodeName);
-
-                    continue;
+                    blockList.add(thisNodeName);
+                    //System.out.println(thisNodeName);
                 }
                 if(current.getHill()) {
-                    weightRegular = 3;
-                } else {
-                    weightRegular = 1;
+                    hillList.add(thisNodeName);
+                    //System.out.print(" " + thisNodeName);
                 }
-
-                if (y > 0) {
-                    String destNodeName = "(" + x + ", " + (y - 1) + ")";
-                    graph1.addEdge(thisNodeName, destNodeName, weightRegular);
-                    graph2.addEdge(thisNodeName, destNodeName, weightClimber);
-                }
-
-                if (y < matrix.length - 1) {
-                    String destNodeName = "(" + (x) + ", " + (y + 1) + ")";
-                    graph1.addEdge(thisNodeName, destNodeName, weightRegular);
-                    graph2.addEdge(thisNodeName, destNodeName, weightClimber);
-                }
-
-                if (x < matrix[y].length - 1) {
-                    String destNodeName = "(" + (x + 1) + ", " + (y) + ")";
-                    graph1.addEdge(thisNodeName, destNodeName, weightRegular);
-                    graph2.addEdge(thisNodeName, destNodeName, weightClimber);
-                }
-
-                if (x > 0) {
-                    String destNodeName = "(" + (x - 1) + ", " + (y) + ")";
-                    graph1.addEdge(thisNodeName, destNodeName, weightRegular);
-                    graph2.addEdge(thisNodeName, destNodeName, weightClimber);
-                }
-
             }
-        }*/
+        }
 
-        ArrayList<String> blockList = new ArrayList<>();
 
         for(int y = 0; y < matrix.length; ++y) {
             for(int x = 0; x < matrix[y].length; ++x) {
 
-                Field current = matrix[y][x];
+                //Field current = matrix[y][x];
 
 
                 String thisNodeName = "(" + y + ", " + x + ")";
 
-                int weightRegular;
-                int weightClimber = 1;
-
-                if(current.getWater() || current.isTowerOnTheField()) {
-                    //System.out.println("breaked");
-                    //System.out.println(thisNodeName);
-                    blockList.add(thisNodeName);
-                    continue;
-                }
-                if(current.getHill()) {
-                    weightRegular = 3;
-                } else {
-                    weightRegular = 1;
-                }
-
                 if (y > 0) {
                     String destNodeName = "(" + (y - 1) + ", " + x + ")";
-                    if(blockList.contains(destNodeName)) continue;
-                    graph1.addEdge(thisNodeName, destNodeName, weightRegular);
-                    graph2.addEdge(thisNodeName, destNodeName, weightClimber);
+                    if(!thisNodeName.equals(destNodeName)) {
+                        String added = thisNodeName + destNodeName;
+                        String addedReverse = destNodeName + thisNodeName;
+                        if(!blockList.contains(thisNodeName) && !blockList.contains(destNodeName) && !blockList.contains(added) && !blockList.contains(addedReverse)) {
+                            blockList.add(added);
+                            graph2.addEdge(thisNodeName, destNodeName, 1);
+                            Field toAdd = matrix[y - 1][x];
+                            if(!hillList.contains(thisNodeName) && !hillList.contains(destNodeName)) {
+                                graph1.addEdge(thisNodeName, destNodeName, 1);
+                            } else {
+                                //System.out.println("Hill: " + thisNodeName + " " + destNodeName);
 
-                    //System.out.print(thisNodeName + "-" + destNodeName + " | ");
+                            }
+                        }
+                    } else {
+                        System.out.println("equals");
+                    }
+
+                    //System.out.print(thisNodeName + "-" + destNodeName + ", " + (weightRegular + weightToAdd) + " | ");
                 }
 
                 if (y < matrix.length - 1) {
                     String destNodeName = "(" + (y + 1) + ", " + x + ")";
-                    if(blockList.contains(destNodeName)) continue;
-                    graph1.addEdge(thisNodeName, destNodeName, weightRegular);
-                    graph2.addEdge(thisNodeName, destNodeName, weightClimber);
-                    //System.out.print(thisNodeName + "-" + destNodeName + " | ");
+                    if(!thisNodeName.equals(destNodeName)) {
+                        String added = thisNodeName + destNodeName;
+                        String addedReverse = destNodeName + thisNodeName;
+                        if(!blockList.contains(thisNodeName) && !blockList.contains(destNodeName) && !blockList.contains(added) && !blockList.contains(addedReverse)) {
+                            blockList.add(added);
+                            graph2.addEdge(thisNodeName, destNodeName, 1);
+                            Field toAdd = matrix[y + 1][x];
+                            if(!hillList.contains(thisNodeName) && !hillList.contains(destNodeName)) {
+                                graph1.addEdge(thisNodeName, destNodeName, 1);
+                            } else {
+                                //System.out.println("Hill: " + thisNodeName + " " + destNodeName);
+
+                            }
+                        }
+                    } else {
+                        System.out.println("equals");
+                    }
+                    //System.out.print(thisNodeName + "-" + destNodeName + ", " + (weightRegular + weightToAdd) + " | ");
 
                 }
 
                 if (x < matrix[y].length - 1) {
                     String destNodeName = "(" + y + ", " + (x + 1) + ")";
-                    if(blockList.contains(destNodeName)) continue;
-                    graph1.addEdge(thisNodeName, destNodeName, weightRegular);
-                    graph2.addEdge(thisNodeName, destNodeName, weightClimber);
-                    //System.out.print(thisNodeName + "-" + destNodeName + " | ");
+                    if(!thisNodeName.equals(destNodeName)) {
+                        String added = thisNodeName + destNodeName;
+                        String addedReverse = destNodeName + thisNodeName;
+                        if(!blockList.contains(thisNodeName) && !blockList.contains(destNodeName) && !blockList.contains(added) && !blockList.contains(addedReverse)) {
+                            blockList.add(added);
+                            graph2.addEdge(thisNodeName, destNodeName, 1);
+                            Field toAdd = matrix[y][x + 1];
+                            if(!hillList.contains(thisNodeName) && !hillList.contains(destNodeName)) {
+                                graph1.addEdge(thisNodeName, destNodeName, 1);
+                            } else {
+                                //System.out.println("Hill: " + thisNodeName + " " + destNodeName);
+
+                            }
+                        }
+                    } else {
+                        System.out.println("equals");
+                    }
+                    //System.out.print(thisNodeName + "-" + destNodeName + ", " + (weightRegular + weightToAdd) + " | ");
 
                 }
 
                 if (x > 0) {
                     String destNodeName = "(" + y + ", " + (x - 1) + ")";
-                    if(blockList.contains(destNodeName)) continue;
-                    graph1.addEdge(thisNodeName, destNodeName, weightRegular);
-                    graph2.addEdge(thisNodeName, destNodeName, weightClimber);
-                    //System.out.print(thisNodeName + "-" + destNodeName + " | ");
+                    if(!thisNodeName.equals(destNodeName)) {
+                        String added = thisNodeName + destNodeName;
+                        String addedReverse = destNodeName + thisNodeName;
+                        if(!blockList.contains(thisNodeName) && !blockList.contains(destNodeName) && !blockList.contains(added) && !blockList.contains(addedReverse)) {
+                            blockList.add(added);
+                            graph2.addEdge(thisNodeName, destNodeName, 1);
+                            Field toAdd = matrix[y][x - 1];
+                            if(!hillList.contains(thisNodeName) && !hillList.contains(destNodeName)) {
+                                graph1.addEdge(thisNodeName, destNodeName, 1);
+                            } else {
+                                //System.out.println("Hill: " + thisNodeName + " " + destNodeName);
 
+                            }
+
+                        }
+                    } else {
+                        System.out.println("equals");
+                    }
                 }
 
             }
-            //System.out.print("\n");
-
         }
 
         for(int y = 0; y < matrix.length && false; ++y) {
@@ -260,3 +265,5 @@ public class GraphUtils {
         }
     }
 }
+
+//https://github.com/zhaohuabing/shortest-path-weighted-graph-dijkstra-java

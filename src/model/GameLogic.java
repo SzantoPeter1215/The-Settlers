@@ -140,19 +140,27 @@ public final class GameLogic {
 
         //TODO: remove , just for testing hill and wa'er. Migh causes out of index error (decrease the sizes then)
         //0-17
-        for(int k = 0; k < 23; ++k) {
-            for(int i = 0; i < 10; ++i) {
-                if(k % 6 == 0) continue;
-                if(i == 5) continue;
-                grids[i][13 + k].addHill();
+        for(int k = 0; k < this.row; ++k) {
+            if(k == this.row / 2) continue;
+
+            for(int i = this.column / 2 - this.column / 5; i <this.column / 2 + this.column / 5; ++i) {
+
+                grids[k][i].addHill();
+
+                if(i%5 == 0 && k % 2 == 0) {
+                    grids[k][i].isHill = false;
+                    grids[k][i].addWater();
+                } else if(i % 3 == 0 && k%5 == 0) {
+                    grids[k][i].isHill = false;
+
+                }
 
             }
         }
 
-        for(int k = 0; k < 23; k+=3) {
-            for(int i = 0; i < 10; i+= 2) {
-                grids[i][13 + k].isHill = false;
-                grids[i][13 + k].addWater();
+        for(int k = 0; k < 20; k+=3) {
+            for(int i = 0; i < 7; i+= 2) {
+
             }
         }
 
@@ -248,7 +256,6 @@ public final class GameLogic {
         GameLogic.playerTurn = PlayerTurn.ATTACK;
         System.out.println("ATTACK!");
         stepCounter = 0;
-        //updatePathMatrix();
 
         //Time to create the two graphs for the path finder to solve
         Graph[] res = GraphUtils.constructGraph(grids);
@@ -260,17 +267,26 @@ public final class GameLogic {
 
 
         for(Soldier s : allSoldiers) {
+            s.restoreEnergy();
 
             if(PlayerTurn.PLAYER1==s.OwnerPlayer){
-                s.createPath(s.getType() == Type.PLAYER1_SOLDIER1?
+                boolean found = s.createPath(s.getType() == Type.PLAYER1_SOLDIER1?
                         graphForRegular :
                         graphForCLimber ,player2Castle.x, player2Castle.y);
+                if(!found) {
+                    s.createPath(graphForCLimber ,player2Castle.x, player2Castle.y);
+                    //todo handle if this is null.
+                }
+
                 addMoney(s.getTax(), 1);
             }
             else{
-                s.createPath(s.getType() == Type.PLAYER2_SOLDIER1?
+                boolean found = s.createPath(s.getType() == Type.PLAYER2_SOLDIER1?
                         graphForRegular :
                         graphForCLimber ,player1Castle.x, player1Castle.y);
+                if(!found) {
+                    s.createPath(graphForCLimber ,player1Castle.x, player1Castle.y);
+                }
                 addMoney(s.getTax(), 2);
             }
         }
@@ -286,21 +302,12 @@ public final class GameLogic {
         clearGridSoldiers();
 
         for(Soldier s : allSoldiers) {
-            s.step();
+            s.step(grids);
             int[] cords = s.getPos();
             grids[cords[0]][cords[1]].addSoldier(s);
 
         }
         addSoldiersToLists();
-/*
-
-        for(Soldier s : player2Soldiers) {
-            s.step();
-            int[] cords = s.getPos();
-            grids[cords[0]][cords[1]].addSoldier(s);
-
-        }
-*/
         //damageSoldiers();
     }
 
@@ -335,5 +342,31 @@ public final class GameLogic {
 
     public InfoBoard getInfoBoard() {
         return infoBoard;
+    }
+
+    public boolean canBuild(int x, int y) {
+        int[][] matrix = new int[grids.length][grids[0].length];
+
+        for(int i = 0; i < grids.length; ++i) {
+            for(int j = 0; j < grids[0].length; ++j) {
+                Field current = grids[i][j];
+                //TODO: maybe reverse
+                if(i == x && j == y) {
+                    matrix[i][j] = 0;
+                } else if(!current.isTowerOnTheField() && !current.getWater()) {
+                    matrix[i][j] = 1;
+                }
+                else {
+                    matrix[i][j] = 0;
+                }
+            }
+        }
+
+        int[] pos1 = {player1Castle.x,player1Castle.y};
+        int[] pos2 = {player2Castle.x,player2Castle.y};
+
+        boolean res = CheckRouteExist.check(matrix, pos1, pos2);
+        System.out.println(res);
+        return res;
     }
 }

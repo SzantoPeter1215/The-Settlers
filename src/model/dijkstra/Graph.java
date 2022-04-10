@@ -53,6 +53,7 @@ public class Graph {
                     return getPath(parents, endNodeName);
                 }
 
+                if(nodes.get(currentPathNode.name) == null) return null;
                 Node[] neighbors = nodes.get(currentPathNode.name).getNeighbors();
                 for (int i = 0; i < neighbors.length; i++) {
                     Node neighbor = neighbors[i];
