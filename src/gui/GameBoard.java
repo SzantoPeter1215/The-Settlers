@@ -255,9 +255,11 @@ public class GameBoard extends JPanel {
                     clickableObject.add(new Position(currentField.x,currentField.y));
                 }
                 else if(localGrid[y_col][x_row].getHill()){
+                    drawFixedRectAngleFieldWithImage(graphics2D,currentField.x,currentField.y,GameUIConstants.Hill,false);
                     imageLoader.loadImage(graphics2D,currentField.x,currentField.y,GameUIConstants.Hill);
                 }
                 else if(localGrid[y_col][x_row].getWater()){
+                    drawFixedRectAngleFieldWithImage(graphics2D,currentField.x,currentField.y,GameUIConstants.Water,false);
                     imageLoader.loadImage(graphics2D,currentField.x,currentField.y,GameUIConstants.Water);
                 }
 
