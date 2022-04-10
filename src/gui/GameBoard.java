@@ -181,6 +181,9 @@ public class GameBoard extends JPanel {
             if(GameLogic.playerTurn == PlayerTurn.ATTACK) {
                 gameLogic.nextAttackPhase();
             }
+            if(gameLogic.isGameOver()){
+                gameLogic.newGame(15,10,"");
+            }
             repaint();
         }
     };
