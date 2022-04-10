@@ -6,10 +6,14 @@ public class Castle {
     public PlayerTurn OwnerPlayer;
     public int health;
     public Type TowerType;
-    public Castle(PlayerTurn OwnerPlayer,int health,Type TowerType){
+    public int range;
+    public int damage;
+    public Castle(PlayerTurn OwnerPlayer,int health,Type TowerType, int range,int damage){
         this.OwnerPlayer = OwnerPlayer;
         this.health = health;
         this.TowerType = TowerType;
+        this.range = range;
+        this.damage = damage;
     }
     public Type getCastlePlayer(PlayerTurn OwnerPlayer){
         if(OwnerPlayer==PlayerTurn.PLAYER1){

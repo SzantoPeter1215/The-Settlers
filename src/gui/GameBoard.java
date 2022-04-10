@@ -45,6 +45,7 @@ public class GameBoard extends JPanel {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
+                //TODO: create disabled state for the WHOLE INFO BOARD!!
                 if(GameLogic.playerTurn == null) return;
                 int startOfThePlayer1InfoBoard = (gameConstants.player1InfoBoard.y+(GameUIConstants.SMALL_FONT.getSize()*2));
                 int endOfThePlayer1InfoBoard = startOfThePlayer1InfoBoard+GameUIConstants.GAME_AREA_RECTANGLE;
@@ -52,6 +53,7 @@ public class GameBoard extends JPanel {
                 int player1_castle_y = gameLogic.player1Castle.y;
                 int player2_castle_x = gameLogic.player2Castle.x;
                 int player2_castle_y = gameLogic.player2Castle.y;
+                //TODO: REFACTOR!
                 InfoBoard infoBoard = gameLogic.getInfoBoard();
                 if (infoBoard.isGameOver()) {
                     startNewGame();
@@ -79,7 +81,7 @@ public class GameBoard extends JPanel {
                             minusMoney = gameLogic.getFillTowerType()==Type.TOWER2 ? GameConstants.TOWER2_PRICE : minusMoney;
                             if(!gameLogic.grids[x][y].getWater() && !gameLogic.grids[x][y].getHill()){
                                 if(gameLogic.removeMoney(minusMoney,GameLogic.playerTurn)) {
-                                    Tower newTowerOnThisField = new Tower(GameLogic.playerTurn, 100, gameLogic.getFillTowerType());
+                                    Tower newTowerOnThisField = new Tower(GameLogic.playerTurn, 100, gameLogic.getFillTowerType(),2,10);
                                     gameLogic.grids[x][y].addTower(newTowerOnThisField);
                                 } else {
                                     PopUp popUp = new PopUp("No money");
@@ -144,6 +146,7 @@ public class GameBoard extends JPanel {
                         GameLogic.playerTurn = PlayerTurn.PLAYER2;
                     }
                 }
+                gameLogic.fillUpTowerAndCastleList();
                 repaint();
             }
         });
@@ -168,6 +171,8 @@ public class GameBoard extends JPanel {
 
 
     private void drawStartScreen(Graphics2D graphics2D) {
+
+        //TODO: remove all this. just example
         graphics2D.setFont(GameUIConstants.MAIN_FONT);
 
         graphics2D.setColor(Color.black);
@@ -182,27 +187,21 @@ public class GameBoard extends JPanel {
 
 
     }
-    private boolean inTheDistance(int origin_x, int origin_y,int x , int y, int distance){
-        if((gameLogic.getColumn()>x&&0<=x)&&y<gameLogic.getRow()&&y>=0){
-            return Math.abs(x-origin_x)<=distance&&Math.abs(y-origin_y)<=distance;
-        }
-        return false;
-    }
+    //TODO:refactor!
     private void drawTowerRange(Graphics2D graphics2D){
-        List<Field> towerAndCastles = new ArrayList<>();
-        for (int y_col = 0; y_col < gameLogic.getRow(); y_col++) {
-            for (int x_row = 0; x_row < gameLogic.getColumn(); x_row++) {
-                if(gameLogic.grids[y_col][x_row].hasRange()){
-                    towerAndCastles.add(gameLogic.grids[y_col][x_row]);
-                }
-            }
-        }
-        for (Field rangedObject : towerAndCastles) {
+        for (Field rangedObject : gameLogic.towerAndCastle) {
             for (int y_col = 0; y_col < gameLogic.getRow(); y_col++) {
                 for (int x_row = 0; x_row < gameLogic.getColumn(); x_row++) {
-                   if(inTheDistance(rangedObject.x,rangedObject.y,x_row,y_col,1)){
-                       drawTowerRange(graphics2D,x_row,y_col);
-                   }
+                    if(rangedObject.isCastleOnTheField()){
+                        if(gameLogic.inTheDistance(rangedObject.x,rangedObject.y,x_row,y_col,rangedObject.getCastleOnTheField().range)){
+                            drawTowerRange(graphics2D,x_row,y_col,rangedObject.getCastleOnTheField().OwnerPlayer);
+                        }
+                    }
+                    else if(rangedObject.isTowerOnTheField()){
+                        if(gameLogic.inTheDistance(rangedObject.x,rangedObject.y,x_row,y_col,rangedObject.getTowerOnTheField().range)){
+                            drawTowerRange(graphics2D,x_row,y_col, rangedObject.getTowerOnTheField().OwnerPlayer);
+                        }
+                    }
                 }
             }
         }
@@ -214,10 +213,11 @@ public class GameBoard extends JPanel {
                 GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.GAME_AREA_RECTANGLE);
     }
     private Rectangle getHealthBar(int x, int y){
-        return new  Rectangle(gameConstants.gameareaREACT.x+x* GameUIConstants.GAME_AREA_RECTANGLE + 5,gameConstants.gameareaREACT.y+y*GameUIConstants.GAME_AREA_RECTANGLE,40,5);
+        return new  Rectangle(gameConstants.gameareaREACT.x+x* GameUIConstants.GAME_AREA_RECTANGLE + 5,gameConstants.gameareaREACT.y+y*GameUIConstants.GAME_AREA_RECTANGLE,40,20);
     }
-    private Rectangle fillHealthBar(int x, int y, int percentage){
-        return new Rectangle(gameConstants.gameareaREACT.x+x* GameUIConstants.GAME_AREA_RECTANGLE + 5,gameConstants.gameareaREACT.y+y*GameUIConstants.GAME_AREA_RECTANGLE,(int)(percentage * 40),5);
+    private Rectangle fillHealthBar(int x, int y, double percentage){
+        int width = (int)(40*percentage);
+        return new Rectangle(gameConstants.gameareaREACT.x+x* GameUIConstants.GAME_AREA_RECTANGLE + 5,gameConstants.gameareaREACT.y+y*GameUIConstants.GAME_AREA_RECTANGLE,width,5);
     }
     private void drawModelToTheGamearea(Graphics2D graphics2D, Field[][] localGrid) {
         clickableObject.clear();
@@ -225,12 +225,12 @@ public class GameBoard extends JPanel {
             for (int x_row = 0; x_row < gameLogic.getColumn(); x_row++) {
                 Rectangle currentField = getGameAreaField(x_row,y_col);
                 graphics2D.setColor(Color.BLACK);
+                //todo it needs to beredone
                 if(localGrid[y_col][x_row].isCastleOnTheField()){
                     Castle castleOnTheField = localGrid[y_col][x_row].getCastleOnTheField();
                     imageLoader.loadImage(graphics2D,currentField.x,currentField.y,castleOnTheField.castleImage());
-                } else if(localGrid[y_col][x_row].getWater()) {
-                    imageLoader.loadImage(graphics2D,currentField.x,currentField.y, GameUIConstants.Water);
-                } else if(localGrid[y_col][x_row].isTowerOnTheField()){
+                }
+                else if(localGrid[y_col][x_row].isTowerOnTheField()){
                     Tower towerOnThisField = localGrid[y_col][x_row].getTowerOnTheField();
                     imageLoader.loadImage(graphics2D,currentField.x,currentField.y,Tower.towerImage(Tower.playerTowerType(towerOnThisField.OwnerPlayer,towerOnThisField.TowerType)));
                 }
@@ -241,7 +241,7 @@ public class GameBoard extends JPanel {
                     graphics2D.setColor(Color.red);
                     graphics2D.fill(healthbar);
                     double percentage = (double) soldier.getHealth() / 100;
-                    Rectangle health = fillHealthBar(x_row,y_col,(int) percentage);
+                    Rectangle health = fillHealthBar(x_row,y_col,percentage);
                     graphics2D.setColor(Color.green);
                     graphics2D.fill(health);
                 }
@@ -249,9 +249,6 @@ public class GameBoard extends JPanel {
                     graphics2D.setFont(GameUIConstants.MAIN_FONT);
                     graphics2D.drawString("X", currentField.x,currentField.y+GameUIConstants.GAME_AREA_RECTANGLE);
                     clickableObject.add(new Position(currentField.x,currentField.y));
-                }
-                else if (localGrid[y_col][x_row].getHill()) {
-                    imageLoader.loadImage(graphics2D,currentField.x,currentField.y, GameUIConstants.Hill);
                 }
                 else{
                     graphics2D.draw(currentField);
@@ -269,6 +266,7 @@ public class GameBoard extends JPanel {
         graphics2D.setStroke(GameUIConstants.SMALL_STROKE);
 
         Field[][] localGrid = gameLogic.getGrids();
+        //TODO: SWICH A SOK IF HELYETT! meg ez az image loaderes dolog is ismétlés.
         drawModelToTheGamearea(graphics2D, localGrid);
     }
     private void drawOutTowerUnitsInfoboard(Graphics2D graphics2D,boolean player1Tower1,boolean player1Tower2,boolean player2Tower1,boolean player2Tower2, boolean isPlayer1Turn,boolean isPlayer2Turn){
@@ -314,11 +312,17 @@ public class GameBoard extends JPanel {
         graphics2D.draw(field);
         graphics2D.setStroke(GameUIConstants.SMALL_STROKE); //clear things out
     }
-    private void drawTowerRange(Graphics2D graphics2D,int x, int y){
+    private void drawTowerRange(Graphics2D graphics2D,int x, int y, PlayerTurn playerTurn){
         Rectangle area = getGameAreaField(x,y);
-        Color c1 = new Color(255,102,102);
+        Color red = new Color(255,102,102);
+        Color blue = new Color(0,0,255);
         graphics2D.setStroke(GameUIConstants.LARGE_STROKE); //clear things out
-        graphics2D.setColor(c1);
+        if(playerTurn==PlayerTurn.PLAYER1){
+            graphics2D.setColor(blue);
+        }
+        else{
+            graphics2D.setColor(red);
+        }
         graphics2D.draw(area);
         graphics2D.setColor(Color.black);
         graphics2D.setStroke(GameUIConstants.SMALL_STROKE);
@@ -346,7 +350,7 @@ public class GameBoard extends JPanel {
             SoldierStates(graphics2D,false,false,true,true);
         }
     }
-    private void drawOutEndButton(Graphics2D graphics2D){
+    private void drawOutEndButton(Graphics2D graphics2D){//todo: when someone clicks on this the tower image become disabled
         graphics2D.setStroke(GameUIConstants.SMALL_STROKE);
         graphics2D.drawString(GameLogic.playerTurn==PlayerTurn.PLAYER1 ? "not my turn" : "end turn",
                 gameConstants.player2_text_onInfoBoard.x,gameConstants.player2_text_onInfoBoard.y);
