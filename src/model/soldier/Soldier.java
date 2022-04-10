@@ -113,6 +113,8 @@ public class Soldier {
     public void step(Field matrix[][]) {
         currentPathX.remove(0);
         currentPathY.remove(0);
+
+        if(currentPathX.size() == 0) return;
         int toStepX = currentPathX.get(0);
         int toStepY = currentPathY.get(0);
 
