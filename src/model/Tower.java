@@ -8,7 +8,7 @@ public class Tower {
     public Type TowerType;
     public int range;
     public int damage;
-    public Tower(PlayerTurn OwnerPlayer,int health,Type TowerType, int towerRange, int damge){
+    public Tower(PlayerTurn OwnerPlayer,int health,Type TowerType, int towerRange, int damage){
         this.health = health;
         this.OwnerPlayer = OwnerPlayer;
         this.TowerType = TowerType;

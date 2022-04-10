@@ -213,11 +213,20 @@ public class GameBoard extends JPanel {
                 GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.GAME_AREA_RECTANGLE);
     }
     private Rectangle getHealthBar(int x, int y){
-        return new  Rectangle(gameConstants.gameareaREACT.x+x* GameUIConstants.GAME_AREA_RECTANGLE + 5,gameConstants.gameareaREACT.y+y*GameUIConstants.GAME_AREA_RECTANGLE,40,20);
+        return new  Rectangle(gameConstants.gameareaREACT.x+x* GameUIConstants.GAME_AREA_RECTANGLE + 5,gameConstants.gameareaREACT.y+y*GameUIConstants.GAME_AREA_RECTANGLE,40,9);
     }
     private Rectangle fillHealthBar(int x, int y, double percentage){
         int width = (int)(40*percentage);
-        return new Rectangle(gameConstants.gameareaREACT.x+x* GameUIConstants.GAME_AREA_RECTANGLE + 5,gameConstants.gameareaREACT.y+y*GameUIConstants.GAME_AREA_RECTANGLE,width,5);
+        return new Rectangle(gameConstants.gameareaREACT.x+x* GameUIConstants.GAME_AREA_RECTANGLE + 5,gameConstants.gameareaREACT.y+y*GameUIConstants.GAME_AREA_RECTANGLE+2,width,5);
+    }
+    private void makeHealthBar(Graphics2D graphics2D,int x, int y,int healthFromSoldier){
+        Rectangle healthbar = getHealthBar(x,y);
+        graphics2D.setColor(Color.red);
+        graphics2D.fill(healthbar);
+        double percentage = (double) healthFromSoldier / 100;
+        Rectangle health = fillHealthBar(x,y,percentage);
+        graphics2D.setColor(Color.green);
+        graphics2D.fill(health);
     }
     private void drawModelToTheGamearea(Graphics2D graphics2D, Field[][] localGrid) {
         clickableObject.clear();
@@ -229,6 +238,7 @@ public class GameBoard extends JPanel {
                 if(localGrid[y_col][x_row].isCastleOnTheField()){
                     Castle castleOnTheField = localGrid[y_col][x_row].getCastleOnTheField();
                     imageLoader.loadImage(graphics2D,currentField.x,currentField.y,castleOnTheField.castleImage());
+                    makeHealthBar(graphics2D,x_row,y_col,castleOnTheField.health);
                 }
                 else if(localGrid[y_col][x_row].isTowerOnTheField()){
                     Tower towerOnThisField = localGrid[y_col][x_row].getTowerOnTheField();
@@ -237,13 +247,7 @@ public class GameBoard extends JPanel {
                 else if(localGrid[y_col][x_row].CountOfTheSoldier()==1){
                     Soldier soldier = localGrid[y_col][x_row].getFirstSoldier();
                     imageLoader.loadImage(graphics2D,currentField.x,currentField.y,soldier.getSoliderImage());
-                    Rectangle healthbar = getHealthBar(x_row,y_col);
-                    graphics2D.setColor(Color.red);
-                    graphics2D.fill(healthbar);
-                    double percentage = (double) soldier.getHealth() / 100;
-                    Rectangle health = fillHealthBar(x_row,y_col,percentage);
-                    graphics2D.setColor(Color.green);
-                    graphics2D.fill(health);
+                    makeHealthBar(graphics2D,x_row,y_col,soldier.getHealth());
                 }
                 else if(localGrid[y_col][x_row].CountOfTheSoldier()>1){
                     graphics2D.setFont(GameUIConstants.MAIN_FONT);

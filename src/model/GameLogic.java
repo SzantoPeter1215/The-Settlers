@@ -56,6 +56,40 @@ public final class GameLogic {
     public void incPlayer1Unit1Number() {
         Player1Unit1Number += 1;
     }
+    public void descPlayer1Unit1Number() {
+        if(Player1Unit1Number-1>=0){
+            Player1Unit1Number -= 1;
+        }
+    }
+    public void descPlayer2Unit1Number() {
+        if(Player2Unit1Number-1>=0){
+            Player2Unit1Number -= 1;
+        }
+    }
+    public void descPlayer1Unit2Number() {
+        if(Player1Unit2Number-1>=0){
+            Player1Unit2Number -= 1;
+        }
+    }
+    public void descPlayer2Unit2Number() {
+        if(Player2Unit2Number-1>=0){
+            Player2Unit2Number -= 1;
+        }
+    }
+    public void descUnitsAfterDeath(Type soldierType, PlayerTurn owner){
+        if(soldierType==Type.PLAYER1_SOLDIER1&&owner==PlayerTurn.PLAYER1){
+            this.descPlayer1Unit1Number();
+        }
+        else if(soldierType==Type.PLAYER1_SOLDIER2&&owner==PlayerTurn.PLAYER1){
+            this.descPlayer1Unit2Number();
+        }
+        else if(soldierType==Type.PLAYER2_SOLDIER1&&owner==PlayerTurn.PLAYER2){
+            this.descPlayer2Unit1Number();
+        }
+        else if(soldierType==Type.PLAYER2_SOLDIER2&&owner==PlayerTurn.PLAYER2){
+            this.descPlayer2Unit1Number();
+        }
+    }
 
     public int getPlayer1Unit2Number() {
         return Player1Unit2Number;
@@ -335,16 +369,35 @@ public final class GameLogic {
     }
 
     public void damageSoldiers(){
+        List<Soldier> deathSoldier = new ArrayList<>();
         for (Field towerOrCastle:
                 towerAndCastle) {
-            Castle castle = towerOrCastle.getCastleOnTheField();
-            for(Soldier s : allSoldiers) {
-                if(towerOrCastle.isCastleOnTheField()){
-                    if(inTheDistance(towerOrCastle.y,towerOrCastle.x, s.x, s.y,castle.range)){//problem with the x and y solved this way
-                        s.minusHealth(castle.damage);
-                    }
-                }
+            int damage = 0;
+            int range = 0;
+            PlayerTurn attackerOwner = null;
+            if(towerOrCastle.isCastleOnTheField()){
+                Castle castle =towerOrCastle.getCastleOnTheField(); 
+                damage = castle.damage;
+                range = castle.range;
+                attackerOwner = castle.OwnerPlayer;
             }
+            else if(towerOrCastle.isTowerOnTheField()){
+                Tower tower = towerOrCastle.getTowerOnTheField();
+                damage = tower.damage;
+                range = tower.range;
+                attackerOwner = tower.OwnerPlayer;
+            }
+            for(Soldier s : allSoldiers) {
+                    if(s.OwnerPlayer!=attackerOwner&&inTheDistance(towerOrCastle.y,towerOrCastle.x, s.x, s.y,range)){//problem with the x and y solved this way
+                        if(!s.minusHealth(damage)){
+                            deathSoldier.add(s);
+                        }
+                    }
+            }
+            for (Soldier death:
+                 deathSoldier) {
+                descUnitsAfterDeath(death.SoldierType,death.OwnerPlayer);
+                allSoldiers.remove(death);}
         }
     }
     public void fillUpTowerAndCastleList(){
