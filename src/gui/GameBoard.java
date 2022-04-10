@@ -9,8 +9,9 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
-
 
 
 public class GameBoard extends JPanel {
@@ -182,30 +183,39 @@ public class GameBoard extends JPanel {
 
     }
     //TODO:refactor!
+    private boolean inTheDistance(int origin_x, int origin_y,int x , int y, int distance){
+        if((gameLogic.getColumn()>x&&0<=x)&&y<gameLogic.getRow()&&y>=0){
+            return Math.abs(x-origin_x)<=distance&&Math.abs(y-origin_y)<=distance;
+        }
+        return false;
+    }
     private void drawTowerRange(Graphics2D graphics2D){
-        Field[][] localGrid = gameLogic.getGrids();
+        List<Field> towerAndCastles = new ArrayList<>();
         for (int y_col = 0; y_col < gameLogic.getRow(); y_col++) {
             for (int x_row = 0; x_row < gameLogic.getColumn(); x_row++) {
-                if(localGrid[y_col][x_row].hasRange()){
-                    int width = 3;
+                if(gameLogic.grids[y_col][x_row].hasRange()){
+                    towerAndCastles.add(gameLogic.grids[y_col][x_row]);
+/*                    int width = 3;
                     int height =3;
                     int x_adjust = 1;
                     int y_adjust = 1;
                     if(y_col == 0) {
                         height = 2;
                         y_adjust = 0;
-                    }else if(y_col == gameConstants.GAMEAREA_HEIGHT_canBeDividedBy - 1) {
+                    }else if(y_col == gameLogic.getColumn() - 1) {
                         height = 2;
                     }
                     if(x_row == 0){
                         width = 2;
                         x_adjust = 0;
-                    }else if(x_row == gameConstants.GAMEAREA_WIDTH_canBeDividedBy - 1){
+                    }else if(x_row == gameLogic.getRow() - 1){
                         width = 2;
                     }
+
                     Rectangle area = new Rectangle(gameConstants.gameareaREACT.x + x_row * GameUIConstants.GAME_AREA_RECTANGLE - x_adjust * GameUIConstants.GAME_AREA_RECTANGLE, gameConstants.gameareaREACT.y + y_col * GameUIConstants.GAME_AREA_RECTANGLE - y_adjust * GameUIConstants.GAME_AREA_RECTANGLE, GameUIConstants.GAME_AREA_RECTANGLE * width, GameUIConstants.GAME_AREA_RECTANGLE * height);
                     Rectangle currentField = new Rectangle(gameConstants.gameareaREACT.x+x_row*GameUIConstants.GAME_AREA_RECTANGLE,gameConstants.gameareaREACT.y+y_col*GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.GAME_AREA_RECTANGLE);
                     Color c1 = new Color(255,102,102);
+                    //graphics2D.setStroke(GameUIConstants.LARGE_STROKE); //clear things out
                     graphics2D.setColor(c1);
                     graphics2D.fill(area);
                     //todo omg it needs to be redone
@@ -216,17 +226,36 @@ public class GameBoard extends JPanel {
                     else if(localGrid[y_col][x_row].isTowerOnTheField()){
                         Tower towerOnThisField = localGrid[y_col][x_row].getTowerOnTheField();
                         imageLoader.loadImage(graphics2D,currentField.x,currentField.y,Tower.towerImage(Tower.playerTowerType(towerOnThisField.OwnerPlayer,towerOnThisField.TowerType)));
-                    }
+                    }*/
                 }
             }
         }
-        towerRangeHelper(graphics2D, localGrid);
+        for (Field rangedObject : towerAndCastles) {
+            for (int y_col = 0; y_col < gameLogic.getRow(); y_col++) {
+                for (int x_row = 0; x_row < gameLogic.getColumn(); x_row++) {
+                   if(inTheDistance(rangedObject.x,rangedObject.y,x_row,y_col,1)){
+                       drawTowerRange(graphics2D,x_row,y_col);
+                   }
+                }
+            }
+        }
+        //towerRangeHelper(graphics2D, localGrid);
     }
-
+    private Rectangle getGameAreaField(int x,int y){
+        return new Rectangle(gameConstants.gameareaREACT.x+x* GameUIConstants.GAME_AREA_RECTANGLE,
+                gameConstants.gameareaREACT.y+y*GameUIConstants.GAME_AREA_RECTANGLE,
+                GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.GAME_AREA_RECTANGLE);
+    }
+    private Rectangle getHealthBar(int x, int y){
+        return new  Rectangle(gameConstants.gameareaREACT.x+x* GameUIConstants.GAME_AREA_RECTANGLE + 5,gameConstants.gameareaREACT.y+y*GameUIConstants.GAME_AREA_RECTANGLE,40,5);
+    }
+    private Rectangle fillHealthBar(int x, int y, int percentage){
+        return new Rectangle(gameConstants.gameareaREACT.x+x* GameUIConstants.GAME_AREA_RECTANGLE + 5,gameConstants.gameareaREACT.y+y*GameUIConstants.GAME_AREA_RECTANGLE,(int)(percentage * 40),5);
+    }
     private void towerRangeHelper(Graphics2D graphics2D, Field[][] localGrid) {
         for (int y_col = 0; y_col < gameLogic.getRow(); y_col++) {
             for (int x_row = 0; x_row < gameLogic.getColumn(); x_row++) {
-                Rectangle currentField = new Rectangle(gameConstants.gameareaREACT.x+x_row* GameUIConstants.GAME_AREA_RECTANGLE,gameConstants.gameareaREACT.y+y_col*GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.GAME_AREA_RECTANGLE);
+                Rectangle currentField = getGameAreaField(x_row,y_col);
                 graphics2D.setColor(Color.BLACK);
                 //todo it needs to beredone
                 if(localGrid[y_col][x_row].isCastleOnTheField()){
@@ -240,12 +269,11 @@ public class GameBoard extends JPanel {
                 else if(localGrid[y_col][x_row].CountOfTheSoldier()>0){
                     Soldier soldier = localGrid[y_col][x_row].getFirstSoldier();
                     imageLoader.loadImage(graphics2D,currentField.x,currentField.y,soldier.getSoliderImage());
-                    Rectangle healthbar = new Rectangle(gameConstants.gameareaREACT.x+x_row* GameUIConstants.GAME_AREA_RECTANGLE + 5,gameConstants.gameareaREACT.y+y_col*GameUIConstants.GAME_AREA_RECTANGLE,40,5);
+                    Rectangle healthbar = getHealthBar(x_row,y_col);
                     graphics2D.setColor(Color.red);
                     graphics2D.fill(healthbar);
                     double percentage = (double) soldier.getHealth() / 100;
-                    System.out.println(percentage);
-                    Rectangle health = new Rectangle(gameConstants.gameareaREACT.x+x_row* GameUIConstants.GAME_AREA_RECTANGLE + 5,gameConstants.gameareaREACT.y+y_col*GameUIConstants.GAME_AREA_RECTANGLE,(int)(percentage * 40),5);
+                    Rectangle health = fillHealthBar(x_row,y_col,(int) percentage);
                     graphics2D.setColor(Color.green);
                     graphics2D.fill(health);
                 }
@@ -310,6 +338,15 @@ public class GameBoard extends JPanel {
         imageLoader.loadImage(graphics2D,x,y,imageUrl);
         graphics2D.draw(field);
         graphics2D.setStroke(GameUIConstants.SMALL_STROKE); //clear things out
+    }
+    private void drawTowerRange(Graphics2D graphics2D,int x, int y){
+        Rectangle area = getGameAreaField(x,y);
+        Color c1 = new Color(255,102,102);
+        graphics2D.setStroke(GameUIConstants.LARGE_STROKE); //clear things out
+        graphics2D.setColor(c1);
+        graphics2D.draw(area);
+        graphics2D.setColor(Color.black);
+        graphics2D.setStroke(GameUIConstants.SMALL_STROKE);
     }
     private void SoldierStates(Graphics2D graphics2D,boolean player1_Soldier1_Active,boolean player1_Soldier2_Active,boolean player2_Soldier1_Active,boolean player2_Soldier2_active){
         imageLoader.loadImage(graphics2D,gameConstants.player1_placeOfSoldier1_OnInfoBoard.x,gameConstants.player1_placeOfSoldier1_OnInfoBoard.y,

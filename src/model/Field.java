@@ -13,11 +13,15 @@ public class Field {
 
     public boolean isHill;
     public boolean isWater;
+    public int x;
+    public int y;
 
-    public Field(){
+    public Field(int x, int y){
         soldiersOnTheField = new ArrayList<Soldier>();
         towersOnTheField = new ArrayList<Tower>();
         castlesOnTheField = new ArrayList<Castle>();
+        this.x = x;
+        this.y = y;
 
         isHill = false;
         isWater = false;

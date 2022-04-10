@@ -204,7 +204,7 @@ public final class GameLogic {
         for (int i = 0; i < row; ++i) {
             for (int j = 0; j < column; ++j) {
                 //grids[i][j] = Type.EMPTY;
-                grids[i][j] = new Field();
+                grids[i][j] = new Field(j,i);
             }
         }
     }
