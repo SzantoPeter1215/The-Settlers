@@ -471,14 +471,23 @@ public final class GameLogic {
                 allSoldiers.remove(death);
             }
         }
-        if(castle_Player1.health<=0){
+/*        if(castle_Player1.health<=0){
             PopUp popUp = new PopUp("Gratulálok, Player 2.");
             this.newGame(15,10,"");
         }
         else if(castle_Player2.health<=0){
             PopUp popUp = new PopUp("Gratulálok, Player 1.");
             this.newGame(15,10,"");
+        }*/
+    }
+    public boolean isGameOver(){
+        if(castle_Player1.health<=0){
+            return  true;
         }
+        else if(castle_Player2.health<=0){
+            return true;
+        }
+        return false;
     }
     public void fillUpTowerAndCastleList(){
         towerAndCastle.clear();
