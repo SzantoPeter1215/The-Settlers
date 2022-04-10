@@ -370,8 +370,6 @@ public final class GameLogic {
             return;
         }
         ++stepCounter;
-        //TODO: create a method that accepts a function and executes it to all the grid elements.
-        //TODO: HANDLE WHEN TWO THINGS ARE IN THE SAME PLACE!!!
 
         clearGridSoldiers();
 
