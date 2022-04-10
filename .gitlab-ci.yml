@@ -1,9 +1,9 @@
 java:
   stage: test
   script:
-  - mvn verify
+  - build
   artifacts:
     reports:
       junit:
         - target/surefire-reports/TEST-*.xml
-        - target/failsafe-reports/TEST-*.xml
+        #- target/failsafe-reports/TEST-*.xml
