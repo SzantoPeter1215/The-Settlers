@@ -109,7 +109,7 @@ public class GameBoard extends JPanel {
                         if(gameLogic.removeMoney(soldier.getPrice(),gameLogic.playerTurn)){
                             gameLogic.incPlayer1Unit1Number();
                             gameLogic.grids[player1_castle_x][player1_castle_y].addSoldier(soldier); //caslte start
-                            gameLogic.a
+                           // gameLogic.a
                         }
                     }
                 }
@@ -196,7 +196,7 @@ public class GameBoard extends JPanel {
             for (int y_col = 0; y_col < gameLogic.getRow(); y_col++) {
                 for (int x_row = 0; x_row < gameLogic.getColumn(); x_row++) {
                     if(rangedObject.isCastleOnTheField()){
-                        if(gameLogic.inTheDistance(rangedObject.x,rangedObject.y,x_row,y_col,rangedObject.getCastleOnTheField().range)){
+                        if(gameLogic.inTheDistanceForTowerRange(rangedObject.x,rangedObject.y,x_row,y_col,rangedObject.getCastleOnTheField().range)){
                             drawTowerRange(graphics2D,x_row,y_col,rangedObject.getCastleOnTheField().OwnerPlayer);
                         }
                     }

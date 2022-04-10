@@ -167,6 +167,12 @@ public final class GameLogic {
         }
         return false;
     }
+    public boolean inTheDistanceForTowerRange(int origin_x, int origin_y,int x , int y, int distance){
+        if ((column > x && 0 <= x) && y < row && y >= 0) {
+            return Math.abs(x - origin_x) <= distance && Math.abs(y - origin_y) <= distance;
+        }
+        return false;
+    }
 
 
     public GameLogic() {
@@ -426,7 +432,7 @@ public final class GameLogic {
                 attackerOwner = tower.OwnerPlayer;
             }
             for(Soldier s : allSoldiers) {
-                    if(s.OwnerPlayer!=attackerOwner&&inTheDistance(towerOrCastle.x,towerOrCastle.y, s.x, s.y,range)){//problem with the x and y solved this way
+                    if(s.OwnerPlayer!=attackerOwner&&inTheDistance(towerOrCastle.y,towerOrCastle.x, s.x, s.y,range)){//problem with the x and y solved this way
                         if(!s.minusHealth(damage)){
                             deathSoldier.add(s);
                         }
