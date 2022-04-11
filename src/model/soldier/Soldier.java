@@ -111,6 +111,7 @@ public class Soldier {
     }
 
     public void step(Field matrix[][]) {
+        if(currentPathX.size() == 0) return;
         currentPathX.remove(0);
         currentPathY.remove(0);
 
