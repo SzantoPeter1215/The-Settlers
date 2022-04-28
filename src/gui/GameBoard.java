@@ -79,8 +79,8 @@ public class GameBoard extends JPanel {
                         if(gameLogic.grids[x][y].isEmpty()) {
                             int minusMoney = gameLogic.getFillTowerType()==Type.TOWER1 ? GameConstants.TOWER1_PRICE : 0;
                             minusMoney = gameLogic.getFillTowerType()==Type.TOWER2 ? GameConstants.TOWER2_PRICE : minusMoney;
-                            if(!gameLogic.grids[x][y].getWater() && !gameLogic.grids[x][y].getHill() && gameLogic.canBuild(x,y)){
-                                if(gameLogic.isMyArea(y,GameLogic.playerTurn)&&gameLogic.removeMoney(minusMoney,GameLogic.playerTurn)) {
+                            if(!gameLogic.grids[x][y].getWater() && !gameLogic.grids[x][y].getHill() && gameLogic.canBuild(x,y)){//ha üres a mező
+                                if(gameLogic.isMyArea(y,GameLogic.playerTurn)&&gameLogic.removeMoney(minusMoney,GameLogic.playerTurn)) {//ha az én területem és van rá elég pénzem
                                     Tower newTowerOnThisField;
                                     if(gameLogic.getFillTowerType() == Type.TOWER1) {
                                         newTowerOnThisField = new Tower(GameLogic.playerTurn,
@@ -101,7 +101,7 @@ public class GameBoard extends JPanel {
                                 }
                             }
                             else{
-                                PopUp popUp = new PopUp("CAN'T BUILD THERE");
+                                PopUp popUp = new PopUp("Nem lehet ide építkezni");
                             }
                         }
                     }
@@ -362,20 +362,8 @@ public class GameBoard extends JPanel {
         graphics2D.setStroke(GameUIConstants.LARGE_STROKE); //clear things out
         if(playerTurn==PlayerTurn.PLAYER1){
             graphics2D.setColor(blue);
-/*            for (int i = 0; i < gameLogic.grids[x][y].soldiersOnTheField.size(); i++) {
-                Soldier soldier = gameLogic.grids[x][y].soldiersOnTheField.get(i);
-                if(soldier.OwnerPlayer==PlayerTurn.PLAYER2){
-                    soldier.minusHealth(10);
-                }
-            }*/
         }
         else{
-/*            for (int i = 0; i < gameLogic.grids[x][y].soldiersOnTheField.size(); i++) {
-                Soldier soldier = gameLogic.grids[x][y].soldiersOnTheField.get(i);
-                if(soldier.OwnerPlayer==PlayerTurn.PLAYER1){
-                    soldier.minusHealth(10);
-                }
-            }*/
             graphics2D.setColor(red);
         }
         graphics2D.draw(area);
