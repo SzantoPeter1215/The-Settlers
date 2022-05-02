@@ -23,6 +23,8 @@ public final class GameUIConstants {
     public final static String Player1Tower2 = "images/player1_tower2.png";
     public final static String Player2Tower1 = "images/player2_tower1.png";
     public final static String Player2Tower2 = "images/player2_tower2.png";
+    public final static String TraningFieldPlayer1 = "images/trainingField_player1.png";
+    public final static String TraningFieldPlayer2 = "images/trainingField_player2.png";
     public final static String Hill = "images/mountain_final.png";
     public final static String Water = "images/water.png";
     public Rectangle gameareaREACT;
@@ -37,6 +39,8 @@ public final class GameUIConstants {
     public Rectangle player1_placeOfSoldier2_OnInfoBoard;
     public Rectangle player2_placeOfSoldier1_OnInfoBoard;
     public Rectangle player2_placeOfSoldier2_OnInfoBoard;
+    public Rectangle player1_placeOfTrainingField_OnInfoBoard;
+    public Rectangle player2_placeOfTrainingField_OnInfoBoard;
 
     public Position player1_text_onInfoBoard;
     public Position player2_text_onInfoBoard;
@@ -70,6 +74,9 @@ public final class GameUIConstants {
         player1_placeOfSoldier2_OnInfoBoard = new Rectangle(GameUIConstants.GAME_AREA_RECTANGLE,player1_placeOfSoldier1_OnInfoBoard.y,GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.GAME_AREA_RECTANGLE);
         player2_placeOfSoldier1_OnInfoBoard = new Rectangle(0,player2_placeOfTower1_OnInfoBoard.y+GAME_AREA_RECTANGLE,GAME_AREA_RECTANGLE,GAME_AREA_RECTANGLE);
         player2_placeOfSoldier2_OnInfoBoard = new Rectangle(GAME_AREA_RECTANGLE,player2_placeOfSoldier1_OnInfoBoard.y,GAME_AREA_RECTANGLE,GAME_AREA_RECTANGLE);
+
+        player1_placeOfTrainingField_OnInfoBoard = new Rectangle(player1_placeOfTower2_OnInfoBoard.x+GameUIConstants.GAME_AREA_RECTANGLE,player1_placeOfTower1_OnInfoBoard.y,GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.GAME_AREA_RECTANGLE);
+        player2_placeOfTrainingField_OnInfoBoard = new Rectangle(player2_placeOfTower2_OnInfoBoard.x+GameUIConstants.GAME_AREA_RECTANGLE,player2_placeOfTower1_OnInfoBoard.y,GameUIConstants.GAME_AREA_RECTANGLE,GameUIConstants.GAME_AREA_RECTANGLE);
 
         player2_text_onInfoBoard = new Position(GameUIConstants.GAME_AREA_RECTANGLE*4,this.player2InfoBoard.y+GameUIConstants.SMALL_FONT.getSize()*3);
         player1_text_onInfoBoard = new Position(GameUIConstants.GAME_AREA_RECTANGLE*4, GameUIConstants.SMALL_FONT.getSize()*3);
