@@ -85,15 +85,12 @@ public class GameBoard extends JPanel {
                                     if(gameLogic.getFillTowerType() == Type.TOWER1) {
                                         newTowerOnThisField = new Tower(GameLogic.playerTurn,
                                                 100, gameLogic.getFillTowerType(),1,10);
-                                        gameLogic.grids[x][y].addTower(newTowerOnThisField);
-                                    } else if(gameLogic.getFillTowerType() == Type.TOWER2){
+                                    } else {
                                         newTowerOnThisField = new Tower(GameLogic.playerTurn,
                                                 100, gameLogic.getFillTowerType(),2,10);
-                                        gameLogic.grids[x][y].addTower(newTowerOnThisField);
+
                                     }
-                                    else if(gameLogic.getFillTowerType()==Type.PLAYER1_TrainingField){
-                                        gameLogic.grids[x][y].addTrainingField(gameLogic.getFillTowerType());
-                                    }
+                                    gameLogic.grids[x][y].addTower(newTowerOnThisField);
                                 } else {
                                     if(!gameLogic.isMyArea(y,GameLogic.playerTurn)){
                                         PopUp popUp = new PopUp("Az ellenség területére nem lehet tornyot rakni.");
@@ -170,9 +167,6 @@ public class GameBoard extends JPanel {
                             gameLogic.grids[player2_castle_x][player2_castle_y].addSoldier(soldier);
                         }
                     }
-                }
-                else if(ScreenMethods.playerInfoBoardTrainingField1_clicked(e.getX(),e.getY())){
-                    gameLogic.setFillTowerType(Type.PLAYER1_TrainingField);
                 }
                 else if(ScreenMethods.playerInfoBoardEndTurn_clicked(e.getX(),e.getY())){
                     if (GameLogic.playerTurn == PlayerTurn.PLAYER2){
@@ -283,11 +277,6 @@ public class GameBoard extends JPanel {
                     drawFixedRectAngleFieldWithImage(graphics2D,currentField.x,currentField.y,castleOnTheField.castleImage(),false);
                     makeHealthBar(graphics2D,x_row,y_col,castleOnTheField.health);
                 }
-                else if(localGrid[y_col][x_row].isTrainingFieldOnThisField()){
-                    TrainingField trainingField = localGrid[y_col][x_row].getTrainingField();
-                    String trainingFieldImage = trainingField.TowerType==Type.PLAYER1_TrainingField ? GameUIConstants.TraningFieldPlayer1 : GameUIConstants.TraningFieldPlayer2;
-                    drawFixedRectAngleFieldWithImage(graphics2D,currentField.x,currentField.y,trainingFieldImage,false);
-                }
                 else if(localGrid[y_col][x_row].isTowerOnTheField()){
                     Tower towerOnThisField = localGrid[y_col][x_row].getTowerOnTheField();
                     drawFixedRectAngleFieldWithImage(graphics2D,currentField.x,currentField.y,Tower.towerImage(Tower.playerTowerType(towerOnThisField.OwnerPlayer,towerOnThisField.TowerType)),false);
@@ -359,10 +348,6 @@ public class GameBoard extends JPanel {
                     drawOutTowerUnitsInfoboard(graphics2D,false,false,false,true,false,true);
                 }
             }
-    }
-    private void drawoutTrainingField(Graphics2D graphics2D, boolean isPlayer1){
-        drawFixedRectAngleFieldWithImage(graphics2D,gameConstants.player1_placeOfTrainingField_OnInfoBoard.x,gameConstants.player1_placeOfTrainingField_OnInfoBoard.y,GameUIConstants.TraningFieldPlayer1,false);
-        drawFixedRectAngleFieldWithImage(graphics2D,gameConstants.player2_placeOfTrainingField_OnInfoBoard.x,gameConstants.player2_placeOfTrainingField_OnInfoBoard.y,GameUIConstants.TraningFieldPlayer2,false);
     }
     private void drawFixedRectAngleFieldWithImage(Graphics2D graphics2D,int x,int y,String imageUrl,boolean isLargeStroke){
         if(isLargeStroke){
@@ -443,7 +428,6 @@ public class GameBoard extends JPanel {
             drawOutTheTowerField(graphics2D,true);
         }
         DrawingOutSoldier(graphics2D);
-        drawoutTrainingField(graphics2D,false);
         drawOutEndButton(graphics2D);
     }
     private void drawAll(Graphics2D graphics2D) {
