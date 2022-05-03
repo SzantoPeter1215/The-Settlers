@@ -10,6 +10,7 @@ public class Field {
     public ArrayList<Soldier> soldiersOnTheField;
     public ArrayList<Tower> towersOnTheField;
     public ArrayList<Castle> castlesOnTheField;
+    public ArrayList<TrainingField> trainingFields;
 
     public boolean isHill;
     public boolean isWater;
@@ -20,6 +21,7 @@ public class Field {
         soldiersOnTheField = new ArrayList<Soldier>();
         towersOnTheField = new ArrayList<Tower>();
         castlesOnTheField = new ArrayList<Castle>();
+        trainingFields = new ArrayList<>();
         this.x = x;
         this.y = y;
 
@@ -27,7 +29,7 @@ public class Field {
         isWater = false;
     }
     public boolean addSoldier(Soldier soldier){
-        if(isTowerOnTheField()){
+        if(isTowerOnTheField()&&!isTrainingFieldOnThisField()){
             return false;
         }
         soldiersOnTheField.add(soldier);
@@ -53,7 +55,16 @@ public class Field {
         }
         return  false;
     }
-
+    public void addTrainingField(Type traininFieldType){
+        PlayerTurn playerTurn = traininFieldType==Type.PLAYER1_TrainingField ? PlayerTurn.PLAYER1 : PlayerTurn.PLAYER2;
+        trainingFields.add(new TrainingField(playerTurn,traininFieldType));
+    }
+    public boolean isTrainingFieldOnThisField(){
+        return trainingFields.size()>0;
+    }
+    public TrainingField getTrainingField(){
+        return trainingFields.get(0);
+    }
     public boolean addHill() {
         if(isEmpty()){
             this.isHill = true;
@@ -79,7 +90,7 @@ public class Field {
     }
 
     public boolean isEmpty(){
-        return soldiersOnTheField.size()==0&&towersOnTheField.size()==0;
+        return soldiersOnTheField.size()==0&&towersOnTheField.size()==0&&trainingFields.size()==0;
     }
     public boolean hasRange(){
         return isTowerOnTheField() || isCastleOnTheField();
