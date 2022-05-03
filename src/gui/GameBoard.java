@@ -103,6 +103,12 @@ public class GameBoard extends JPanel {
                             else{
                                 PopUp popUp = new PopUp("Nem lehet ide építkezni");
                             }
+                        } else if(gameLogic.grids[x][y].isTowerOnTheField() && gameLogic.grids[x][y].getTowerOnTheField().OwnerPlayer == GameLogic.playerTurn){
+                            if(gameLogic.grids[x][y].getTowerOnTheField().TowerType == Type.TOWER1){
+                                PopUp popUp = new PopUp("Torony 1!");
+                            } else if(gameLogic.grids[x][y].getTowerOnTheField().TowerType == Type.TOWER2){
+                                PopUp popUp = new PopUp("Torony 2!");
+                            }
                         }
                     }
                 }
