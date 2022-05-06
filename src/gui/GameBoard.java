@@ -209,7 +209,6 @@ public class GameBoard extends JPanel {
 
             while (myReader.hasNextLine()) {
                 String data = myReader.nextLine();
-                System.out.println(data);
                 if(data.equals("s")){
                     maps.add(new ArrayList<>());
                 } else {
@@ -259,7 +258,6 @@ public class GameBoard extends JPanel {
                 }
             }
             myWriterAppend.close();
-            System.out.println("Successfully wrote to the file.");
         } catch (IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
@@ -268,45 +266,9 @@ public class GameBoard extends JPanel {
     }
 
     private void createInputDialog() {
-/*
-        JTextField nameField = new JTextField(5);
-
-        JComboBox<String> mapList = new JComboBox<>();
-        //mapList.setSelectedIndex(0);
-
-        int maxSpeed = 200;
-        int minSpeed = 10;
-
-        JSlider speedSlider = new JSlider(minSpeed, maxSpeed, maxSpeed - minSpeed);
-
-        JPanel myPanel = new JPanel();
-        myPanel.add(new JLabel("Name: "));
-        myPanel.add(nameField);
-
-        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
-        myPanel.add(new JLabel("Map:"));
-        myPanel.add(mapList);
-
-        myPanel.add(newLine);
-
-        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
-        myPanel.add(new JLabel("Speed:      hard"));
-        myPanel.add(speedSlider);
-        myPanel.add(new JLabel("easy"));
-
-        int result = JOptionPane.showConfirmDialog(null, myPanel,
-                "Please enter your game settings:", JOptionPane.OK_CANCEL_OPTION);
-        if (result == JOptionPane.OK_OPTION) {
-            name = nameField.getText().trim();
-            if(name.equals("")) name = "Anonymous";
-            //map = (String) Objects.requireNonNull(mapList.getSelectedItem());
-            //speed = speedSlider.getValue();
-        }
-        */
         ArrayList<ArrayList<String[]>> maps = readFile();
         assert maps != null;
         String[] selectTables = new String[maps.size()];
-        System.out.println((maps.get(0).get(0)[0]));
 
 
         int k = 0;
@@ -314,6 +276,7 @@ public class GameBoard extends JPanel {
             selectTables[k] = k+1 + ". map";
             ++k;
         }
+        gameLogic.setRawMap(maps.get(0));
 
         JPanel myPanel = new JPanel();
         myPanel.add(new JLabel("<html>e: EMPTY<br/>c1: CASTLE 1<br/>c2: CASTLE 2" +
@@ -321,16 +284,16 @@ public class GameBoard extends JPanel {
 
 
         String[][] rec = {
-                { "e", "e", "e","e", "e", "e","e", "e", "e","e", "e", "e","e", "e", "e" },
-                { "e", "e", "e","e", "e", "e","e", "e", "e","e", "e", "e","e", "e", "e" },
-                { "e", "e", "e","e", "e", "e","e", "e", "e","e", "e", "e","e", "e", "e" },
-                { "e", "e", "e","e", "e", "e","e", "e", "e","e", "e", "e","e", "e", "e" },
-                { "e", "e", "e","e", "e", "e","e", "e", "e","e", "e", "e","e", "e", "e" },
-                { "e", "e", "e","e", "e", "e","e", "e", "e","e", "e", "e","e", "e", "e" },
-                { "e", "e", "e","e", "e", "e","e", "e", "e","e", "e", "e","e", "e", "e" },
-                { "e", "e", "e","e", "e", "e","e", "e", "e","e", "e", "e","e", "e", "e" },
-                { "e", "e", "e","e", "e", "e","e", "e", "e","e", "e", "e","e", "e", "e" },
-                { "e", "e", "e","e", "e", "e","e", "e", "e","e", "e", "e","e", "e", "e" },
+                {"_","_","_",   "_","_","_",   "_","_","_",   "_","_","_",   "_","_","_" },
+                {"_","_","_",   "_","_","_",   "_","_","_",   "_","_","_",   "_","_","_" },
+                {"_","_","_",   "_","_","_",   "_","_","_",   "_","_","_",   "_","_","_" },
+                {"_","_","_",   "_","_","_",   "_","_","_",   "_","_","_",   "_","_","_" },
+                {"_","c1","_",   "_","w","_",   "_","_","_",   "_","_","_",   "_","_","_" },
+                {"_","_","_",   "_","h","_",   "_","_","_",   "_","_","_",   "_","_","_" },
+                {"_","_","_",   "_","_","_",   "_","_","_",   "_","_","_",   "_","_","_" },
+                {"_","_","_",   "_","_","_",   "_","_","_",   "_","_","_",   "_","c2","_" },
+                {"_","_","_",   "_","_","_",   "_","_","_",   "_","_","_",   "_","_","_" },
+                {"_","_","_",   "_","h","_",   "_","_","_",   "_","_","_",   "_","_","_" },
         };
         String[] header = { "1", "2", "3", "4", "5", "6" ,"7", "8",
                 "9" ,"10", "11", "12" ,"13", "14", "15"};
@@ -342,11 +305,10 @@ public class GameBoard extends JPanel {
 
         b.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
-                //TODO: SET IT ACTIVE
                 ArrayList<String[]> toAdd = new ArrayList<>();
                 for(int i=0; i < 10; ++i) {
                     String[] newRec =
-                            { "e", "e", "e","e", "e", "e","e", "e", "e","e", "e", "e","e", "e", "e" }
+                            {  "_",  "_",  "_", "_",  "_",  "_", "_",  "_",  "_", "_",  "_",  "_", "_",  "_",  "_" }
                             ;
                     for(int j = 0; j < 15; ++j) {
                         newRec[j] = getData(table, i, j).toString();
@@ -354,18 +316,37 @@ public class GameBoard extends JPanel {
                     toAdd.add(newRec);
                 }
                 maps.add(toAdd);
+                gameLogic.setRawMap(toAdd);
+
+                StringBuilder toShow = new StringBuilder();
+                for (int i = 0; i < 10; ++i) {
+                    toShow.append(Arrays.toString(toAdd.get(i)));
+                    toShow.append("\n");
+                }
+                PopUp pop = new PopUp(toShow.toString());
 
                 fileWriteToFile(maps);
             }
         });
-
+        JComboBox<String> mapList = new JComboBox<>(selectTables);
         b2.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
-                //TODO set the current map to the one from the dropdown
+                StringBuilder toShow = new StringBuilder();
+
+                int idx = Integer.parseInt(((String) Objects.requireNonNull(mapList.getSelectedItem()))
+                        .split("\\.")[0]);
+                ArrayList<String[]> map = maps.get(idx-1);
+
+                for (int i = 0; i < 10; ++i) {
+                    toShow.append(Arrays.toString(map.get(i)));
+                    toShow.append("\n");
+                }
+                gameLogic.setRawMap(map);
+                PopUp pop = new PopUp(toShow.toString());
             }
         });
 
-        JComboBox<String> mapList = new JComboBox<>(selectTables);
+
 
         myPanel.add(b);
         myPanel.add(new JLabel("or"));

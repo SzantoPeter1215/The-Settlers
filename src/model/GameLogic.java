@@ -8,6 +8,7 @@ import model.soldier.Soldier;
 import model.soldier.SoldierType;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -30,6 +31,12 @@ public final class GameLogic {
     private int Player1Unit2Number;
     private int Player2Unit1Number;
     private int Player2Unit2Number;
+
+    private ArrayList<String[]> rawMap;
+
+    public void setRawMap(ArrayList<String[]> map) {
+        rawMap = map;
+    }
 
     //private PathSolver path;
 
@@ -191,8 +198,6 @@ public final class GameLogic {
         this.row = gameConstants.GAMEAREA_HEIGHT_canBeDividedBy;
         this.column = gameConstants.GAMEAREA_WIDTH_canBeDividedBy;
 
-        //path = new PathSolver();
-
         grids = new Field[row][column];
         towerAndCastle = new ArrayList<>();
         stepCounter = 0;
@@ -203,22 +208,38 @@ public final class GameLogic {
 
 
         //TODO: remove , just for testing hill and wa'er. Migh causes out of index error (decrease the sizes then)
-        //0-17
-        for(int k = 0; k < this.row; ++k) {
-            if(k == this.row / 2) continue;
 
-            for(int i = this.column / 2 - this.column / 5; i <this.column / 2 + this.column / 5; ++i) {
+        //int Player1castleRandomX = ThreadLocalRandom.current().nextInt(0, gameConstants.GAMEAREA_WIDTH_canBeDividedBy/4);
+        //int Player2castleRandomX = ThreadLocalRandom.current().nextInt(gameConstants.GAMEAREA_WIDTH_canBeDividedBy/4*3, gameConstants.GAMEAREA_WIDTH_canBeDividedBy-1);
 
-                grids[k][i].addHill();
 
-                if(i%5 == 0 && k % 2 == 0) {
-                    grids[k][i].isHill = false;
-                    grids[k][i].addWater();
-                } else if(i % 3 == 0 && k%5 == 0) {
-                    grids[k][i].isHill = false;
+        int Player1castleRandomX = 0,Player2castleRandomX= 0, Player1castleRandomY = 1, Player2castleRandomY = 1;
+        for(int k = 0; k < 10; ++k) {
+            String[] line = rawMap.get(k)[0].split(",");
 
+            int length = rawMap.get(k).length <=1 ? line.length : rawMap.get(k).length;
+            for(int i =0; i <length; ++i) {
+                String toCalc = rawMap.get(k).length <= 1 ? line[i] : rawMap.get(k)[i];
+                switch (toCalc.trim()) {
+                    case "w": {
+                        grids[k][i].addWater();
+                        break;
+                    }
+                    case "h": {
+                        grids[k][i].addHill();
+                        break;
+                    }
+                    case "c1": {
+                        Player1castleRandomX = i;
+                        Player1castleRandomY = k;
+                        break;
+                    }
+                    case "c2": {
+                        Player2castleRandomX = i;
+                        Player2castleRandomY = k;
+                        break;
+                    }
                 }
-
             }
         }
 
@@ -231,23 +252,18 @@ public final class GameLogic {
         graphForRegular = new Graph();
         graphForCLimber = new Graph();
 
-
-
-
-
         //TODO: set the grids to their default type. (according to the map we choose)
 
         infoBoard.reset(userName);
 
-        int Player1castleRandomX = ThreadLocalRandom.current().nextInt(0, gameConstants.GAMEAREA_WIDTH_canBeDividedBy/4);
-        int Player2castleRandomX = ThreadLocalRandom.current().nextInt(gameConstants.GAMEAREA_WIDTH_canBeDividedBy/4*3, gameConstants.GAMEAREA_WIDTH_canBeDividedBy-1);
-        int castleRandomY = ThreadLocalRandom.current().nextInt(0, gameConstants.GAMEAREA_HEIGHT_canBeDividedBy);//It's the same for both castles
-        this.player1Castle = new Position(castleRandomY,Player1castleRandomX);
-        this.player2Castle = new Position(castleRandomY,Player2castleRandomX);
+
+        //int castleRandomY = ThreadLocalRandom.current().nextInt(0, gameConstants.GAMEAREA_HEIGHT_canBeDividedBy);//It's the same for both castles
+        this.player1Castle = new Position(Player1castleRandomY,Player1castleRandomX);
+        this.player2Castle = new Position(Player2castleRandomY,Player2castleRandomX);
         castle_Player1 = new Castle(PlayerTurn.PLAYER1,100,Type.PLAYER1_CASTLE,2,10);
-        grids[castleRandomY][Player1castleRandomX].addCaslte(castle_Player1);
+        grids[Player1castleRandomY][Player1castleRandomX].addCaslte(castle_Player1);
         castle_Player2 = new Castle(PlayerTurn.PLAYER2,100,Type.PLAYER2_CASTLE,2,10);
-        grids[castleRandomY][Player2castleRandomX].addCaslte(castle_Player2);
+        grids[Player2castleRandomY][Player2castleRandomX].addCaslte(castle_Player2);
         setFillTowerType(Type.TOWER1);
         fillUpTowerAndCastleList();
     }
