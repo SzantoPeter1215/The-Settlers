@@ -202,13 +202,14 @@ public class GameBoard extends JPanel {
 
             ArrayList<ArrayList<String[]>> maps = new ArrayList<>();
 
-            String data = myReader.nextLine();
+            //String data = myReader.nextLine();
             maps.add(new ArrayList<>());
 
             int current = 0;
 
             while (myReader.hasNextLine()) {
-                data = myReader.nextLine();
+                String data = myReader.nextLine();
+                System.out.println(data);
                 if(data.equals("s")){
                     maps.add(new ArrayList<>());
                 } else {
@@ -226,15 +227,38 @@ public class GameBoard extends JPanel {
         return null;
     }
 
-    private void fileWriteToFile() {
+    private void fileWriteToFile(ArrayList<ArrayList<String[]>> maps) {
 
         try {
             URL url = getClass().getResource("maps.txt");
             assert url != null;
             File myObj = new File(url.getPath());
             FileWriter myWriter = new FileWriter(myObj, false);
-            myWriter.write("Files in Java might be tricky, but it is fun enough!");
+            myWriter.write("");
+
             myWriter.close();
+
+            FileWriter myWriterAppend = new FileWriter(myObj, true);
+
+            for(int i = 0; i<maps.size(); ++i) {
+                if(i!=0) {
+                    myWriterAppend.write("\ns\n");
+
+                }
+                for(int j = 0; j < maps.get(i).size(); ++j) {
+                    if(j > 0) {
+                        myWriterAppend.write("\n");
+                    }
+                    for(int k = 0; k < maps.get(i).get(j).length; ++k) {
+                        if(k>0) {
+                            myWriterAppend.write(", ");
+                        }
+                        myWriterAppend.write(maps.get(i).get(j)[k]);
+
+                    }
+                }
+            }
+            myWriterAppend.close();
             System.out.println("Successfully wrote to the file.");
         } catch (IOException e) {
             System.out.println("An error occurred.");
@@ -293,7 +317,7 @@ public class GameBoard extends JPanel {
 
         JPanel myPanel = new JPanel();
         myPanel.add(new JLabel("<html>e: EMPTY<br/>c1: CASTLE 1<br/>c2: CASTLE 2" +
-                "<br/>w: WATER<br/>M: MOUNTAIN</html>"));
+                "<br/>w: WATER<br/>m: MOUNTAIN</html>"));
 
 
         String[][] rec = {
@@ -318,9 +342,20 @@ public class GameBoard extends JPanel {
 
         b.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
-                //TODO SAVE TO FILE AND SET IT TO ACTIVE
-                System.out.println( getData(table, 2, 2));
-                fileWriteToFile();
+                //TODO: SET IT ACTIVE
+                ArrayList<String[]> toAdd = new ArrayList<>();
+                for(int i=0; i < 10; ++i) {
+                    String[] newRec =
+                            { "e", "e", "e","e", "e", "e","e", "e", "e","e", "e", "e","e", "e", "e" }
+                            ;
+                    for(int j = 0; j < 15; ++j) {
+                        newRec[j] = getData(table, i, j).toString();
+                    }
+                    toAdd.add(newRec);
+                }
+                maps.add(toAdd);
+
+                fileWriteToFile(maps);
             }
         });
 
@@ -341,8 +376,7 @@ public class GameBoard extends JPanel {
         int result = JOptionPane.showConfirmDialog(null, myPanel,
                 "Please enter your game settings:", JOptionPane.OK_CANCEL_OPTION);
         if (result == JOptionPane.OK_OPTION) {
-            Object obj1 = getData(table, 2, 2);
-            System.out.println(obj1);
+
         } else {
             System.exit(-1);
         }
