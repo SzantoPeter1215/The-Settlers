@@ -55,7 +55,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<mainClass>com.example.springbootdocker.SpringBootDockerApplication</mainClass>
+					<mainClass>com.example.springframework.SpringBootDockerApplication</mainClass>
 				</configuration>
 			</plugin>
 		</plugins>
