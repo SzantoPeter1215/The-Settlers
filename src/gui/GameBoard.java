@@ -5,15 +5,15 @@ import model.info.InfoBoard;
 import model.soldier.Soldier;
 
 import javax.swing.*;
+import javax.swing.Timer;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.PipedOutputStream;
-import java.util.ArrayList;
+import java.io.*;
+import java.net.URL;
+import java.util.*;
 import java.util.List;
-import java.util.Scanner;
-
+import java.util.Scanner; // Import the Scanner class to read text files
 
 public class GameBoard extends JPanel {
 
@@ -29,6 +29,7 @@ public class GameBoard extends JPanel {
     private TheScreen ScreenMethods;
     private ImageLoader imageLoader;
     private List<Position> clickableObject; //many things on one field
+
 
     public GameBoard(GameLogic gameLogic) {
         gameConstants = new GameUIConstants();//it will calculate the area
@@ -189,9 +190,169 @@ public class GameBoard extends JPanel {
         });
     }
 
+    private Object getData(JTable table, int row_index, int col_index){
+        return table.getModel().getValueAt(row_index, col_index);
+    }
+    private ArrayList readFile(){
+        try {
+            URL url = getClass().getResource("maps.txt");
+            assert url != null;
+            File myObj = new File(url.getPath());
+            Scanner myReader = new Scanner(myObj);
+
+            ArrayList<ArrayList<String[]>> maps = new ArrayList<>();
+
+            String data = myReader.nextLine();
+            maps.add(new ArrayList<>());
+
+            int current = 0;
+
+            while (myReader.hasNextLine()) {
+                data = myReader.nextLine();
+                if(data.equals("s")){
+                    maps.add(new ArrayList<>());
+                } else {
+                    String[] segments = data.split(", ");
+                    maps.get(maps.size() - 1).add(segments);
+                }
+            }
+            myReader.close();
+            return maps;
+
+        } catch (FileNotFoundException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private void fileWriteToFile() {
+
+        try {
+            URL url = getClass().getResource("maps.txt");
+            assert url != null;
+            File myObj = new File(url.getPath());
+            FileWriter myWriter = new FileWriter(myObj, false);
+            myWriter.write("Files in Java might be tricky, but it is fun enough!");
+            myWriter.close();
+            System.out.println("Successfully wrote to the file.");
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+
+    }
+
+    private void createInputDialog() {
+/*
+        JTextField nameField = new JTextField(5);
+
+        JComboBox<String> mapList = new JComboBox<>();
+        //mapList.setSelectedIndex(0);
+
+        int maxSpeed = 200;
+        int minSpeed = 10;
+
+        JSlider speedSlider = new JSlider(minSpeed, maxSpeed, maxSpeed - minSpeed);
+
+        JPanel myPanel = new JPanel();
+        myPanel.add(new JLabel("Name: "));
+        myPanel.add(nameField);
+
+        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
+        myPanel.add(new JLabel("Map:"));
+        myPanel.add(mapList);
+
+        myPanel.add(newLine);
+
+        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
+        myPanel.add(new JLabel("Speed:      hard"));
+        myPanel.add(speedSlider);
+        myPanel.add(new JLabel("easy"));
+
+        int result = JOptionPane.showConfirmDialog(null, myPanel,
+                "Please enter your game settings:", JOptionPane.OK_CANCEL_OPTION);
+        if (result == JOptionPane.OK_OPTION) {
+            name = nameField.getText().trim();
+            if(name.equals("")) name = "Anonymous";
+            //map = (String) Objects.requireNonNull(mapList.getSelectedItem());
+            //speed = speedSlider.getValue();
+        }
+        */
+        ArrayList<ArrayList<String[]>> maps = readFile();
+        assert maps != null;
+        String[] selectTables = new String[maps.size()];
+        System.out.println((maps.get(0).get(0)[0]));
+
+
+        int k = 0;
+        for(ArrayList<String[]> val : maps) {
+            selectTables[k] = k+1 + ". map";
+            ++k;
+        }
+
+        JPanel myPanel = new JPanel();
+        myPanel.add(new JLabel("<html>e: EMPTY<br/>c1: CASTLE 1<br/>c2: CASTLE 2" +
+                "<br/>w: WATER<br/>M: MOUNTAIN</html>"));
+
+
+        String[][] rec = {
+                { "e", "e", "e","e", "e", "e","e", "e", "e","e", "e", "e","e", "e", "e" },
+                { "e", "e", "e","e", "e", "e","e", "e", "e","e", "e", "e","e", "e", "e" },
+                { "e", "e", "e","e", "e", "e","e", "e", "e","e", "e", "e","e", "e", "e" },
+                { "e", "e", "e","e", "e", "e","e", "e", "e","e", "e", "e","e", "e", "e" },
+                { "e", "e", "e","e", "e", "e","e", "e", "e","e", "e", "e","e", "e", "e" },
+                { "e", "e", "e","e", "e", "e","e", "e", "e","e", "e", "e","e", "e", "e" },
+                { "e", "e", "e","e", "e", "e","e", "e", "e","e", "e", "e","e", "e", "e" },
+                { "e", "e", "e","e", "e", "e","e", "e", "e","e", "e", "e","e", "e", "e" },
+                { "e", "e", "e","e", "e", "e","e", "e", "e","e", "e", "e","e", "e", "e" },
+                { "e", "e", "e","e", "e", "e","e", "e", "e","e", "e", "e","e", "e", "e" },
+        };
+        String[] header = { "1", "2", "3", "4", "5", "6" ,"7", "8",
+                "9" ,"10", "11", "12" ,"13", "14", "15"};
+        JTable table = new JTable(rec, header);
+        myPanel.add(new JScrollPane(table));
+
+        JButton b=new JButton("Save and select currently edited");
+        JButton b2=new JButton("Select the one from the dropdown current");
+
+        b.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                //TODO SAVE TO FILE AND SET IT TO ACTIVE
+                System.out.println( getData(table, 2, 2));
+                fileWriteToFile();
+            }
+        });
+
+        b2.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                //TODO set the current map to the one from the dropdown
+            }
+        });
+
+        JComboBox<String> mapList = new JComboBox<>(selectTables);
+
+        myPanel.add(b);
+        myPanel.add(new JLabel("or"));
+        myPanel.add(b2);
+        myPanel.add(mapList);
+
+
+        int result = JOptionPane.showConfirmDialog(null, myPanel,
+                "Please enter your game settings:", JOptionPane.OK_CANCEL_OPTION);
+        if (result == JOptionPane.OK_OPTION) {
+            Object obj1 = getData(table, 2, 2);
+            System.out.println(obj1);
+        } else {
+            System.exit(-1);
+        }
+    }
+
     private void startNewGame() {
         int time = gameConstants.TIMER;
         this.timer = new Timer(time, this.oneGameCycleAction);
+        createInputDialog();
+
         this.timer.start();
         GameLogic.playerTurn=PlayerTurn.PLAYER1;
         gameLogic.newGame(gameConstants.GAMEAREA_HEIGHT_canBeDividedBy,gameConstants.GAMEAREA_WIDTH_canBeDividedBy, name);
