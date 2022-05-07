@@ -279,8 +279,8 @@ public class GameBoard extends JPanel {
         gameLogic.setRawMap(maps.get(0));
 
         JPanel myPanel = new JPanel();
-        myPanel.add(new JLabel("<html>e: EMPTY<br/>c1: CASTLE 1<br/>c2: CASTLE 2" +
-                "<br/>w: WATER<br/>m: MOUNTAIN</html>"));
+        myPanel.add(new JLabel("<html>_: EMPTY<br/>c1: CASTLE 1<br/>c2: CASTLE 2" +
+                "<br/>w: WATER<br/>h: HILL</html>"));
 
 
         String[][] rec = {
