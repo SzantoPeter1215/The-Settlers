@@ -1,11 +1,11 @@
 package test;
 
 import model.dijkstra.Graph;
-import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.Test;
+import static junit.framework.Assert.assertEquals;
 
 class PathSolverTest {
     /*

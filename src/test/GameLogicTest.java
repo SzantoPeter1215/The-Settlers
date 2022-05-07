@@ -4,9 +4,9 @@ import gui.GameUIConstants;
 import model.GameConstants;
 import model.GameLogic;
 import model.PlayerTurn;
-import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.Test;
+import static junit.framework.Assert.assertEquals;
 
 
 class GameLogicTest {
