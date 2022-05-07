@@ -1,6 +1,7 @@
 package model.dijkstra;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.Test;
+import static junit.framework.Assert.assertEquals;
 
 import model.Field;
 
