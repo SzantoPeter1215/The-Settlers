@@ -13,16 +13,6 @@ import static org.junit.Assert.*;
 
 class GameLogicTest {
     @Test
-    public void testNewGame(){
-        GameLogic gameLogic = new GameLogic();
-        GameUIConstants gameConstants = new GameUIConstants();
-        //gameLogic.newGame(gameConstants.GAMEAREA_HEIGHT_canBeDividedBy,gameConstants.GAMEAREA_WIDTH_canBeDividedBy,"asd");
-        //assertEquals(gameConstants.GAMEAREA_HEIGHT_canBeDividedBy, gameLogic.getRow());
-        //assertEquals(gameConstants.GAMEAREA_WIDTH_canBeDividedBy, gameLogic.getColumn());
-        //assertEquals(null, gameLogic.getGrids());
-    }
-
-    @Test
     public void testMoney(){
         GameLogic gameLogic = new GameLogic();
         assertEquals(1000, gameLogic.getPlayer1Gold());
