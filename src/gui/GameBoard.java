@@ -80,8 +80,8 @@ public class GameBoard extends JPanel {
                         if(gameLogic.grids[x][y].isEmpty()) {
                             int minusMoney = gameLogic.getFillTowerType()==Type.TOWER1 ? GameConstants.TOWER1_PRICE : 0;
                             minusMoney = gameLogic.getFillTowerType()==Type.TOWER2 ? GameConstants.TOWER2_PRICE : minusMoney;
-                            if(!gameLogic.grids[x][y].getWater() && !gameLogic.grids[x][y].getHill() && gameLogic.canBuild(x,y)){//ha üres a mező
-                                if(gameLogic.isMyArea(y,GameLogic.playerTurn)&&gameLogic.removeMoney(minusMoney,GameLogic.playerTurn)) {//ha az én területem és van rá elég pénzem
+                            if(!gameLogic.grids[x][y].getWater() && !gameLogic.grids[x][y].getHill() && gameLogic.canBuild(x,y)){//ha ures a mezo
+                                if(gameLogic.isMyArea(y,GameLogic.playerTurn)&&gameLogic.removeMoney(minusMoney,GameLogic.playerTurn)) {//ha az en teruletem es van ra eleg penzem
                                     Tower newTowerOnThisField;
                                     if(gameLogic.getFillTowerType() == Type.TOWER1) {
                                         newTowerOnThisField = new Tower(GameLogic.playerTurn,
@@ -97,15 +97,15 @@ public class GameBoard extends JPanel {
                                     }
                                 } else {
                                     if(!gameLogic.isMyArea(y,GameLogic.playerTurn)){
-                                        PopUp popUp = new PopUp("Az ellenség területére nem lehet tornyot rakni.");
+                                        PopUp popUp = new PopUp("Az ellenseg teruletere nem lehet tornyot rakni.");
                                     }
                                     else{
-                                        PopUp popUp = new PopUp("Elfogyott a pénz.");
+                                        PopUp popUp = new PopUp("Elfogyott a penz.");
                                     }
                                 }
                             }
                             else{
-                                PopUp popUp = new PopUp("Nem lehet ide építkezni");
+                                PopUp popUp = new PopUp("Nem lehet ide epitkezni");
                             }
                         } else if(gameLogic.grids[x][y].isTowerOnTheField() && gameLogic.grids[x][y].getTowerOnTheField().OwnerPlayer == GameLogic.playerTurn){
                             if(gameLogic.grids[x][y].getTowerOnTheField().TowerType == Type.TOWER1){
@@ -502,7 +502,7 @@ public class GameBoard extends JPanel {
         graphics2D.setStroke(GameUIConstants.SMALL_STROKE);
 
         Field[][] localGrid = gameLogic.getGrids();
-        //TODO: SWICH A SOK IF HELYETT! meg ez az image loaderes dolog is ismétlés.
+        //TODO: SWICH A SOK IF HELYETT! meg ez az image loaderes dolog is ismetles.
         drawModelToTheGamearea(graphics2D, localGrid);
     }
     private void drawOutTowerUnitsInfoboard(Graphics2D graphics2D,boolean player1Tower1,boolean player1Tower2,boolean player2Tower1,boolean player2Tower2, boolean isPlayer1Turn,boolean isPlayer2Turn){

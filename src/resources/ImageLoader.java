@@ -8,9 +8,9 @@ import java.io.InputStream;
 public final class ImageLoader {
 
     /**
-     * A bufferbe helyezi a megadott képet
-     * @param path a kép elérési útja
-     * @return a bebufferelt képpel.
+     * A bufferbe helyezi a megadott kepet
+     * @param path a kep eleresi utja
+     * @return a bebufferelt keppel.
      */
     public static BufferedImage readImage(String path) throws IOException {
         try (final InputStream inputStream = ImageLoader.class.getResourceAsStream(path)) {

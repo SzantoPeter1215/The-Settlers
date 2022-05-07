@@ -8,7 +8,7 @@ import java.awt.*;
 public class GameFrame extends JFrame {
 
     /**
-     * Az alap ablak létrehozásáért felel.
+     * Az alap ablak letrehozasaert felel.
      */
     public GameFrame(GameLogic gameLogic) {
         setTitle("The settlers");

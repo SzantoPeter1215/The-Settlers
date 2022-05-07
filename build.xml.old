@@ -72,12 +72,12 @@
                 <property name="production.class.path" refid="production.class.path"/>
                 <echo message="${production.class.path}"/>
         -->
-        <javac srcdir="src" destdir="${out}/production/${ant.project.name}" debug="on" source="${version}">
+        <javac includeantruntime="false" srcdir="src" destdir="${out}/production/${ant.project.name}" debug="on" source="${version}">
             <classpath refid="production.class.path"/>
             <include name="**/*.java"/>
             <exclude name="**/*Test.java"/>
         </javac>
-        <javac srcdir="${test.src}" destdir="${out}/test/${ant.project.name}" debug="on" source="${version}">
+        <javac includeantruntime="false" srcdir="${test.src}" destdir="${out}/test/${ant.project.name}" debug="on" source="${version}">
             <classpath refid="test.class.path"/>
             <include name="**/*Test.java"/>
         </javac>

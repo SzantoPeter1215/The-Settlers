@@ -12,8 +12,8 @@ public class TheScreen {
     public TheScreen() {
         gameConstants = new GameUIConstants();//it will calculate the area based on the current screen
     }
-    //TODO: formázás: átláthatóbb lenne, ha spacek lennének
-    // az összehasónlító operandusok előtt ÉS után a>=b<c>d&&a||v vagy a >= b < c > d && a || v
+    //TODO: formazas: atlathatobb lenne, ha spacek lennenek
+    // az osszehasonlito operandusok elott ES utan a>=b<c>d&&a||v vagy a >= b < c > d && a || v
     public boolean playerInfoBoardTower1_clicked(int x, int y){
         if(GameLogic.playerTurn== PlayerTurn.PLAYER1){
             int startOfThePlayer1InfoBoard = (gameConstants.player1InfoBoard.y+(GameUIConstants.SMALL_FONT.getSize()*2));

@@ -22,8 +22,8 @@ public final class GameLogic {
     public static PlayerTurn playerTurn = PlayerTurn.PLAYER1;
     private int player1Gold = GameConstants.START_GOLD_PLAYER;
     private int player2Gold = GameConstants.START_GOLD_PLAYER;
-    //TODO: a castle helyét am nem a logicban kéne tartani?
-    // Vagy jó a megjelenítési rétegben mert nem függ tőle a többi esemény.
+    //TODO: a castle helyet am nem a logicban kene tartani?
+    // Vagy jo a megjelenitesi retegben mert nem fugg tole a tobbi esemeny.
     public Position player1Castle;
     public Position player2Castle;
 
@@ -283,7 +283,7 @@ public final class GameLogic {
     }
 
     /**
-     * Az alap négyzetháló mátrix inicializálása
+     * Az alap negyzethalo matrix inicializalasa
      */
     private void initGrid() {
         for (int i = 0; i < row; ++i) {
@@ -351,7 +351,7 @@ public final class GameLogic {
         }
     }
     public void initAttackPhase() {
-        //TODO: itt kéne összeszámolni a katonákat és pénzt adni a megfelelő játékosnak
+        //TODO: itt kene osszeszamolni a katonakat es penzt adni a megfelelo jatekosnak
         GameLogic.playerTurn = PlayerTurn.ATTACK;
         System.out.println("ATTACK!");
         stepCounter = 0;
@@ -489,11 +489,11 @@ public final class GameLogic {
             }
         }
        if(castle_Player1.health<=0){
-            PopUp popUp = new PopUp("Gratulálok, Player 2.");
+            PopUp popUp = new PopUp("Gratulalok, Player 2.");
             infoBoard.setGameOver();
         }
         else if(castle_Player2.health<=0){
-            PopUp popUp = new PopUp("Gratulálok, Player 1.");
+            PopUp popUp = new PopUp("Gratulalok, Player 1.");
             infoBoard.setGameOver();
             //new GameFrame(this);
         }
