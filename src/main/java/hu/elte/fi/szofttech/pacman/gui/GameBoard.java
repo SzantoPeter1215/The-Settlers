@@ -108,9 +108,19 @@ public class GameBoard extends JPanel {
                             }
                         } else if(gameLogic.grids[x][y].isTowerOnTheField() && gameLogic.grids[x][y].getTowerOnTheField().OwnerPlayer == GameLogic.playerTurn){
                             if(gameLogic.grids[x][y].getTowerOnTheField().TowerType == Type.TOWER1){
-                                PopUp popUp = new PopUp("Torony 1!");
+                                UpgradePopUp upgradePopUp = new UpgradePopUp("Torony 1!");
+                                if(upgradePopUp.pressed == 0){
+                                    gameLogic.upgradeTower(x, y);
+                                }else if(upgradePopUp.pressed == 1){
+                                    gameLogic.demolishTower(x, y);
+                                }
                             } else if(gameLogic.grids[x][y].getTowerOnTheField().TowerType == Type.TOWER2){
-                                PopUp popUp = new PopUp("Torony 2!");
+                                UpgradePopUp upgradePopUp = new UpgradePopUp("Torony 2!");
+                                if(upgradePopUp.pressed == 0){
+                                    gameLogic.upgradeTower(x, y);
+                                }else if(upgradePopUp.pressed == 1){
+                                    gameLogic.demolishTower(x, y);
+                                }
                             }
                         }
                     }

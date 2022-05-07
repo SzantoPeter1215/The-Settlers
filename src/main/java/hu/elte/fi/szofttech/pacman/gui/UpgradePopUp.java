@@ -1,4 +1,4 @@
-package gui;
+package main.java.hu.elte.fi.szofttech.pacman.gui;
 
 import javax.swing.*;
 

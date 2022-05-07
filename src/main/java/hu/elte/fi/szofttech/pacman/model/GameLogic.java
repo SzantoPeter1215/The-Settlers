@@ -543,4 +543,31 @@ public final class GameLogic {
         boolean res = CheckRouteExist.check(matrix, pos1, pos2);
         return res;
     }
+
+    public void upgradeTower(int x, int y){
+        grids[x][y].getTowerOnTheField().damage += 10;
+        if(grids[x][y].getTowerOnTheField().TowerType == Type.TOWER1) {
+            removeMoney(30, grids[x][y].getTowerOnTheField().OwnerPlayer);
+        }else if(grids[x][y].getTowerOnTheField().TowerType == Type.TOWER2){
+            removeMoney(60, grids[x][y].getTowerOnTheField().OwnerPlayer);
+        }
+    }
+
+    public void demolishTower(int x, int y){
+        Type towerType = grids[x][y].getTowerOnTheField().TowerType;
+        grids[x][y].towersOnTheField.remove(grids[x][y].getTowerOnTheField());
+        if(towerType == Type.TOWER1){
+            if(playerTurn == PlayerTurn.PLAYER1){
+                addMoney(20,1);
+            }else if(playerTurn == PlayerTurn.PLAYER2){
+                addMoney(20,2);
+            }
+        }else if(towerType == Type.TOWER2) {
+            if (playerTurn == PlayerTurn.PLAYER1) {
+                addMoney(40, 1);
+            } else if (playerTurn == PlayerTurn.PLAYER2) {
+                addMoney(40, 2);
+            }
+        }
+    }
 }
