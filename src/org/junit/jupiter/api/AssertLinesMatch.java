@@ -166,7 +166,7 @@ class AssertLinesMatch {
 					// fast-forward "unlimited": until next match
 					while (true) {
 						if (actualDeque.isEmpty()) {
-							fail("fast-forward(∞) didn't find: `%s`", snippet(expectedLine));
+							fail("fast-forward((infinite)) didn't find: `%s`", snippet(expectedLine));
 						}
 						if (matches(expectedLine, actualDeque.peek())) {
 							continue main;
