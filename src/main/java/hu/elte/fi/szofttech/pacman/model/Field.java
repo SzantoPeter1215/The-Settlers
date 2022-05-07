@@ -54,12 +54,30 @@ public class Field {
         }
         return  false;
     }
-    public void addTrainingField(Type traininFieldType){
+    public TrainingField addTrainingField(Type traininFieldType){
         PlayerTurn playerTurn = traininFieldType==Type.PLAYER1_TrainingField ? PlayerTurn.PLAYER1 : PlayerTurn.PLAYER2;
-        trainingFields.add(new TrainingField(playerTurn,traininFieldType));
+        TrainingField trainingField = new TrainingField(playerTurn,traininFieldType,x,y);
+        trainingFields.add(trainingField);
+        return trainingField;
     }
     public boolean isTrainingFieldOnThisField(){
         return trainingFields.size()>0;
+    }
+    public boolean isPlayer1TrainingFiled(){
+        for (int i = 0; i < trainingFields.size(); i++) {
+            if(trainingFields.get(i).TowerType==Type.PLAYER1_TrainingField){
+                return true;
+            }
+        }
+        return false;
+    }
+    public boolean isPlayer2TrainingFiled(){
+        for (int i = 0; i < trainingFields.size(); i++) {
+            if(trainingFields.get(i).TowerType==Type.PLAYER2_TrainingField){
+                return true;
+            }
+        }
+        return false;
     }
     public TrainingField getTrainingField(){
         return trainingFields.get(0);

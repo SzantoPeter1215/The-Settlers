@@ -92,7 +92,13 @@ public class GameBoard extends JPanel {
                                         gameLogic.grids[x][y].addTower(newTowerOnThisField);
                                     }
                                     else if(gameLogic.getFillTowerType()==Type.PLAYER1_TrainingField){
-                                        gameLogic.grids[x][y].addTrainingField(gameLogic.getFillTowerType());
+                                        gameLogic.placedTrainingFields.add(gameLogic.grids[x][y].
+                                                addTrainingField(gameLogic.getFillTowerType()));//it returns with a traningfield
+
+                                    }
+                                    else if(gameLogic.getFillTowerType()==Type.PLAYER2_TrainingField){
+                                        gameLogic.placedTrainingFields.add(gameLogic.grids[x][y].
+                                                addTrainingField(gameLogic.getFillTowerType()));
                                     }
                                 } else {
                                     if(!gameLogic.isMyArea(y,GameLogic.playerTurn)){
@@ -183,6 +189,9 @@ public class GameBoard extends JPanel {
                 }
                 else if(ScreenMethods.playerInfoBoardTrainingField1_clicked(e.getX(),e.getY())){
                     gameLogic.setFillTowerType(Type.PLAYER1_TrainingField);
+                }
+                else if(ScreenMethods.playerInfoBoardTrainingField2_clicked(e.getX(),e.getY())){
+                    gameLogic.setFillTowerType(Type.PLAYER2_TrainingField);
                 }
                 else if(ScreenMethods.playerInfoBoardEndTurn_clicked(e.getX(),e.getY())){
                     if (GameLogic.playerTurn == PlayerTurn.PLAYER2){

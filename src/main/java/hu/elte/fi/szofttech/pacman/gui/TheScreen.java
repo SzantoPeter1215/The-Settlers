@@ -52,6 +52,15 @@ public class TheScreen {
         }
         return false;
     }
+    public boolean playerInfoBoardTrainingField2_clicked(int x, int y){
+        if(x>=gameConstants.player2_placeOfTrainingField_OnInfoBoard.x&&x<=gameConstants.player2_placeOfTrainingField_OnInfoBoard.x+GameUIConstants.GAME_AREA_RECTANGLE){
+            if(y>=gameConstants.player2_placeOfTrainingField_OnInfoBoard.y && y<=gameConstants.player2_placeOfTrainingField_OnInfoBoard.y+GameUIConstants.GAME_AREA_RECTANGLE){
+                System.out.println("ooh yeah");
+                return true;
+            }
+        }
+        return false;
+    }
     public boolean playerInfoBoardSolder1_clicked(int x, int y){
         if(GameLogic.playerTurn==PlayerTurn.PLAYER1){
             int startOfThePlayer1InfoBoard = (gameConstants.player1InfoBoard.y+(GameUIConstants.SMALL_FONT.getSize()*2));

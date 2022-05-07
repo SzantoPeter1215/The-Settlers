@@ -28,6 +28,7 @@ public final class GameLogic {
     private int Player1Unit2Number;
     private int Player2Unit1Number;
     private int Player2Unit2Number;
+    public ArrayList<TrainingField> placedTrainingFields;
 
     private ArrayList<String[]> rawMap;
 
@@ -195,6 +196,7 @@ public final class GameLogic {
         this.row = gameConstants.GAMEAREA_HEIGHT_canBeDividedBy;
         this.column = gameConstants.GAMEAREA_WIDTH_canBeDividedBy;
 
+        placedTrainingFields = new ArrayList<>();
         grids = new Field[row][column];
         towerAndCastle = new ArrayList<>();
         stepCounter = 0;
@@ -349,6 +351,16 @@ public final class GameLogic {
     }
     public void initAttackPhase() {
         //TODO: itt kene osszeszamolni a katonakat es penzt adni a megfelelo jatekosnak
+
+        //put soldiers in front of the traning fields
+        for (int i = 0; i < placedTrainingFields.size(); i++) {
+            TrainingField trainingField = placedTrainingFields.get(i);
+            Soldier soldier = new Soldier(PlayerTurn.PLAYER1,100,Type.PLAYER1_SOLDIER1,trainingField.x,trainingField.y);
+            grids[trainingField.x][trainingField.y].addSoldier(soldier);
+            allSoldiers.add(soldier);
+            System.out.println("It runs once");
+        }
+
         GameLogic.playerTurn = PlayerTurn.ATTACK;
         System.out.println("ATTACK!");
         stepCounter = 0;
