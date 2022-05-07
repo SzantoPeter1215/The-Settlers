@@ -3,8 +3,8 @@ package test;
 import model.dijkstra.Graph;
 import java.util.List;
 
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.Test;
+import static junit.framework.Assert.assertEquals;
 
 class PathSolverTest {
     /*
