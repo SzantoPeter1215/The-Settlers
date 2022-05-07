@@ -3,7 +3,6 @@ image: ubuntu:20.04
 stages:
   - build
   - test
-  - deploy
 
 before_script:
   - apt-get update -yqq
