@@ -1,7 +1,5 @@
 package model.dijkstra;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import model.Field;
 
 import java.util.ArrayList;
@@ -180,5 +178,3 @@ public class GraphUtils {
         }
     }
 }
-
-//https://github.com/zhaohuabing/shortest-path-weighted-graph-dijkstra-java
