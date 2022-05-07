@@ -5,10 +5,10 @@ import main.java.hu.elte.fi.szofttech.pacman.model.GameLogic;
 import main.java.hu.elte.fi.szofttech.pacman.model.PlayerTurn;
 
 
-//import org.junit.jupiter.api.Test;
-//import static org.junit.jupiter.api.Assertions.*;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+//import org.junit.Test;
+//import static org.junit.Assert.*;
 
 
 class GameLogicTest {

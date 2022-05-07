@@ -3,10 +3,10 @@ package test.java.hu.elte.fi.szofttech.pacman.model;
 import main.java.hu.elte.fi.szofttech.pacman.model.dijkstra.Graph;
 import java.util.List;
 
-//import org.junit.jupiter.api.Test;
-//import static org.junit.jupiter.api.Assertions.*;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+//import org.junit.Test;
+//import static org.junit.Assert.*;
 
 class PathSolverTest {
     /*
