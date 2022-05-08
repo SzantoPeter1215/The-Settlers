@@ -355,7 +355,7 @@ public final class GameLogic {
             TrainingField trainingField = placedTrainingFields.get(i);
             Soldier soldier = new Soldier(PlayerTurn.PLAYER1,100,Type.PLAYER1_SOLDIER1,trainingField.y,trainingField.x);
             System.out.println("Training field: "+trainingField.x+ " , "+trainingField.y);
-            grids[trainingField.x][trainingField.y].addSoldier(soldier);
+            grids[trainingField.y][trainingField.x].addSoldier(soldier);
             incPlayer1Unit1Number();
         }
 
