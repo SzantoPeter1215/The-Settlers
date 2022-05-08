@@ -149,7 +149,7 @@ public class GameBoard extends JPanel {
                         Soldier soldier = new Soldier(PlayerTurn.PLAYER1,100,Type.PLAYER1_SOLDIER1,player1_castle_x,player1_castle_y);
                         if(gameLogic.removeMoney(soldier.getPrice(),gameLogic.playerTurn)){
                             gameLogic.incPlayer1Unit1Number();
-                            gameLogic.grids[player1_castle_x][player1_castle_y].addSoldier(soldier); //caslte start
+                            gameLogic.grids[player1_castle_x][player1_castle_y].addSoldier(soldier,gameLogic); //caslte start
                            // gameLogic.a
                         }
                     }
@@ -161,7 +161,7 @@ public class GameBoard extends JPanel {
                         Soldier soldier = new Soldier(PlayerTurn.PLAYER1,100,Type.PLAYER1_SOLDIER2,player1_castle_x,player1_castle_y);
                             if(gameLogic.removeMoney(soldier.getPrice(),gameLogic.playerTurn)){
                                 gameLogic.incPlayer1Unit2Number();
-                                gameLogic.grids[player1_castle_x][player1_castle_y].addSoldier(soldier);
+                                gameLogic.grids[player1_castle_x][player1_castle_y].addSoldier(soldier,gameLogic);
 
                             }
                     }
@@ -174,7 +174,7 @@ public class GameBoard extends JPanel {
                         Soldier soldier = new Soldier(PlayerTurn.PLAYER2,100,Type.PLAYER2_SOLDIER1,player2_castle_x,player2_castle_y);
                         if(gameLogic.removeMoney(soldier.getPrice(),gameLogic.playerTurn)){
                             gameLogic.incPlayer2Unit1Number();
-                            gameLogic.grids[player2_castle_x][player2_castle_y].addSoldier(soldier);
+                            gameLogic.grids[player2_castle_x][player2_castle_y].addSoldier(soldier,gameLogic);
                         }
 
                     }
@@ -186,7 +186,7 @@ public class GameBoard extends JPanel {
                         Soldier soldier = new Soldier(PlayerTurn.PLAYER2,100,Type.PLAYER2_SOLDIER2,player2_castle_x,player2_castle_y);
                         if(gameLogic.removeMoney(soldier.getPrice(),gameLogic.playerTurn)){
                             gameLogic.incPlayer2Unit1Number();
-                            gameLogic.grids[player2_castle_x][player2_castle_y].addSoldier(soldier);
+                            gameLogic.grids[player2_castle_x][player2_castle_y].addSoldier(soldier,gameLogic);
                         }
                     }
                 }
@@ -626,9 +626,9 @@ public class GameBoard extends JPanel {
 
         graphics2D.setColor(GameUIConstants.TEXT_COLOR);
         graphics2D.setFont(GameUIConstants.SMALL_FONT);
-        graphics2D.drawString("Player 1         Gold: "+gameLogic.getPlayer1Gold()+"    Regular: "+gameLogic.getPlayer1Unit1Number()+"  Climber: "+gameLogic.getPlayer1Unit2Number(),
+        graphics2D.drawString("Player 1         Gold: "+gameLogic.getPlayer1Gold()+"    Regular: "+gameLogic.getPlayer1Unit1Count()+"  Climber: "+gameLogic.getPlayer1Unit2Count(),
                 gameConstants.player1_moneyAndNameText.x,gameConstants.player1_moneyAndNameText.y);
-        graphics2D.drawString("Player 2         Gold: "+gameLogic.getPlayer2Gold()+"    Regular: "+gameLogic.getPlayer2Unit1Number()+"  Climber: "+gameLogic.getPlayer2Unit2Number(),
+        graphics2D.drawString("Player 2         Gold: "+gameLogic.getPlayer2Gold()+"    Regular: "+gameLogic.getPlayer2Unit1Count()+"  Climber: "+gameLogic.getPlayer2Unit2Count(),
                 gameConstants.player2_moneyAndNameText.x,gameConstants.player2_moneyAndNameText.y);
 
         if(GameLogic.playerTurn==PlayerTurn.PLAYER1){

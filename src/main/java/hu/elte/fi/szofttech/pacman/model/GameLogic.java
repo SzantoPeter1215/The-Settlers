@@ -19,6 +19,38 @@ public final class GameLogic {
     public static PlayerTurn playerTurn = PlayerTurn.PLAYER1;
     private int player1Gold = GameConstants.START_GOLD_PLAYER;
     private int player2Gold = GameConstants.START_GOLD_PLAYER;
+    private int player1Unit1Count;
+
+    public int getPlayer1Unit1Count() {
+        return player1Unit1Count;
+    }
+    public void incPlayer1Unit1Count() {
+        player1Unit1Count++;
+    }
+    public int getPlayer1Unit2Count() {
+        return player1Unit2Count;
+    }
+    public void incPlayer1Unit2Count() {
+        player1Unit2Count++;
+    }
+
+    public int getPlayer2Unit1Count() {
+        return player2Unit1Count;
+    }
+    public void incPlayer2Unit1Count() {
+        player2Unit1Count++;
+    }
+
+    public int getPlayer2Unit2Count() {
+        return player2Unit2Count;
+    }
+    public void incPlayer2Unit2Count() {
+        player2Unit2Count++;
+    }
+
+    private int player1Unit2Count;
+    private int player2Unit1Count;
+    private int player2Unit2Count;
     //TODO: a castle helyet am nem a logicban kene tartani?
     // Vagy jo a megjelenitesi retegben mert nem fugg tole a tobbi esemeny.
     public Position player1Castle;
@@ -344,7 +376,7 @@ public final class GameLogic {
 
             }
             System.out.println(trainingField.OwnerPlayer);
-            grids[trainingField.y][trainingField.x].addSoldier(soldier);
+            grids[trainingField.y][trainingField.x].addSoldier(soldier,this);
         }
     }
     public void initAttackPhase() {
@@ -405,7 +437,7 @@ public final class GameLogic {
         for(Soldier s : allSoldiers) {
             s.step(grids);
             int[] cords = s.getPos();
-            grids[cords[0]][cords[1]].addSoldier(s);
+            grids[cords[0]][cords[1]].addSoldier(s,this);
 
 /*            if(s.OwnerPlayer == PlayerTurn.PLAYER1) {
                 if(player2Castle.x == s.x && player2Castle.y == s.y) {
@@ -427,6 +459,10 @@ public final class GameLogic {
     }
 
     private void addSoldiersToLists() {//it can calucalute the number
+        player1Unit1Count = 0;
+        player1Unit2Count = 0;
+        player2Unit1Count = 0;
+        player2Unit2Count = 0;
         allSoldiers.clear();
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < column; j++) {
@@ -434,9 +470,20 @@ public final class GameLogic {
                 if(toMovedSoldier!=null){
                     allSoldiers.addAll(grids[i][j].getSoliders());
                 }
-                for (Soldier soldier : allSoldiers) {
-                    //soldier.SoldierType==
-                }
+            }
+        }
+        for (Soldier soldier : allSoldiers) {
+            if(soldier.SoldierType == Type.PLAYER1_SOLDIER1){
+                player1Unit1Count++;
+            }
+            else if(soldier.SoldierType == Type.PLAYER1_SOLDIER2){
+                player1Unit2Count++;
+            }
+            else if(soldier.SoldierType == Type.PLAYER2_SOLDIER1){
+                player2Unit1Count++;
+            }
+            else if(soldier.SoldierType == Type.PLAYER2_SOLDIER2){
+                player2Unit2Count++;
             }
         }
     }

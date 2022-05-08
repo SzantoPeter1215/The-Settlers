@@ -27,9 +27,21 @@ public class Field {
         isHill = false;
         isWater = false;
     }
-    public boolean addSoldier(Soldier soldier){
+    public boolean addSoldier(Soldier soldier,GameLogic gameLogic){
         if(isTowerOnTheField()){
             return false;
+        }
+        if(soldier.SoldierType == Type.PLAYER1_SOLDIER1){
+            gameLogic.incPlayer1Unit1Count();
+        }
+        else if(soldier.SoldierType == Type.PLAYER1_SOLDIER2){
+            gameLogic.incPlayer1Unit2Count();
+        }
+        else if(soldier.SoldierType == Type.PLAYER2_SOLDIER1){
+            gameLogic.incPlayer2Unit1Count();
+        }
+        else if(soldier.SoldierType == Type.PLAYER2_SOLDIER2){
+            gameLogic.incPlayer2Unit2Count();
         }
         soldiersOnTheField.add(soldier);
         return true;
