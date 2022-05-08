@@ -79,6 +79,9 @@ public class GameBoard extends JPanel {
                         if(gameLogic.grids[x][y].isEmpty()) {
                             int minusMoney = gameLogic.getFillTowerType()==Type.TOWER1 ? GameConstants.TOWER1_PRICE : 0;
                             minusMoney = gameLogic.getFillTowerType()==Type.TOWER2 ? GameConstants.TOWER2_PRICE : minusMoney;
+                            if(gameLogic.getFillTowerType()==Type.PLAYER1_TrainingField||gameLogic.getFillTowerType()==Type.PLAYER2_TrainingField){
+                                minusMoney = GameConstants.TRAININGFIELD_PRICE;
+                            }
                             if(!gameLogic.grids[x][y].getWater() && !gameLogic.grids[x][y].getHill() && gameLogic.canBuild(x,y)){//ha ures a mezo
                                 if(gameLogic.isMyArea(y,GameLogic.playerTurn)&&gameLogic.removeMoney(minusMoney,GameLogic.playerTurn)) {//ha az en teruletem es van ra eleg penzem
                                     Tower newTowerOnThisField;

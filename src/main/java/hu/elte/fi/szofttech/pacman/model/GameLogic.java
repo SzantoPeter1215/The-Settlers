@@ -145,24 +145,7 @@ public final class GameLogic {
         return column;
     }
 
-    /*public void setRow(int row) {
-        //this.row = row;
-    }*/
-
-    /*public void setTypeElement(int x, int y,Type element){
-        if(element==Type.EMPTY){
-            grids[x][y].stuffOnTheField.clear();
-        }
-        grids[x][y].add(element);
-    }*/
     public Field[][] getGrids() {
-        /*Type[][] convertedGrid = new Type[row][column];
-        for(int i = 0;i<column;i++){
-            for (int j = 0; j < row; j++) {
-                convertedGrid[i][j] = grids[i][j].getMainType();
-            }
-        }
-        return convertedGrid;*/
         return grids;
     }
     public boolean inTheDistance(int origin_x, int origin_y,int x , int y, int distance) {
@@ -349,22 +332,25 @@ public final class GameLogic {
             }
         }
     }
-    public void initAttackPhase() {
-        //TODO: itt kene osszeszamolni a katonakat es penzt adni a megfelelo jatekosnak
-        for (int i = 0; i < placedTrainingFields.size(); i++) {
-            TrainingField trainingField = placedTrainingFields.get(i);
+    public void putUnitsIntoTheTrainingFields(){
+        for (TrainingField trainingField : placedTrainingFields) {
             Soldier soldier;
-            if(trainingField.OwnerPlayer == PlayerTurn.PLAYER1) {
-                soldier = new Soldier(PlayerTurn.PLAYER1,100,Type.PLAYER1_SOLDIER1,trainingField.y,trainingField.x);
+            if (trainingField.OwnerPlayer == PlayerTurn.PLAYER1) {
+                soldier = new Soldier(PlayerTurn.PLAYER1, 100, Type.PLAYER1_SOLDIER1, trainingField.y, trainingField.x);
+                incPlayer1Unit1Number();
             } else {
-                soldier = new Soldier(PlayerTurn.PLAYER2,100,Type.PLAYER2_SOLDIER1,trainingField.y,trainingField.x);
+                soldier = new Soldier(PlayerTurn.PLAYER2, 100, Type.PLAYER2_SOLDIER1, trainingField.y, trainingField.x);
+                incPlayer2Unit1Number();
 
             }
             System.out.println(trainingField.OwnerPlayer);
             grids[trainingField.y][trainingField.x].addSoldier(soldier);
-            incPlayer1Unit1Number();
         }
+    }
+    public void initAttackPhase() {
+        //TODO: itt kene osszeszamolni a katonakat es penzt adni a megfelelo jatekosnak
 
+        putUnitsIntoTheTrainingFields();
         //put soldiers in front of the traning fields
 
         GameLogic.playerTurn = PlayerTurn.ATTACK;
@@ -440,13 +426,16 @@ public final class GameLogic {
         //damageSoldiers();
     }
 
-    private void addSoldiersToLists() {
+    private void addSoldiersToLists() {//it can calucalute the number
         allSoldiers.clear();
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < column; j++) {
                 List<Soldier> toMovedSoldier =grids[i][j].getSoliders();
                 if(toMovedSoldier!=null){
                     allSoldiers.addAll(grids[i][j].getSoliders());
+                }
+                for (Soldier soldier : allSoldiers) {
+                    //soldier.SoldierType==
                 }
             }
         }
