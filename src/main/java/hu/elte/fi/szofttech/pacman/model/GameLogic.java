@@ -353,7 +353,7 @@ public final class GameLogic {
         //TODO: itt kene osszeszamolni a katonakat es penzt adni a megfelelo jatekosnak
         for (int i = 0; i < placedTrainingFields.size(); i++) {
             TrainingField trainingField = placedTrainingFields.get(i);
-            Soldier soldier = new Soldier(PlayerTurn.PLAYER1,100,Type.PLAYER1_SOLDIER1,5,5);
+            Soldier soldier = new Soldier(PlayerTurn.PLAYER1,100,Type.PLAYER1_SOLDIER1,trainingField.y,trainingField.x);
             System.out.println("Training field: "+trainingField.x+ " , "+trainingField.y);
             grids[trainingField.x][trainingField.y].addSoldier(soldier);
             incPlayer1Unit1Number();
