@@ -28,7 +28,7 @@ public class Field {
         isWater = false;
     }
     public boolean addSoldier(Soldier soldier){
-        if(isTowerOnTheField()&&!isTrainingFieldOnThisField()){
+        if(isTowerOnTheField()){
             return false;
         }
         soldiersOnTheField.add(soldier);

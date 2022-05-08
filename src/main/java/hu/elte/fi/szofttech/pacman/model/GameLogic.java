@@ -351,15 +351,15 @@ public final class GameLogic {
     }
     public void initAttackPhase() {
         //TODO: itt kene osszeszamolni a katonakat es penzt adni a megfelelo jatekosnak
-
-        //put soldiers in front of the traning fields
         for (int i = 0; i < placedTrainingFields.size(); i++) {
             TrainingField trainingField = placedTrainingFields.get(i);
-            Soldier soldier = new Soldier(PlayerTurn.PLAYER1,100,Type.PLAYER1_SOLDIER1,trainingField.x,trainingField.y);
+            Soldier soldier = new Soldier(PlayerTurn.PLAYER1,100,Type.PLAYER1_SOLDIER1,5,5);
+            System.out.println("Training field: "+trainingField.x+ " , "+trainingField.y);
             grids[trainingField.x][trainingField.y].addSoldier(soldier);
-            allSoldiers.add(soldier);
-            System.out.println("It runs once");
+            incPlayer1Unit1Number();
         }
+
+        //put soldiers in front of the traning fields
 
         GameLogic.playerTurn = PlayerTurn.ATTACK;
         System.out.println("ATTACK!");

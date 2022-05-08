@@ -96,7 +96,7 @@ public class Soldier {
     }
 
     public boolean createPath(Graph tree, int castleX, int castleY) {
-        System.out.println(x + " " + y + " " + castleX + " " + castleY);
+        //System.out.println(x + " " + y + " " + castleX + " " + castleY);
         ArrayList<Integer>[] currentPath = GraphUtils.getPath(tree, x, y, castleX, castleY);
 
         //assert currentPath != null;
