@@ -1,23 +1,23 @@
 # The Settlers
 
-![image001](/uploads/56dfbe7d86428f0a786cebf1d76b2c8f/image001.png)
+![attackPhase](/uploads/42a5ec00150e3c95b22d230be82d2c8b/attackPhase.PNG)
 ### Letrejon a matrix alapu palya, a piros reszben kigeneralodik a ket var es a barnaban a termeszeti akadaly.
-![image002](/uploads/ab493bc9b807873ab3be883e534c6112/image002.png)
+![base1](/uploads/cddde277fdb2fe9ba5913e0de3e2f29c/base1.PNG)
 ### Az elso jatekos elkezdi lerakni a tornyait(kek mezobe rakhat). Az egysegeit, az egysegek a mostani peldaban csak a var elotti mezobol indulhatnak, de a megvalositasban a var koruli resz lesz a megengedett
-![image003](/uploads/5a7718099c8903a2f993b8df81a2b484/image003.png)
+![xinfo](/uploads/bb5c4b43dd6d418d16bdad34d49a7d37/xinfo.PNG)
 ### Az elso jatekos befejezte(ranyomott az end turn gombra), szoval most a 2. jatekos jon. Ugyanugy a piros mezobe rakhat es az egysegek a var elott lesznek, egymason. Alul lehet latni az egysegek valodi szamat.
-![image004](/uploads/5b42d9602ed0cd2a9c3ee3f64c2f8e71/image004.png)
+![towerupdate](/uploads/848c2f6ec188959ec0fd36d503ac1a1f/towerupdate.PNG)
 ### Mindket jatekos befejezte, szoval most a tamado kor jon, par lepes erejeig. Minden egyseg kiszamolja, mi a legrovidebb ut az ellenseg varahoz es azon lep egy megadott szamot. A tuskes egysegek lassabban  mennek, de tobb eleterejuk van, a sima egysegek gyorsak, de konnyen pusztithatok
-![image005](/uploads/3cdccf21b7a27121706b065737694e69/image005.png)
+![error1](/uploads/15bbec291103c405fbaa266d7975ac8e/error1.PNG)
 ### Megtortentek a lepesek, szoval jon a kovetkezo epitkezo kor. A penzhez hozzaadodik, az eletbe levo egysegek szama es kilott egysegek szama (ebben a korben meg nem oltek a tornyok). Ugyanugy varakat epithetunk a kek mezobe (ahol az ellenseg egysege van, nem lehet) .
-![image006](/uploads/0f57847920fbea9872f8f0c124e12891/image006.png)
+![error2](/uploads/b16185776f0d37f5ab2f62be6d0aa9d2/error2.PNG)
 ### Ugyanez a piros oldalon, “az ide se lehet” felirat ervenytelen, ha vartol barhonnan indithatok egysegek, mivel akkor nem zarjuk el az egysegek jarasvonalat, max. onnantol a vartol jobbra nem lehet egyseget rakni, mivel beszorul. 
-![image007](/uploads/26e8276adefe981f92c0ee5d902c437d/image007.png)
+![builder1](/uploads/aa330396159a5602ced2fa50e9f6daa6/builder1.PNG)
 ### Az uj egysegek elindulnak a vartol es az uj tornyok is mukodesbe lepnek. Ujra kiszamitja az osszes egyseg a legrovidebb utvonalat.
-![image008](/uploads/ae93b7a97727a1eac3c89ed61e21daac/image008.png)
+![builder2](/uploads/22e563b17a62560e249dc0502fccaba1/builder2.PNG)
 ### Az egysegek a tornyokhoz ernek, ahol sebzest kapnak toluk(bizonyos tavolsagtol). A tornyok kolunbozoen sebeznek(tavolsag es gyorsasag). Ha egy egyseg eljutt egy var elotti mezohoz, elpusztul es a var ereje csokken. A kor vegen az osszes elpusztitott egysegert is fogunk mar penzt kapna, nemcsak a meglevo egysegeinkert(ebben az esetben a piros jatekos). 
 ## Diagram
-![uml_done](/uploads/65052e3fa94e2ec2701ea09b8b071035/uml_done.PNG)
+![uml](/uploads/29a71f0fac961fdf29d51c9a41e96360/uml.png)
 
 ## Use case 
 ![useCase_done](/uploads/7a6ad3d171eda6ad2459d0ca47a1bfa1/useCase_done.PNG)
@@ -90,12 +90,3 @@
 | 1         | GIVEN | That I clicked on the save game button                           |
 |           | WHEN  |                                                                  |
 |           | THEN  | The game gets saved                                              |
-
-Terminal:
-Before: `git pull -r`  
-New branch: `git checkout -b "your_branch_name"`  
-Change branch: `git checkout "your_branch_name"`  
-View existing branch: `git branch`  
-Delete branch: `git branch -D "your_branch_name"`  
-Fetch origin: `git fetch origin`  
-Merge to your branch: `git merge origin/main`
